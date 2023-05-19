@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    body { margin: 0; }
+  </style>
+  <!-- <script src="//unpkg.com/3d-force-graph"></script> -->
+  <script src="../dist/3d-force-graph.js"></script>
+  <title>Bloom Post-Processing Effect</title>
+</head>
+<body>
+<div id="3d-graph"></div>
+<script type="module">
+  // https://www.skypack.dev/view/three
+  import { UnrealBloomPass } from '//cdn.skypack.dev/three@0.136/examples/jsm/postprocessing/UnrealBloomPass.js';
+
+  // .jsonUrl('./datasets/miserables.json')
+
+  const Graph = ForceGraph3D()
+  (document.getElementById('3d-graph'))
+    .jsonUrl('./datasets/villarreal.json')
+    .nodeLabel('id')
+    .nodeAutoColorBy('group');
+
+  const bloomPass = new UnrealBloomPass();
+  bloomPass.strength = 3;
+  bloomPass.radius = 1;
+  bloomPass.threshold = 0.1;
+  Graph.postProcessingComposer().addPass(bloomPass);
+
+</script>
+</body>
+</html>

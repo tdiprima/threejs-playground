@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { margin: 0; }
+  </style>
+  <!-- <script src="//unpkg.com/3d-force-graph"></script> -->
+  <script src="../dist/3d-force-graph.js"></script>
+  <title>Larger graph (~4k elements)</title>
+</head>
+<body>
+<div id="3d-graph"></div>
+<script>
+  const elem = document.getElementById("3d-graph");
+
+  const Graph = ForceGraph3D()(elem)
+    .jsonUrl("./datasets/blocks.json")
+    .nodeAutoColorBy("user")
+    .nodeLabel(node => `${node.user}: ${node.description}`)
+    .onNodeClick(node => window.open(`https://bl.ocks.org/${node.user}/${node.id}`, "_blank"));
+
+  // console.log("%cGraph", "color: #ccff00;", Graph);
+</script>
+</body>
+</html>
