@@ -1,0 +1,145 @@
+﻿html {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  -webkit-user-select: none;
+  background: silver;
+  -webkit-text-size-adjust: none;
+}
+
+body {
+  font-weight: bold;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: #000;
+}
+
+/* Upper Left */
+
+.overlay1 {
+  font-family: "Courier", "sans-serif";
+  font-size: 12pt;
+  position: absolute;
+  z-index: 1;
+  top: 1%;
+  left: 1%;
+  width: 240px;
+  height: 12px;
+  color: white;
+}
+
+/* Buttons */
+
+button {
+  font-family: "Courier", "sans-serif";
+  font-size: 12pt;
+  position: absolute;
+  z-index: 1;
+  min-width: 40px;
+  text-align: center;
+  border-radius: 0;
+  -webkit-appearance: none;
+}
+
+/* Right Side */
+
+.pauseButton {
+  top: 10px;
+  right: 20px;
+}
+
+.soundButton {
+  top: 10px;
+  right: 70px;
+}
+
+.cameraButton {
+  top: 40px;
+  right: 20px;
+}
+
+.reflinButton {
+  top: 40px;
+  right: 70px;
+}
+
+.lgearButton {
+  top: 70px;
+  right: 20px;
+}
+
+.flapsButton {
+  top: 70px;
+  right: 70px;
+}
+
+.canopyButton {
+  top: 100px;
+  right: 20px;
+}
+
+.hookButton {
+  top: 100px;
+  right: 70px;
+}
+
+/* Lower Left */
+
+.spddButton {
+  position: absolute;
+  bottom: 100px;
+  left: 20px;
+}
+
+.pitdButton {
+  position: absolute;
+  bottom: 100px;
+  left: 70px;
+}
+
+.spduButton {
+  position: absolute;
+  bottom: 100px;
+  left: 120px;
+}
+
+.bnklButton {
+  position: absolute;
+  bottom: 70px;
+  left: 20px;
+}
+
+.cntrButton {
+  position: absolute;
+  bottom: 70px;
+  left: 70px;
+}
+
+.bnkrButton {
+  position: absolute;
+  bottom: 70px;
+  left: 120px;
+}
+
+.yawlButton {
+  position: absolute;
+  bottom: 40px;
+  left: 20px;
+}
+
+.pituButton {
+  position: absolute;
+  bottom: 40px;
+  left: 70px;
+}
+
+.yawrButton {
+  position: absolute;
+  bottom: 40px;
+  left: 120px;
+}
