@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Iridiscencia / Iridiscente</title>
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+<script src="/build/three.min.js"></script>
+<script id="vertexShader" type="x-shader/x-vertex">
+  varying vec3 vNormal;
+
+  void main() {
+    vNormal = normalize(normalMatrix * normal);
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+</script>
+
+<script id="fragmentShader" type="x-shader/x-fragment">
+  uniform float time;
+  varying vec3 vNormal;
+
+  void main() {
+    vec3 light = vec3(1.0, 1.0, 1.0); // Light direction
+    vec3 ambient = vec3(0.2, 0.2, 0.2); // Ambient color
+    vec3 color = vec3(0.8, 0.8, 0.8); // Base color
+
+    float intensity = dot(vNormal, normalize(light));
+    vec3 iridescentColor = vec3(sin(time), sin(time + 2.094), sin(time + 4.188)) * 0.5 + 0.5;
+
+    vec3 finalColor = ambient + color * intensity + iridescentColor;
+    gl_FragColor = vec4(finalColor, 1.0);
+  }
+</script>
+
+<script>
+  // Create a scene
+  let scene = new THREE.Scene();
+  scene.background = new THREE.Color("#212121")
+
+  // Create a camera
+  let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.z = 3;
+
+  // Create a renderer
+  let renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  // Create a sphere geometry
+  let geometry = new THREE.SphereGeometry(1, 32, 32);
+
+  // Create a custom shader material
+  let material = new THREE.ShaderMaterial({
+    vertexShader: document.getElementById('vertexShader').textContent,
+    fragmentShader: document.getElementById('fragmentShader').textContent
+  });
+
+  // Create a sphere mesh with the geometry and material
+  let sphere = new THREE.Mesh(geometry, material);
+
+  // Add the sphere to the scene
+  scene.add(sphere);
+
+  // Create an animation loop
+  function animate() {
+    requestAnimationFrame(animate);
+
+    // Rotate the sphere
+    sphere.rotation.x += 0.01;
+    sphere.rotation.y += 0.01;
+
+    // Render the scene
+    renderer.render(scene, camera);
+  }
+
+  // Start the animation loop
+  animate();
+</script>
+</body>
+</html>
