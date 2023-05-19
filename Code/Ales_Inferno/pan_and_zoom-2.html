@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Displaying 2D Images in Three.js</title>
+  <!-- NOT RESPONDING TO MOUSE -->
+  <link href="main.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<script type="importmap">{
+  "imports": {
+    "three": "/build/three.module.js",
+    "three/addons/": "/jsm/"
+  }
+}
+</script>
+<script async src="/es-module-shims-1.3.6/dist/es-module-shims.js"></script>
+
+<script type="module">
+  import * as THREE from "three";
+  import {OrbitControls} from "three/addons/controls/OrbitControls.js";
+
+  // Set up the parent scene and camera. ¿Por qué?
+  let parentScene = new THREE.Scene();
+  let parentCamera = new THREE.PerspectiveCamera(
+    45,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  );
+  parentCamera.position.set(0, 0, 10);
+
+  // Set up the renderer and add it to the DOM
+  let renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  let loader = new THREE.TextureLoader();
+
+  let geometry = new THREE.PlaneGeometry(2, 1);
+
+  function fabricar(filename, x, y, z) {
+    // Create a separate scene for each image
+    let scene = new THREE.Scene();
+
+    // Create a separate camera for each image
+    let camera = new THREE.PerspectiveCamera(
+      45,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
+
+    // Set the position of each camera
+    camera.position.set(0, 0, 5); // todo: position?
+
+    // Create controls for each camera
+    let controls = new OrbitControls(camera, renderer.domElement);
+
+    // Load each image and add it to its corresponding scene
+    let image = loader.load(filename);
+
+    let material = new THREE.MeshBasicMaterial({ map: image });
+
+    let mesh = new THREE.Mesh(geometry, material);
+
+    // Position the image
+    mesh.position.set(x, y, z);
+
+    scene.add(mesh);
+
+    // Add each scene to the parent scene
+    parentScene.add(scene);
+
+    return [controls, camera]
+  }
+
+  // Setup each thing
+  let camera1, camera2, camera3, camera4;
+  let controls1, controls2, controls3, controls4;
+
+  let result = fabricar("image1.jpg", -1, 1, 0);
+  controls1 = result[0];
+  camera1 = result[1];
+
+  result = fabricar("image2.jpg", 1, 1, 0);
+  controls2 = result[0];
+  camera2 = result[1];
+
+  result = fabricar("image3.jpg", -1, -1, 0);
+  controls3 = result[0];
+  camera3 = result[1];
+
+  result = fabricar("image4.jpg", 1, -1, 0);
+  controls4 = result[0];
+  camera4 = result[1];
+
+  // Set up event listeners to control the cameras
+  let selectedCamera = null;
+
+  controls1.addEventListener('start', () => { selectedCamera = camera1; });
+  controls2.addEventListener('start', () => { selectedCamera = camera2; });
+  controls3.addEventListener('start', () => { selectedCamera = camera3; });
+  controls4.addEventListener('start', () => { selectedCamera = camera4; });
+
+  // ¿Esto te parece familiar?
+  controls1.addEventListener('change', () => {
+    camera2.position.copy(camera1.position);
+    camera2.rotation.copy(camera1.rotation);
+    camera3.position.copy(camera1.position);
+    camera3.rotation.copy(camera1.rotation);
+    camera4.position.copy(camera1.position);
+    camera4.rotation.copy(camera1.rotation);
+  });
+
+  controls2.addEventListener('change', () => {
+    camera1.position.copy(camera2.position);
+    camera1.rotation.copy(camera2.rotation);
+    camera3.position.copy(camera2.position);
+    camera3.rotation.copy(camera2.rotation);
+    camera4.position.copy(camera2.position);
+    camera4.rotation.copy(camera2.rotation);
+  });
+
+  controls3.addEventListener('change', () => {
+    camera1.position.copy(camera3.position);
+    camera1.rotation.copy(camera3.rotation);
+    camera2.position.copy(camera3.position);
+    camera2.rotation.copy(camera3.rotation);
+    camera4.position.copy(camera3.position);
+    camera4.rotation.copy(camera3.rotation);
+  });
+
+  controls4.addEventListener('change', () => {
+    camera1.position.copy(camera4.position);
+    camera1.rotation.copy(camera4.rotation);
+    camera2.position.copy(camera4.position);
+    camera2.rotation.copy(camera4.rotation);
+    camera3.position.copy(camera4.position);
+    camera3.rotation.copy(camera4.rotation);
+  });
+
+  // Set up a function to handle window resizing
+  function onWindowResize() {
+    parentCamera.aspect = window.innerWidth / window.innerHeight;
+    parentCamera.updateProjectionMatrix();
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  }
+
+  // Render the scene
+  function render() {
+    requestAnimationFrame(render);
+
+    // Update the selected camera's controls
+    if (selectedCamera) {
+      selectedCamera.updateProjectionMatrix();
+      selectedCamera.updateMatrixWorld();
+      selectedCamera.updateWorldMatrix(true, true);
+      selectedCamera.updateMatrix();
+      selectedCamera.updateMatrixWorld(true);
+      selectedCamera.lookAt(0, 0, 0);
+      selectedCamera.updateProjectionMatrix();
+      selectedCamera.updateMatrixWorld(true);
+      selectedCamera.updateMatrix();
+      selectedCamera.updateWorldMatrix(true, true);
+    }
+
+    // Render the parent scene
+    renderer.render(parentScene, parentCamera);
+  }
+
+  window.addEventListener('resize', onWindowResize, false);
+  render();
+</script>
+</body>
+</html>
