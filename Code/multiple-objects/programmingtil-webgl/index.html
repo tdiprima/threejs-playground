@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiple Shapes</title>
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+<!-- Canvas -->
+<canvas id="glcanvas"></canvas>
+
+<!-- Shaders -->
+<script name="shader" data-src="shaders/vertex.glsl" data-type="vertex" data-version="v1"></script>
+<script name="shader" data-src="shaders/fragment.glsl" data-type="fragment" data-version="v1"></script>
+
+<!-- Library: Signals processing used for dispatching methods -->
+<script src="vendor/js/signals.js"></script>
+
+<!-- Library: our common library -->
+<script src="libs/glUtils.js"></script>
+
+<!-- This is the bulk of the actual WebGL stuff -->
+<script src="app.js"></script>
+</body>
+</html>
