@@ -1,0 +1,145 @@
+html,
+body {
+  font-size: 14px;
+}
+
+body {
+  font-family: 'Share Tech', sans-serif;
+  overflow: hidden;
+  margin: 0;
+  text-shadow: 0 0 16px #1c1d1e;
+}
+
+#app {
+  overflow: hidden;
+  height: 100vh;
+  cursor: grab;
+}
+
+#app:active {
+  cursor: grabbing;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.controls {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 100%;
+  user-select: none;
+  text-align: center;
+  pointer-events: none;
+}
+
+h4 {
+  font-weight: normal;
+  padding-bottom: .5rem;
+  letter-spacing: .3rem;
+  text-transform: uppercase;
+}
+
+h4,
+h2 {
+  font-weight: normal;
+  margin: 0 0;
+  color: white;
+}
+
+.count-title {
+  position: relative;
+}
+
+.icon {
+  font-size: 3rem;
+  color: white;
+  text-shadow: 0 0 16px #1c1d1e;
+}
+
+button {
+  margin: 0;
+  padding: 0 0;
+  user-select: auto;
+  pointer-events: all;
+  color: white;
+  border: none;
+  background: none;
+}
+
+h4,
+h2 {
+  user-select: text;
+  pointer-events: all;
+}
+
+#count {
+  font-size: 5rem;
+  font-weight: 200;
+  line-height: .9em;
+}
+
+.buttons {
+  display: flex;
+}
+
+.flip {
+  transform: scaleX(-1);
+}
+
+button:hover {
+  cursor: pointer;
+  background: transparent;
+}
+
+button:hover .icon {
+  color: #747484;
+}
+
+#less {
+  margin-right: 1rem;
+}
+
+.more {
+  left: 100%;
+}
+
+.switch {
+  font-family: 'Share Tech', sans-serif;
+  font-size: 1rem;
+  margin: 0;
+  padding: .5rem .5rem 0;
+  text-decoration: underline;
+  border: none;
+}
+
+.switch:hover {
+  cursor: pointer;
+  color: #9494aa;
+  background: transparent;
+}
+
+@media screen and (min-width: 400px) {
+  body,
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 550px) {
+  /* landscape styles */
+  .controls {
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: 100vh;
+    margin-left: 4rem;
+  }
+}
