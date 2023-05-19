@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>3D wireframe in webgl</title>
+  <!-- https://webglfundamentals.org/webgl/lessons/webgl-2d-vs-3d-library.html -->
+  <!-- https://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html -->
+  <link href="../resources/style.css" rel="stylesheet">
+  <script src="../resources/utils.js"></script>
+</head>
+<body>
+<canvas height="300" id="c" width="400"></canvas>
+
+<!-- Here is the code that runs on the GPU on your computer. -->
+<!-- GL Shader Language (GLSL) -->
+
+<!-- vertex shader -->
+
+<!-- A vertex shader's job is to compute vertex positions. -->
+<script id="vertex-shader-2d" type="x-shader/x-vertex">
+  // an attribute will receive data from a buffer
+  attribute vec4 a_position;
+  uniform mat4 u_worldViewProjection;
+
+  // all shaders have a main function
+  void main() {
+    // gl_Position is a special variable a vertex shader
+    // is responsible for setting
+    gl_Position = u_worldViewProjection * a_position;
+  }
+</script>
+
+<!-- fragment shader -->
+
+<!-- A fragment shader's job is to compute a color for each pixel
+ of the primitive currently being drawn -->
+<script id="fragment-shader-2d" type="x-shader/x-fragment">
+  // fragment shaders don't have a default precision so we need
+  // to pick one. mediump is a good default. It means "medium precision"
+  precision mediump float;
+
+  void main() {
+    // gl_FragColor is a special variable a fragment shader
+    // is responsible for setting
+    gl_FragColor = vec4(0.53, 0.03, 0.03, 1);// return Blood Red #880808
+  }
+</script>
+
+<script src="cube-webgl.js"></script>
+
+</body>
+</html>

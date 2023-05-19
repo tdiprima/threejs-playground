@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>utils</title>
+  <link href="doc.min.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div id="main">
+  <h1 class="page-title">utils</h1>
+  <section>
+    <article>
+      <div class="container-overview">
+        <dl class="details"></dl>
+      </div>
+      <h3 class="subsection-title">Methods</h3>
+      <h4 class="name" id="compileShader">compileShader<span class=
+                                                               "signature">(gl<span class="signature-attributes">non-null</span>,
+shaderSource, shaderType)</span> <span class="type-signature">→
+(non-null) {WebGLShader}</span></h4>
+      <div class="description">Creates and compiles a shader.</div>
+      <h5>Parameters:</h5>
+      <table class="params">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th class="last">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="name"><code>gl</code></td>
+          <td class="type"><span class=
+                                   "param-type">WebGLRenderingContext</span></td>
+          <td class="description last">The WebGL Context.</td>
+        </tr>
+        <tr>
+          <td class="name"><code>shaderSource</code></td>
+          <td class="type"><span class="param-type">string</span></td>
+          <td class="description last">The GLSL source code for the
+            shader.
+          </td>
+        </tr>
+        <tr>
+          <td class="name"><code>shaderType</code></td>
+          <td class="type"><span class="param-type">number</span></td>
+          <td class="description last">The type of shader, VERTEX_SHADER or
+            FRAGMENT_SHADER.
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <dl class="details">
+        <dt class="tag-source">Source:</dt>
+        <dd class="tag-source">
+          <ul class="dummy">
+            <li><a href="utils.js.html">utils.js</a>, <a href=
+                                                           "utils.js.html#line10">line 10</a></li>
+          </ul>
+        </dd>
+      </dl>
+      <h5>Returns:</h5>
+      <div class="param-desc">The shader.</div>
+      <dl>
+        <dt>Type</dt>
+        <dd><span class="param-type">WebGLShader</span></dd>
+      </dl>
+      <h4 class="name" id="createProgram"><span class="type-signature"></span>createProgram<span class="signature">(gl<span class="signature-attributes">non-null</span>, vertexShader<span class="signature-attributes">non-null</span>, fragmentShader<span class="signature-attributes">non-null</span>)</span><span class="type-signature"> &rarr; (non-null) {WebGLProgram}</span></h4>
+      <div class="description">Creates a program from 2 shaders.</div>
+      <h5>Parameters:</h5>
+      <table class="params">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th class="last">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="name"><code>gl</code></td>
+          <td class="type">
+            <span class="param-type">WebGLRenderingContext</span>
+          </td>
+          <td class="description last">The WebGL context.</td>
+        </tr>
+        <tr>
+          <td class="name"><code>vertexShader</code></td>
+          <td class="type"><span class="param-type">WebGLShader</span></td>
+          <td class="description last">A vertex shader.</td>
+        </tr>
+        <tr>
+          <td class="name"><code>fragmentShader</code></td>
+          <td class="type"><span class="param-type">WebGLShader</span></td>
+          <td class="description last">A fragment shader.</td>
+        </tr>
+        </tbody>
+      </table>
+      <dl class="details">
+        <dt class="tag-source">Source:</dt>
+        <dd class="tag-source">
+          <ul class="dummy">
+            <li><a href="utils.js.html">utils.js</a>, <a href=
+                                                           "utils.js.html#line37">line 37</a></li>
+          </ul>
+        </dd>
+      </dl>
+      <h5>Returns:</h5>
+      <div class="param-desc">A program.</div>
+      <dl>
+        <dt>Type</dt>
+        <dd><span class="param-type">WebGLProgram</span></dd>
+      </dl>
+      <h4 class="name" id="createProgramFromScripts">
+        createProgramFromScripts<span class="signature">(gl<span class=
+                                                                   "signature-attributes">non-null</span>, shaderScriptIds)</span>
+        <span class="type-signature">→ (non-null)
+{WebGLProgram}</span></h4>
+      <div class="description">Creates a program from 2 script
+        tags.
+      </div>
+      <h5>Parameters:</h5>
+      <table class="params">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th class="last">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="name"><code>gl</code></td>
+          <td class="type"><span class=
+                                   "param-type">WebGLRenderingContext</span></td>
+          <td class="description last">The WebGL Context.</td>
+        </tr>
+        <tr>
+          <td class="name"><code>shaderScriptIds</code></td>
+          <td class="type"><span class=
+                                   "param-type">Array.&lt;string&gt;</span></td>
+          <td class="description last">Array of ids of the script tags for
+            the shaders. The first is assumed to be the vertex shader, the
+            second the fragment shader.
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <dl class="details">
+        <dt class="tag-source">Source:</dt>
+        <dd class="tag-source">
+          <ul class="dummy">
+            <li><a href="utils.js.html">utils.js</a>, <a href=
+                                                           "utils.js.html#line66">line 66</a></li>
+          </ul>
+        </dd>
+      </dl>
+      <h5>Returns:</h5>
+      <div class="param-desc">A program</div>
+      <dl>
+        <dt>Type</dt>
+        <dd><span class="param-type">WebGLProgram</span></dd>
+      </dl>
+      <h4 class="name" id="createShaderFromScript">
+        createShaderFromScript<span class="signature">(gl<span class=
+                                                                 "signature-attributes">non-null</span>, scriptId)</span>
+        <span class="type-signature">→ (non-null) {WebGLShader}</span></h4>
+      <div class="description">Creates a shader from the content of a
+        script tag.
+      </div>
+      <h5>Parameters:</h5>
+      <table class="params">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th class="last">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="name"><code>gl</code></td>
+          <td class="type"><span class=
+                                   "param-type">WebGLRenderingContext</span></td>
+          <td class="description last">The WebGL Context.</td>
+        </tr>
+        <tr>
+          <td class="name"><code>scriptId</code></td>
+          <td class="type"><span class="param-type">string</span></td>
+          <td class="description last">The id of the script tag.</td>
+        </tr>
+        <tr>
+          <td class="name"><code>opt_shaderType.</code></td>
+          <td class="type"><span class="param-type">string</span></td>
+          <td class="description last">The type of shader to create. If not
+            passed in will use the type attribute from the script tag.
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <dl class="details">
+        <dt class="tag-source">Source:</dt>
+        <dd class="tag-source">
+          <ul class="dummy">
+            <li><a href="utils.js.html">utils.js</a>, <a href=
+                                                           "utils.js.html#line83">line 83</a></li>
+          </ul>
+        </dd>
+      </dl>
+      <h5>Returns:</h5>
+      <div class="param-desc">A shader.</div>
+      <dl>
+        <dt>Type</dt>
+        <dd><span class="param-type">WebGLShader</span></dd>
+      </dl>
+      <h4 class="name" id="resizeCanvasToDisplaySize">
+        resizeCanvasToDisplaySize<span class="signature">(canvas)</span>
+        <span class="type-signature">→ {boolean}</span></h4>
+      <div class="description">Resize Canvas
+        https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+      </div>
+      <h5>Parameters:</h5>
+      <table class="params">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th class="last">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="name"><code>canvas</code></td>
+          <td class="type"></td>
+          <td class="description last"></td>
+        </tr>
+        </tbody>
+      </table>
+      <dl class="details">
+        <dt class="tag-source">Source:</dt>
+        <dd class="tag-source">
+          <ul class="dummy">
+            <li><a href="utils.js.html">utils.js</a>, <a href=
+                                                           "utils.js.html#line115">line 115</a></li>
+          </ul>
+        </dd>
+      </dl>
+      <h5>Returns:</h5>
+      <dl>
+        <dt>Type</dt>
+        <dd><span class="param-type">boolean</span></dd>
+      </dl>
+    </article>
+  </section>
+</div>
+<nav>
+  <h2><a href="index.html">Home</a></h2>
+  <h3>Global</h3>
+  <ul>
+    <li><a href="#compileShader">compileShader</a></li>
+    <li><a href="#createProgram">createProgram</a></li>
+    <li><a href=
+             "#createProgramFromScripts">createProgramFromScripts</a></li>
+    <li><a href=
+             "#createShaderFromScript">createShaderFromScript</a></li>
+    <li><a href=
+             "#resizeCanvasToDisplaySize">resizeCanvasToDisplaySize</a></li>
+  </ul>
+</nav>
+<br class="clear">
+<footer>Documentation generated by <a href=
+                                        "https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Aug 16
+  2022 16:48:16 GMT-0400 (Eastern Daylight Time)
+</footer>
+</body>
+</html>
