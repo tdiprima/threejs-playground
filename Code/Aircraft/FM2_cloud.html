@@ -1,0 +1,66 @@
+﻿<!doctype html>
+<html lang="en">
+
+<!-- PROGRAM INFORMATION
+Copyright 2017-22, Phil Crowther <phil@philcrowther.com>
+Licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+Version dated 23 Dec 2021
+Features:
+* Loading screen (a spinning prop).
+* Loads skybox with lensflare.  Aircraft model reflects skybox.
+* Moving undercast.
+* Loads and displays external and internal aircraft models (glb) with animated parts and engine sounds.
+* Aircaft can bank and turn.
+ERRORS:
+* No assignment of button routines
+
+SHADOW TEST
+
+-->
+
+<head>
+  <title>Sample Aircraft Viewer</title>
+  <!-- http://philcrowther.com/WebGL/Aircraft/FM2_cloud.html -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" name="viewport">
+  <link href="styles/butn_fm2.css" rel="stylesheet">
+</head>
+
+<body oncontextmenu="return false;">
+
+<div id="container">
+  <div class="overlay1">
+    <div>Heading..: <span id="AC_Head"></span></div>
+    <div>AC Bank..: <span id="AC_Bank"></span></div>
+    <div>AC Pitch.: <span id="AC_Ptch"></span></div>
+  </div>
+</div>
+
+<button class="pauseButton" id="PAW">Paws</button>
+<button class="soundButton" id="SND">Sond</button>
+
+<button class="cameraButton" id="CAM">View</button>
+<button class="reflinButton" id="REF">RfLn</button>
+
+<button class="lgearButton" id="LGB">Gear</button>
+<button class="flapsButton" id="FLP">Flap</button>
+<button class="canopyButton" id="CAN">Cnpy</button>
+<button class="hookButton" id="HUK">Hook</button>
+
+<button class="spddButton" id="SLO">-</button>
+<button class="pitdButton" id="PTD">&uarr;</button>
+<button class="spduButton" id="FST">+</button>
+<button class="bnklButton" id="BKL">&larr;</button>
+<button class="cntrButton" id="CTR">X</button>
+<button class="bnkrButton" id="BKR">&rarr;</button>
+<button class="yawlButton" id="YWL">[</button>
+<button class="pituButton" id="PTU">&darr;</button>
+<button class="yawrButton" id="YWR">]</button>
+
+<script type="importmap">
+  {"imports": {"three": "./mod139/build/three.module.js"}}
+</script>
+
+<script type="module" src="FM2_cloud.js"></script>
+
+</body>
+</html>
