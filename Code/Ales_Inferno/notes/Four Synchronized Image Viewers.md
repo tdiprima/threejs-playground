@@ -170,21 +170,23 @@ In summary, this code allows the user to interact with the scene by dragging and
 
 ### What does it mean when you get intersection results, even when the mouse is outside of the scene?
 
-When you get intersection results even when the mouse is outside of the scene, it usually means that the raycaster is capturing intersections with objects beyond the boundaries of the scene or canvas.
+When you get intersection results even when the mouse is outside of the scene, it usually means that the raycaster is capturing intersections with **objects beyond the boundaries of the scene or canvas.**
 
-The raycaster in three.js shoots a ray into the scene based on the mouse position or other input coordinates. It then checks for intersections with objects in the scene along that ray. The raycaster doesn't know the boundaries of the scene or the canvas by default. It simply calculates intersections along the ray.
+The raycaster in three.js shoots a ray into the scene based on the mouse position or other input coordinates. It then checks for intersections with objects in the scene along that ray. The **raycaster doesn't know the boundaries** of the scene or the canvas by default. It simply calculates intersections along the ray.
 
 So, if you're getting intersection results even when the mouse is outside of the scene, it could be because the raycaster is shooting the ray beyond the scene boundaries, and it intersects with objects in that extended direction.
+
+<span style="color:#0000dd;">Eh... it may be confused because of the way this was set up. Estoy confundida.</span>
 
 To handle this situation, you can set up additional checks to filter out unwanted intersections. For example, you can limit the raycaster to only shoot rays within the boundaries of the scene or within a specific region of interest. You can also check if the intersection point falls within the desired boundaries before applying any actions based on the intersection.
 
 By implementing such checks, you can ensure that the intersection results are relevant and meaningful within the context of your specific scene or application.
 
-### Only the last image (image4.jpg) is showing up on screen.  I have 4 WebGLRenderers, 4 divs (one for each image), 4 Scenes, 4 texture loaders, etc.
+### Only the last image (image4.jpg) is showing up on screen.
 
 Set the **position** and scale of the mesh so that it fits within the canvas for that image.
 
-### How to create and add a mesh to a scene:
+### Mesh positioning
 
 ```javascript
 // create a texture loader and load the image file
@@ -210,11 +212,11 @@ scene.add(mesh);
 
 Make sure that you're creating a separate mesh and adding it to a separate scene for each image, and that the positions and scales of the meshes are adjusted appropriately so that they fit within their respective canvases.
 
-## Is this my camera?
+## We only put 1 camera...
 
-Since I have 4 scenes and 4 images, do I need 4 cameras?
+<span style="color:red;">Since I have 4 scenes and 4 images, don't I need 4 cameras?</span>
 
-Yes, you will need a separate camera for each scene. Each camera is responsible for rendering the view of the scene from a particular perspective, so if you have multiple scenes, you will need multiple cameras to render each scene correctly.
+Yes, you will need a **separate camera for each scene.** Each camera is responsible for rendering the view of the scene from a particular perspective, so if you have multiple scenes, you will need multiple cameras to render each scene correctly.
 
 When you create each scene, you can also create a separate camera for that scene, like this:
 
@@ -236,8 +238,8 @@ window.addEventListener('resize', () => {
     camera1.aspect = width / height;
     camera1.updateProjectionMatrix();
     renderer1.setSize(width, height);
+    // Repeat this code for each camera and renderer.
 
-    // repeat for the other cameras and renderers
     width = canvas2.clientWidth;
     height = canvas2.clientHeight;
     camera2.aspect = width / height;
@@ -260,20 +262,22 @@ window.addEventListener('resize', () => {
 
 <br>
 
-In this example, the `resize` event handler updates the aspect ratio of the camera, updates the projection matrix of the camera, and resizes the renderer to match the new size of the canvas. Repeat this code for each camera and renderer.
+In this example, the `resize` event handler updates the aspect ratio of the camera, updates the projection matrix of the camera, and resizes the renderer to match the new size of the canvas.
 
 ## Positioning Scenes and Objects
 
 If you have 4 three.js scenes, should the scenes be positioned, or are they positioned via CSS?  Or is it OK to simply position the objects inside each scene?
 
-In three.js, the positioning of scenes and objects can be achieved using different approaches depending on your specific requirements. Here are a few options:
+<span style="color:#0000dd;">Again, because of the way this was set up, I was confused whether the scene itself needed to be positioned, OR do I simply position 4 images... but everything's relative to the canvas, right?  So... wtf?</span>
+
+The positioning of scenes and objects can be achieved using different approaches depending on your specific requirements. 
+
+### Here are a few options:
 
 1. **Positioning Scenes:** The positioning of scenes themselves is typically done by manipulating the camera within each scene. By adjusting the camera's position, rotation, and field of view, you can control the view and perspective of the scene. This approach allows you to have multiple scenes arranged in 3D space.
 
 2. **Positioning via CSS:** If you want to position the entire canvas element containing the scenes on your webpage, you can use CSS to control its position, size, and other styling properties. This approach is useful when you want to position the scenes within the HTML layout and control their placement relative to other elements on the page.
 
 3. **Positioning Objects within Scenes:** Inside each scene, you can position objects individually by manipulating their properties such as position, rotation, and scale. This approach is useful for arranging and animating objects within a scene, giving you precise control over their placement.
-
-The choice between these approaches depends on your specific needs and the desired behavior of your application. You can use a combination of these methods to achieve the desired result.
 
 <br>
