@@ -33,7 +33,9 @@
   parentCamera.position.set(0, 0, 10);
 
   // Set up the renderer and add it to the DOM
-  let renderer = new THREE.WebGLRenderer();
+  // let renderer = new THREE.WebGLRenderer();
+  let renderer = new THREE.WebGLRenderer( { alpha: true } );
+  // renderer.setClearColor( 0x000000, 0 );
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
@@ -41,9 +43,11 @@
 
   let geometry = new THREE.PlaneGeometry(2, 1);
 
-  function fabricar(filename, x, y, z) {
+  function fabricar(filename, x, y, z, color, name) {
     // Create a separate scene for each image
     let scene = new THREE.Scene();
+    scene.background = new THREE.Color(color);
+    // scene.background = new THREE.Color("#212121")
 
     // Create a separate camera for each image
     let camera = new THREE.PerspectiveCamera(
@@ -52,9 +56,10 @@
       0.1,
       1000
     );
+    camera.name = name;
 
     // Set the position of each camera
-    camera.position.set(0, 0, 5); // todo: position?
+    camera.position.set(0, 0, 5);
 
     // Create controls for each camera
     let controls = new OrbitControls(camera, renderer.domElement);
@@ -67,7 +72,7 @@
     let mesh = new THREE.Mesh(geometry, material);
 
     // Position the image
-    mesh.position.set(x, y, z);
+    mesh.position.set(x, y, 5); // todo: z
 
     scene.add(mesh);
 
@@ -81,19 +86,20 @@
   let camera1, camera2, camera3, camera4;
   let controls1, controls2, controls3, controls4;
 
-  let result = fabricar("image1.jpg", -1, 1, 0);
+  // WHY CAN'T I SEE MY COLORS?
+  let result = fabricar("image1.jpg", -1, 1, 0, "#f00", "cam1");
   controls1 = result[0];
   camera1 = result[1];
 
-  result = fabricar("image2.jpg", 1, 1, 0);
+  result = fabricar("image2.jpg", 1, 1, 0, "#ff0", "cam2");
   controls2 = result[0];
   camera2 = result[1];
 
-  result = fabricar("image3.jpg", -1, -1, 0);
+  result = fabricar("image3.jpg", -1, -1, 0, "#0f0", "cam3");
   controls3 = result[0];
   camera3 = result[1];
 
-  result = fabricar("image4.jpg", 1, -1, 0);
+  result = fabricar("image4.jpg", 1, -1, 0, "#00f", "cam4");
   controls4 = result[0];
   camera4 = result[1];
 
@@ -156,6 +162,7 @@
 
     // Update the selected camera's controls
     if (selectedCamera) {
+      // console.log(selectedCamera.name) // todo: this never changes with subsequent clicks
       selectedCamera.updateProjectionMatrix();
       selectedCamera.updateMatrixWorld();
       selectedCamera.updateWorldMatrix(true, true);
