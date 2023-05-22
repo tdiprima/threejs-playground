@@ -5,16 +5,45 @@ const geometry = new THREE.PlaneGeometry(1, 1);
 const loader = new THREE.TextureLoader();
 
 // Extend the OrbitControls class to emit zoom events
-class CustomOrbitControls extends OrbitControls {
+class CustomOrbitControls1 extends OrbitControls {
   constructor(camera, domElement) {
+    // The constructor gets called twice
     super(camera, domElement);
     this.zoomEvent = {type: 'zoom', zoom: this.object.zoom};
   }
 
   update() {
+    // Why is this not working?
     const zoomChanged = this.zoomEvent.zoom !== this.object.zoom;
 
     super.update();
+
+    if (zoomChanged) {
+      this.zoomEvent.zoom = this.object.zoom;
+      this.dispatchEvent(this.zoomEvent);
+    }
+  }
+}
+
+class CustomOrbitControls extends THREE.EventDispatcher {
+  constructor(camera, domElement) {
+    // This gets called twice, obviously.
+    super();
+    this.object = camera;
+    this.domElement = domElement;
+    this.zoomEvent = { type: 'zoom', zoom: this.object.zoom };
+
+    // ... Add your existing OrbitControls code here
+
+    // Add an event listener for the 'change' event
+    this.addEventListener('change', this.update.bind(this));
+  }
+
+  update() {
+    // This gets called repeatedly (calling from rendering loop)
+    const zoomChanged = this.zoomEvent.zoom !== this.object.zoom;
+
+    // ... Add your existing OrbitControls update code here
 
     if (zoomChanged) {
       this.zoomEvent.zoom = this.object.zoom;

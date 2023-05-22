@@ -30,7 +30,7 @@ One approach is to use a shared event system where one scene emits an event when
 ### Synchronization between two scenes:
 
 ```javascript
-// huntress.html
+// huntress.html, h1.js
 // Create the first scene
 const scene1 = new THREE.Scene();
 const camera1 = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -82,19 +82,19 @@ update();
 
 In the above code, we have two scenes (`scene1` and `scene2`) with their respective cameras (`camera1` and `camera2`). Each scene has its own renderer, controls, and other necessary configurations that you can set up according to your requirements.
 
-We create an event system using `THREE.EventDispatcher` to facilitate communication between the two scenes. The `eventDispatcher` will handle the events emitted by one scene and listened to by the other.
+We create an **event system** using `THREE.EventDispatcher` to **facilitate communication** between the two scenes. The `eventDispatcher` will handle the events emitted by one scene and listened to by the other.
 
-In this example, when the zoom level changes in `scene1`, it emits a 'scene1zoom' event, which triggers the `onScene1Zoom` function. Inside `onScene1Zoom`, we adjust the zoom level of `camera2` in `scene2` accordingly.
+In this example, when the zoom level changes in `scene1`, it emits a **'scene1zoom'** event, which triggers the `onScene1Zoom` function. Inside `onScene1Zoom`, we adjust the zoom level of `camera2` in `scene2` accordingly.
 
 Similarly, when the zoom level changes in `scene2`, it emits a 'scene2zoom' event, which triggers the `onScene2Zoom` function. Inside `onScene2Zoom`, we adjust the zoom level of `camera1` in `scene1` accordingly.
 
-To make this work, you'll need to capture the zoom events in each scene's controls and emit the corresponding event. The specific implementation will depend on the controls library you are using for zooming in and out.
+<span style="color:red;">Not firing.</span>
 
-Remember to modify this code to suit your specific use case and integrate it with your existing setup for each scene.
+To make this work, you'll need to **capture the zoom events** in each scene's controls and emit the corresponding event. The specific implementation will depend on the controls library you are using for zooming in and out.
 
 ## Ayúdame.
 
-Well, the controls I'm using to zoom is simply the three.js OrbitControls.  So in the update() method, I'm just doing:
+Well, the controls I'm using to zoom is simply the three.js OrbitControls.  So in the `update()` method, I'm just doing:
 
 ```js
 controls1.update();
@@ -105,9 +105,10 @@ renderer2.render(scene2, camera2);
 
 But when I zoom in on one image, the other image doesn't move.  You mentioned that I'll need to capture the zoom events in each scene's controls and emit the corresponding event.  How do I make this work?
 
-To synchronize the zooming behavior using `OrbitControls`, you can modify the existing `OrbitControls` class to emit a custom event whenever the zoom level changes. Here's an example implementation that demonstrates this:
+To synchronize the zooming behavior using `OrbitControls`, you can modify the existing `OrbitControls` class to **emit a custom event** whenever the zoom level changes.
 
 ```javascript
+// huntress.html, h2.js
 // Extend the OrbitControls class to emit zoom events
 class CustomOrbitControls extends THREE.OrbitControls {
   constructor(camera, domElement) {
@@ -187,9 +188,9 @@ update();
 
 <br>
 
-In the above code, we create a custom class `CustomOrbitControls` by extending the `THREE.OrbitControls` class. This custom class emits a `zoom` event whenever the zoom level changes. The `zoom` event includes the `zoom` value, which represents the current zoom level of the controls.
+In the above code, we create a custom class `CustomOrbitControls` by **extending the `THREE.OrbitControls` class.** This custom class emits a `zoom` event whenever the zoom level changes. The `zoom` event includes the `zoom` value, which represents the current zoom level of the controls.
 
-In the `update()` method of `CustomOrbitControls`, we check if the zoom level has changed since the last update. If it has, we update the `zoomEvent` object and dispatch the event using `dispatchEvent`.
+In the `update()` method of `CustomOrbitControls`, we check if the **zoom level has changed** since the last update. If it has, we update the `zoomEvent` object and dispatch the event using `dispatchEvent`.
 
 In the scene setup section, we create an instance of `CustomOrbitControls` for each scene (`controls1` for `scene1` and `controls2` for `scene2`). We add event listeners to these controls for the `zoom` event and dispatch a custom event (`scene1zoom`...
 
@@ -199,10 +200,10 @@ Que mierda.
 
 <span style="color:#0000dd;">The CustomOrbitControls update() method does not seem to be firing.  And the zoom event on the controls1 and controls2 CustomOrbitControls are not firing.</span>
 
-Apologies for the confusion. It seems there was an oversight in the previous code. To make the custom `CustomOrbitControls` class work correctly, we need to inherit from `EventDispatcher` and dispatch events appropriately. Here's an updated version of the code:
+To make the custom `CustomOrbitControls` class work correctly, we need to **inherit from `EventDispatcher`** and dispatch events appropriately.
 
 ```javascript
-// Extend the OrbitControls class to emit zoom events
+// h2.js
 class CustomOrbitControls extends THREE.EventDispatcher {
   constructor(camera, domElement) {
     super();
@@ -210,7 +211,7 @@ class CustomOrbitControls extends THREE.EventDispatcher {
     this.domElement = domElement;
     this.zoomEvent = { type: 'zoom', zoom: this.object.zoom };
 
-    // ... Add your existing OrbitControls code here
+    // ... Add your existing OrbitControls code here (¿Perdón?)
 
     // Add an event listener for the 'change' event
     this.addEventListener('change', this.update.bind(this));
@@ -219,7 +220,7 @@ class CustomOrbitControls extends THREE.EventDispatcher {
   update() {
     const zoomChanged = this.zoomEvent.zoom !== this.object.zoom;
 
-    // ... Add your existing OrbitControls update code here
+    // ... Add your existing OrbitControls update code here (¿Disculpe?)
 
     if (zoomChanged) {
       this.zoomEvent.zoom = this.object.zoom;
@@ -231,9 +232,55 @@ class CustomOrbitControls extends THREE.EventDispatcher {
 // Rest of the code remains the same
 ```
 
-<br>
+### Is this what he wanted?
 
-In the updated code, we modify the `CustomOrbitControls` class to inherit from `THREE.EventDispatcher`, which provides the event dispatching functionality. We also add an event listener for the `'change'` event, which triggers the `update` method when the controls change.
+```js
+class CustomOrbitControls extends THREE.EventDispatcher {
+  constructor(camera, domElement) {
+    // This gets called twice, obviously.
+    super();
+    this.object = camera;
+    this.domElement = domElement;
+    this.zoomEvent = {type: 'zoom', zoom: this.object.zoom};
+
+    // ... Add your existing OrbitControls code here
+    this.controls1 = new CustomOrbitControls(camera1, renderer1.domElement);
+    this.controls1.addEventListener('zoom', (event) => {
+      console.log("controls1");
+      eventDispatcher.dispatchEvent({type: 'scene1zoom', zoom: event.zoom});
+    });
+
+    // Create the custom controls for scene2
+    this.controls2 = new CustomOrbitControls(camera2, renderer2.domElement);
+    this.controls2.addEventListener('zoom', (event) => {
+      console.log("controls2");
+      eventDispatcher.dispatchEvent({type: 'scene2zoom', zoom: event.zoom});
+    });
+
+    // Add an event listener for the 'change' event
+    this.addEventListener('change', this.update.bind(this));
+  }
+
+  update() {
+    // This gets called repeatedly (calling from rendering loop)
+    const zoomChanged = this.zoomEvent.zoom !== this.object.zoom;
+
+    // ... Add your existing OrbitControls update code here
+    this.controls1.update();
+    this.controls2.update();
+
+    if (zoomChanged) {
+      this.zoomEvent.zoom = this.object.zoom;
+      this.dispatchEvent(this.zoomEvent);
+    }
+  }
+}
+```
+
+<span style="color:red;">This didn't work, either.</span>
+
+
+In the updated code, we modify the `CustomOrbitControls` class to **inherit from `THREE.EventDispatcher`**, which provides the event dispatching functionality. We also add an event listener for the **`'change'`** event, which triggers the **`update`** method when the controls change.
 
 Make sure to replace the previous definition of `CustomOrbitControls` in your code with this updated version. The `update` method should now fire correctly, and the `zoom` events on `controls1` and `controls2` should be emitted as expected.
 
@@ -241,7 +288,9 @@ Make sure to replace the previous definition of `CustomOrbitControls` in your co
 
 <span style="color:#0000dd;">Now it doesn't work at all.  I can't zoom in or out.  Could you give a complete example?</span>
 
-Apologies for the confusion earlier. Here's a complete example that demonstrates how to synchronize the zooming behavior between two scenes using `OrbitControls` in three.js:
+Here's a complete example that demonstrates how to synchronize the zooming behavior between two scenes using `OrbitControls` in three.js
+
+<span style="color:red;">Notice, there's no class extension BS.</span>
 
 ```javascript
 // maneja.html
@@ -301,7 +350,6 @@ Inside the event handlers (`onControlsChange1` and `onControlsChange2`), we sync
 
 The `update` function is responsible for rendering the scenes. It updates both `controls1` and `controls2`, renders the scenes using their respective cameras and renderers, and recursively calls itself for smooth animation.
 
-Please note that this example assumes you have already set up the necessary configuration for the scenes, cameras, and renderers (not shown in the code). Make sure to replace the placeholder comments (`// ... Set up renderer, camera, and other necessary configurations for scene1/scene2`) with your actual setup code for each scene.
 
 ## Plugins for panning and zooming
 

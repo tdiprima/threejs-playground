@@ -57,6 +57,7 @@ const onScene1Zoom = (event) => {
   camera2.updateProjectionMatrix();
 };
 eventDispatcher.addEventListener('scene1zoom', onScene1Zoom);
+// eventDispatcher.addEventListener('change', onScene1Zoom);
 
 // Listen for zoom event on scene2
 const onScene2Zoom = (event) => {
@@ -66,6 +67,8 @@ const onScene2Zoom = (event) => {
   camera1.updateProjectionMatrix();
 };
 eventDispatcher.addEventListener('scene2zoom', onScene2Zoom);
+// eventDispatcher.addEventListener('change', onScene2Zoom);
+// todo: Still no.
 
 // Update function for rendering the scenes
 function update() {
