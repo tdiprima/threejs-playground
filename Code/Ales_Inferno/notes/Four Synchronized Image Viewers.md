@@ -1,6 +1,6 @@
 ## Synchronized Image Viewers
 
-<span style="color:#0000d8;">In three.js, how can I create 4 image viewers in a webpage, and add a control so that if the user hovers over 1 image and pans and zooms, the other 3 images pan and zoom the same way?</span>
+<span style="color:#0000d8;">In three.js, how can I create 4 image viewers in a webpage, and add a control so that if the user hovers over 1 image and pans and zooms, the other 3 images pan and zoom the same way?</span>x
 
 ### To create four image viewers in a webpage using Three.js:
 
@@ -207,6 +207,7 @@ scene.add(mesh);
 ```
 
 <br>
+
 Make sure that you're creating a separate mesh and adding it to a separate scene for each image, and that the positions and scales of the meshes are adjusted appropriately so that they fit within their respective canvases.
 
 ## Is this my camera?
@@ -225,6 +226,7 @@ const camera4 = new THREE.PerspectiveCamera(75, aspectRatio, 0.1, 1000);
 ```
 
 <br>
+
 You will need to update the aspect ratio of the cameras whenever the size of the canvas changes, to ensure that the rendering remains correct. You can do this by adding an event listener for the `resize` event on the window object, like this:
 
 ```javascript
