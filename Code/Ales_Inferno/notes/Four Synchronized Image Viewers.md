@@ -30,6 +30,7 @@
 3. This will in turn update the position and zoom of all four images.
 
 ```javascript
+// sync.html
 // create four instances of the WebGLRenderer
 const renderer1 = new THREE.WebGLRenderer();
 const renderer2 = new THREE.WebGLRenderer();
@@ -181,15 +182,7 @@ By implementing such checks, you can ensure that the intersection results are re
 
 ### Only the last image (image4.jpg) is showing up on screen.  I have 4 WebGLRenderers, 4 divs (one for each image), 4 Scenes, 4 texture loaders, etc.
 
-If only the last image is showing up on the screen, it's likely that you're not adding the other images to their respective scenes correctly.
-
-### Make sure that you're following these steps for each image:
-
-1. Create a `TextureLoader` object and use it to load the image file.
-2. Create a `MeshBasicMaterial` object and use the loaded texture as its `map` property.
-3. Create a `PlaneGeometry` object and a `Mesh` object using the material and geometry.
-4. Set the position and scale of the mesh so that it fits within the canvas for that image. &lt;&mdash; This is what was missing.
-5. Add the mesh to the scene for that image.
+Set the **position** and scale of the mesh so that it fits within the canvas for that image.
 
 ### How to create and add a mesh to a scene:
 
@@ -273,11 +266,11 @@ If you have 4 three.js scenes, should the scenes be positioned, or are they posi
 
 In three.js, the positioning of scenes and objects can be achieved using different approaches depending on your specific requirements. Here are a few options:
 
-1. Positioning Scenes: The positioning of scenes themselves is typically done by manipulating the camera within each scene. By adjusting the camera's position, rotation, and field of view, you can control the view and perspective of the scene. This approach allows you to have multiple scenes arranged in 3D space.
+1. **Positioning Scenes:** The positioning of scenes themselves is typically done by manipulating the camera within each scene. By adjusting the camera's position, rotation, and field of view, you can control the view and perspective of the scene. This approach allows you to have multiple scenes arranged in 3D space.
 
-2. Positioning via CSS: If you want to position the entire canvas element containing the scenes on your webpage, you can use CSS to control its position, size, and other styling properties. This approach is useful when you want to position the scenes within the HTML layout and control their placement relative to other elements on the page.
+2. **Positioning via CSS:** If you want to position the entire canvas element containing the scenes on your webpage, you can use CSS to control its position, size, and other styling properties. This approach is useful when you want to position the scenes within the HTML layout and control their placement relative to other elements on the page.
 
-3. Positioning Objects within Scenes: Inside each scene, you can position objects individually by manipulating their properties such as position, rotation, and scale. This approach is useful for arranging and animating objects within a scene, giving you precise control over their placement.
+3. **Positioning Objects within Scenes:** Inside each scene, you can position objects individually by manipulating their properties such as position, rotation, and scale. This approach is useful for arranging and animating objects within a scene, giving you precise control over their placement.
 
 The choice between these approaches depends on your specific needs and the desired behavior of your application. You can use a combination of these methods to achieve the desired result.
 
