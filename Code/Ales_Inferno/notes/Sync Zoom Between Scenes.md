@@ -30,6 +30,7 @@ One approach is to use a shared event system where one scene emits an event when
 ### Synchronization between two scenes:
 
 ```javascript
+// huntress.html
 // Create the first scene
 const scene1 = new THREE.Scene();
 const camera1 = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
