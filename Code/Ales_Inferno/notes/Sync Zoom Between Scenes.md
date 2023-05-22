@@ -193,75 +193,9 @@ In the `update()` method of `CustomOrbitControls`, we check if the zoom level ha
 
 In the scene setup section, we create an instance of `CustomOrbitControls` for each scene (`controls1` for `scene1` and `controls2` for `scene2`). We add event listeners to these controls for the `zoom` event and dispatch a custom event (`scene1zoom`...
 
-## Bien.
+# Events not firing.
 
-<span style="color:#0000dd;">Earlier, you mentioned that my specific implementation will depend on the controls library I'm using for zooming in and out.  Can you recommend such a plugin or library?  Is there one that allows panning in three.js as well as zooming?</span>
-
-Certainly! One popular library that provides both zooming and panning functionalities for three.js is `three-orbitcontrols`. It is a modified version of `OrbitControls` with added panning support. You can find the library on GitHub at the following link: [three-orbitcontrols](https://github.com/mattdesl/three-orbit-controls).
-
-To use `three-orbitcontrols` in your project, you can follow these steps:
-
-1. Download the `OrbitControls.js` file from the GitHub repository or use a package manager like npm to install it:
-
-   ```shell
-   npm install three-orbitcontrols
-   ```
-
-2. Include the `OrbitControls.js` file in your HTML file or import it into your JavaScript file if you're using a module bundler:
-
-   ```javascript
-   import { OrbitControls } from 'three-orbitcontrols';
-   ```
-
-3. Create instances of `OrbitControls` for each scene and configure them:
-
-   ```javascript
-   // Create the first scene
-   const scene1 = new THREE.Scene();
-   const camera1 = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-   const renderer1 = new THREE.WebGLRenderer();
-   // ... Set up renderer and other necessary configurations for scene1
-
-   // Create the second scene
-   const scene2 = new THREE.Scene();
-   const camera2 = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-   const renderer2 = new THREE.WebGLRenderer();
-   // ... Set up renderer and other necessary configurations for scene2
-
-   // Create the OrbitControls instances for each scene
-   const controls1 = new OrbitControls(camera1, renderer1.domElement);
-   controls1.enablePan = true; // Enable panning
-   // ... Additional configuration for controls1
-
-   const controls2 = new OrbitControls(camera2, renderer2.domElement);
-   controls2.enablePan = true; // Enable panning
-   // ... Additional configuration for controls2
-   ```
-
-   You can customize the controls by modifying their properties. In the example above, we enable panning by setting `enablePan` to `true`. You can explore other properties and methods available in `OrbitControls` for more advanced customization.
-
-4. Update the controls in the rendering loop:
-
-   ```javascript
-   function update() {
-     controls1.update();
-     renderer1.render(scene1, camera1);
-
-     controls2.update();
-     renderer2.render(scene2, camera2);
-
-     requestAnimationFrame(update);
-   }
-
-   // Start the rendering loop
-   update();
-   ```
-
-With `three-orbitcontrols`, you'll have zooming and panning functionality available for each scene, and you can synchronize the zoom behavior using the approach mentioned earlier in this conversation.
-
-Remember to add appropriate event listeners to the controls to emit custom events and handle them to synchronize the zoom behavior between scenes.
-
-## Que mierda
+Que mierda.
 
 <span style="color:#0000dd;">The CustomOrbitControls update() method does not seem to be firing.  And the zoom event on the controls1 and controls2 CustomOrbitControls are not firing.</span>
 
@@ -368,5 +302,73 @@ Inside the event handlers (`onControlsChange1` and `onControlsChange2`), we sync
 The `update` function is responsible for rendering the scenes. It updates both `controls1` and `controls2`, renders the scenes using their respective cameras and renderers, and recursively calls itself for smooth animation.
 
 Please note that this example assumes you have already set up the necessary configuration for the scenes, cameras, and renderers (not shown in the code). Make sure to replace the placeholder comments (`// ... Set up renderer, camera, and other necessary configurations for scene1/scene2`) with your actual setup code for each scene.
+
+## Plugins for panning and zooming
+
+<span style="color:#0000dd;">Earlier, you mentioned that my specific implementation will depend on the controls library I'm using for zooming in and out.  Can you recommend such a plugin or library?  Is there one that allows panning in three.js as well as zooming?</span>
+
+Certainly! One popular library that provides both zooming and panning functionalities for three.js is `three-orbitcontrols`. It is a modified version of `OrbitControls` with added panning support. You can find the library on GitHub at the following link: [three-orbitcontrols](https://github.com/mattdesl/three-orbit-controls).
+
+To use `three-orbitcontrols` in your project, you can follow these steps:
+
+1. Download the `OrbitControls.js` file from the GitHub repository or use a package manager like npm to install it:
+
+   ```shell
+   npm install three-orbitcontrols
+   ```
+
+2. Include the `OrbitControls.js` file in your HTML file or import it into your JavaScript file if you're using a module bundler:
+
+   ```javascript
+   import { OrbitControls } from 'three-orbitcontrols';
+   ```
+
+3. Create instances of `OrbitControls` for each scene and configure them:
+
+   ```javascript
+   // Create the first scene
+   const scene1 = new THREE.Scene();
+   const camera1 = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+   const renderer1 = new THREE.WebGLRenderer();
+   // ... Set up renderer and other necessary configurations for scene1
+
+   // Create the second scene
+   const scene2 = new THREE.Scene();
+   const camera2 = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+   const renderer2 = new THREE.WebGLRenderer();
+   // ... Set up renderer and other necessary configurations for scene2
+
+   // Create the OrbitControls instances for each scene
+   const controls1 = new OrbitControls(camera1, renderer1.domElement);
+   controls1.enablePan = true; // Enable panning
+   // ... Additional configuration for controls1
+
+   const controls2 = new OrbitControls(camera2, renderer2.domElement);
+   controls2.enablePan = true; // Enable panning
+   // ... Additional configuration for controls2
+   ```
+
+   You can customize the controls by modifying their properties. In the example above, we enable panning by setting `enablePan` to `true`. You can explore other properties and methods available in `OrbitControls` for more advanced customization.
+
+4. Update the controls in the rendering loop:
+
+   ```javascript
+   function update() {
+     controls1.update();
+     renderer1.render(scene1, camera1);
+
+     controls2.update();
+     renderer2.render(scene2, camera2);
+
+     requestAnimationFrame(update);
+   }
+
+   // Start the rendering loop
+   update();
+   ```
+
+With `three-orbitcontrols`, you'll have zooming and panning functionality available for each scene, and you can synchronize the zoom behavior using the approach mentioned earlier in this conversation.
+
+Remember to add appropriate event listeners to the controls to emit custom events and handle them to synchronize the zoom behavior between scenes.
 
 <br>
