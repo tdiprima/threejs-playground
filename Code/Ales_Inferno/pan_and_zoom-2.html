@@ -62,7 +62,7 @@
     // Load each image and add it to its corresponding scene
     let image = loader.load(filename);
 
-    let material = new THREE.MeshBasicMaterial({ map: image });
+    let material = new THREE.MeshBasicMaterial({ map: image, side: THREE.DoubleSide });
 
     let mesh = new THREE.Mesh(geometry, material);
 

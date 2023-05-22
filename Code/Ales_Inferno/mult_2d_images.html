@@ -45,7 +45,7 @@
     let image1Texture = textureLoader.load(filename);
 
     // Create the mesh object for the image
-    let image1 = new THREE.Mesh(planeGeometry, new THREE.MeshBasicMaterial({map: image1Texture}));
+    let image1 = new THREE.Mesh(planeGeometry, new THREE.MeshBasicMaterial({ map: image1Texture, side: THREE.DoubleSide }));
 
     // Position the image
     image1.position.set(x, y, z);
