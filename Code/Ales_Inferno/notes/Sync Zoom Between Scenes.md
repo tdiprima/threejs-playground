@@ -309,6 +309,7 @@ Make sure to replace the previous definition of `CustomOrbitControls` in your co
 Apologies for the confusion earlier. Here's a complete example that demonstrates how to synchronize the zooming behavior between two scenes using `OrbitControls` in three.js:
 
 ```javascript
+// maneja.html
 // Create the first scene
 const scene1 = new THREE.Scene();
 const camera1 = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
