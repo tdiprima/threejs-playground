@@ -1,6 +1,6 @@
 ## Synchronized Image Viewers
 
-<span style="color:#0000d8;">In three.js, how can I create 4 image viewers in a webpage, and add a control so that if the user hovers over 1 image and pans and zooms, the other 3 images pan and zoom the same way?</span>x
+<span style="color:#0000d8;">In three.js, how can I create 4 image viewers in a webpage, and add a control so that if the user hovers over 1 image and pans and zooms, the other 3 images pan and zoom the same way?</span>
 
 ### To create four image viewers in a webpage using Three.js:
 
@@ -30,7 +30,7 @@
 3. This will in turn update the position and zoom of all four images.
 
 ```javascript
-// sync.html
+// dust-to-dust.html
 // create four instances of the WebGLRenderer
 const renderer1 = new THREE.WebGLRenderer();
 const renderer2 = new THREE.WebGLRenderer();

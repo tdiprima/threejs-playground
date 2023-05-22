@@ -1,6 +1,6 @@
 ## Perform the object intersection successfully using the Raycaster class
 
-sync.html, pan\_and\_zoom-3.html
+dust-to-dust.html, pan\_and\_zoom-3.html
 
 ```js
 const intersects = raycaster.intersectObjects([image1, image2, image3, image4]);
