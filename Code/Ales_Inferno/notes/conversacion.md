@@ -1,13 +1,13 @@
 ## Display 4 Images
 
-<span style="color:#0000dd;">If I wanted to display four 2-d images in three.js, how would I do that?
+<span style="color:#0000dd;">If I wanted to display four 2-d images in three.js, how would I do that?  (Note: wrong question, on purpose.)</span>
 
 To display four 2D images in three.js, you can use the TextureLoader to load the images and then create four separate Mesh objects with planes as their geometries and the loaded textures as their materials.
 
 **Here's how to create four image planes:**
 
 ```javascript
-// mult_2d_images.html
+// las-cuatro-imagenes.html, c1.js
 // Create a texture loader
 const textureLoader = new THREE.TextureLoader();
 
@@ -21,7 +21,7 @@ const image4Texture = textureLoader.load('image4.jpg');
 const planeGeometry = new THREE.PlaneGeometry(1, 1);
 
 // Create the mesh objects for the images
-const image1 = new THREE.Mesh(planeGeometry, new THREE.MeshBasicMaterial({ map: image1Texture }));
+const image1 = new THREE.Mesh(planeGeometry, new THREE.MeshBasicMaterial({ map: image1Texture })); // { side: THREE.DoubleSide }
 const image2 = new THREE.Mesh(planeGeometry, new THREE.MeshBasicMaterial({ map: image2Texture }));
 const image3 = new THREE.Mesh(planeGeometry, new THREE.MeshBasicMaterial({ map: image3Texture }));
 const image4 = new THREE.Mesh(planeGeometry, new THREE.MeshBasicMaterial({ map: image4Texture }));
@@ -37,9 +37,18 @@ scene.add(image1, image2, image3, image4);
 ```
 
 <br>
-The TextureLoader is used to load the images, and then four separate Mesh objects are created with planes as their geometries and the loaded textures as their materials. The position property of each image is set to position them in the scene, and they are added to the scene using the add() method.
 
-Note that this example uses MeshBasicMaterial which is a simple material that just maps the texture to the plane geometry without any lighting or shading effects. If you want more advanced material properties like lighting and shadows, you can use a different type of material, such as MeshStandardMaterial.
+1. The `TextureLoader` is used to load the images.
+
+2. Four separate `Mesh` objects are created with planes as their geometries and the loaded textures as their materials.
+
+3. The `position` property of each image is set to position them in the. scene
+
+4. They are added to the scene using the `add()` method.
+
+Note that this example uses `MeshBasicMaterial` which is a simple material that just maps the texture to the plane geometry **without any lighting or shading effects.**
+
+If you want more advanced material properties like lighting and shadows, you can use a different type of material, such as `MeshStandardMaterial`.
 
 ## Pan and Zoom
 
@@ -50,7 +59,7 @@ Note that this example uses MeshBasicMaterial which is a simple material that ju
 How to create an interactive scene with four images that pan and zoom together:
 
 ```javascript
-// pan_and_zoom-1.html
+// c2.js
 // Create a texture loader
 const textureLoader = new THREE.TextureLoader();
 

@@ -1,3 +1,4 @@
+// solo 4 imagenes
 import * as THREE from "three";
 
 // Create a scene
