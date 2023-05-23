@@ -59,7 +59,7 @@ If you want more advanced material properties like lighting and shadows, you can
 How to create an interactive scene with four images that pan and zoom together:
 
 ```javascript
-// c2.js
+// las-cuatro-imagenes.html, c2.js
 // Create a texture loader
 const textureLoader = new THREE.TextureLoader();
 
@@ -97,6 +97,7 @@ controls.enableDamping = true;
 controls.dampingFactor = 0.05;
 
 // Add event listeners to the images to pan and zoom together
+// TODO: WRONG! USE RAYCASTING.
 image1.addEventListener('mousedown', onImageMouseDown);
 image2.addEventListener('mousedown', onImageMouseDown);
 image3.addEventListener('mousedown', onImageMouseDown);
@@ -146,7 +147,7 @@ render();
 
 <br>
 
-The `onImageMouseDown` function is called when an image is **clicked or touched.** It sets the camera target to the position of the clicked image and adds event listeners to the document to pan and zoom the images together.
+The `onImageMouseDown` function is called when an image is **clicked or touched.** <span style="color:red;">No, it isn't.</span> It sets the camera target to the position of the clicked image and adds event listeners to the document to pan and zoom the images together.
 
 The `onDocumentMouseMove` function is called when the mouse or touch moves while an image is being **dragged.** It calculates the mouse/touch movement and updates the camera position using the `dolly` and `pan` methods of the `OrbitControls` class.
 
@@ -161,6 +162,10 @@ With this code, you should be able to pan and zoom on any image you choose, and 
 <span style="color:#0000dd;">That is close to what I want.  Perhaps what I'm asking for is something a little more complex, that might require it to be rewritten such that each image has its own scene(?)  Your example makes the whole scene zoom in and out, but I want to zoom on one image, and the other images zoom too.  And the 4 images remain stationary.  Does that make sense?</span>
 
 Yes, that makes sense. In that case, you can create a separate scene for each image and place all four scenes in a parent scene. Each image scene would have its own camera and controls, but all the cameras would be synced to move and zoom together.
+
+### Esqueletos <span style="font-size:27px;">☠️</span>
+
+And kool-aid-kids.html
 
 ```javascript
 // Set up the parent scene and camera
@@ -212,7 +217,8 @@ camera3.position.set(0, 0, 5);
 camera4.position.set(0, 0, 5);
 
 // Create controls for each camera
-const controls1 = new THREE.OrbitControls(camera1);  // 2nd argument renderer.domElement
+// TODO: 2nd argument renderer.domElement
+const controls1 = new THREE.OrbitControls(camera1); 
 const controls2 = new THREE.OrbitControls(camera2);
 const controls3 = new THREE.OrbitControls(camera3);
 const controls4 = new THREE.OrbitControls(camera4);
@@ -338,11 +344,12 @@ render();
 ```
 
 <br>
-In this updated implementation, we've added event listeners to each control to keep track of the selected camera. Whenever a control starts to move, we set the selected camera to that camera.
 
-We've also added event listeners to each control's change event to update the position and rotation of the other three cameras. Whenever a camera is moved or rotated, we update the positions and rotations of the other three cameras to match.
+In this updated implementation, we've added **event listeners to each control to keep track of the selected camera.** Whenever a control starts to move, we set the selected camera to that camera.
 
-Finally, in the render function, we've added code to update the selected camera's controls and render the parent scene with the parent camera.
+We've also added event listeners to **each control's change event** to update the position and rotation of the other three cameras. Whenever a camera is moved or rotated, we update the positions and rotations of the other three cameras to match.
+
+Finally, in the **render function,** we've added code to update the selected camera's controls and render the parent scene with the parent camera.
 
 
 <span style="color:#0000dd;">Your code seems good, but only the 4th image is being displayed, and it's in the middle of the screen.
@@ -350,7 +357,7 @@ Finally, in the render function, we've added code to update the selected camera'
 Ah, it seems that we need to **add the four images to the parent scene and position them correctly.** This positions the four images at the corners of the parent scene:
 
 ```javascript
-// pan_and_zoom-3.html
+// kool-aid-kids.html
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
@@ -489,6 +496,7 @@ animate();
 ```
 
 <br>
+
 This positions each of the four images at the corners of the parent scene by setting their positions relative to their respective sub-scenes. The selectedCamera variable now stores a reference to the camera of the currently selected image, which is determined when the user clicks on one of the images.
 
 When the user moves the mouse, the code checks if a camera has been selected, and if so, it rotates the camera around the world axes based on the mouse movements.
@@ -542,7 +550,7 @@ parentScene.add(scene4);
 const target = new THREE.Object3D();
 parentScene.add(target);
 
-// HE FORGOT TO ADD THE RENDERER
+// TODO: HE FORGOT TO ADD THE RENDERER
 
 // Create the four controls
 const controls1 = new THREE.OrbitControls(camera1, renderer.domElement);
