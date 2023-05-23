@@ -348,6 +348,10 @@ We've also added event listeners to **each control's change event** to update th
 Finally, in the **render function,** we've added code to update the selected camera's controls and render the parent scene with the parent camera.
 
 
+## Posición
+
+Posicionamiento.
+
 <span style="color:#0000dd;">Your code seems good, but only the 4th image is being displayed, and it's in the middle of the screen.
 
 Ah, it seems that we need to **add the four images to the parent scene and position them correctly.** This positions the four images at the corners of the parent scene:
@@ -388,7 +392,7 @@ document.body.appendChild(renderer.domElement);
 const geometry = new THREE.PlaneGeometry(1, 1);
 const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
 
-// HE FORGOT TO LOAD THE TEXTURES
+// TODO: HE FORGOT TO LOAD THE TEXTURES
 
 const image1 = new THREE.Mesh(geometry, material);
 image1.position.set(-2, 2, 0);
@@ -494,29 +498,29 @@ animate();
 
 <br>
 
-This positions each of the four images at the corners of the parent scene by setting their positions relative to their respective sub-scenes. The selectedCamera variable now stores a reference to the camera of the currently selected image, which is determined when the user clicks on one of the images.
+This positions each of the four images at the corners of the parent scene by **setting their positions relative to their respective sub-scenes.**
+
+The `selectedCamera` variable now stores a reference to the camera of the currently selected image, which is determined when the user clicks on one of the images.
 
 When the user moves the mouse, the code checks if a camera has been selected, and if so, it rotates the camera around the world axes based on the mouse movements.
-
-## Update Controls for each Image
 
 <span style="color:#0000dd;">The images were not showing up, so I updated your code to add them, like so:
 
 ```js
-  const loader = new THREE.TextureLoader();
-  const image1 = loader.load('image1.jpg');
-  const material1 = new THREE.MeshBasicMaterial({ map: image1 })
-  const mesh1 = new THREE.Mesh(geometry, material1);
-  mesh1.position.set(-2, 2, 0);
-  scene1.add(mesh1);
-  // etc.
+const loader = new THREE.TextureLoader();
+const image1 = loader.load('image1.jpg');
+const material1 = new THREE.MeshBasicMaterial({ map: image1 })
+const mesh1 = new THREE.Mesh(geometry, material1);
+mesh1.position.set(-2, 2, 0);
+scene1.add(mesh1);
+// x4
 ```
+
+## panorámica y zoom
 
 <span style="color:#0000dd;">Otherwise the code looks good, except - the images are not panning and zooming.  Any ideas?
 
-I apologize for the oversight in my previous response. Thank you for updating the code to add the images.
-
-Regarding the panning and zooming issue, it looks like we forgot to **update the controls for each image** to use the same target object, so they all pan and zoom together:
+It looks like we forgot to **update the controls for each image** to use the same target object, so they all pan and zoom together:
 
 ```javascript
 // Create the four scenes and cameras
@@ -690,14 +694,16 @@ THREE.Object3D.add: object not an instance of THREE.Object3D.
 Object { x: 0, y: 0, z: 0 }
 ```
 
+<br>
+
 These errors indicate that there are issues with the objects being passed as arguments in your three.js code.
 
-The first error, "THREE.WebGLRenderer.render: camera is not an instance of THREE.Camera," suggests that you are passing an object that is not an instance of THREE.Camera as the camera argument in the render method of the WebGLRenderer.
+The first error, "**THREE.WebGLRenderer.render**: camera is not an instance of THREE.Camera," suggests that you are passing an object that is not an instance of THREE.Camera as the camera argument in the render method of the WebGLRenderer.
 
 Make sure that you have created a THREE.Camera object and that you are passing it correctly as the camera argument. You can create a new instance of the camera object using one of the available camera types in three.js, such as THREE.PerspectiveCamera or THREE.OrthographicCamera.
 
-The second error, "THREE.Object3D.add: object not an instance of THREE.Object3D," indicates that you are trying to add an object that is not an instance of THREE.Object3D to a THREE.Object3D container.
+The second error, "**THREE.Object3D.add**: object not an instance of THREE.Object3D," indicates that you are trying to add an object that is not an instance of THREE.Object3D to a THREE.Object3D container.
 
-Make sure that you are creating instances of the Object3D class and adding them to other Object3D instances or using them as the base class for other objects. You can create a new instance of the Object3D class using `new THREE.Object3D()`.
+Make sure that you are creating instances of the Object3D class and adding them to other Object3D instances or using them as the base class for other objects. You can create a new instance of the Object3D class using **`new THREE.Object3D()`**.
 
 <br>
