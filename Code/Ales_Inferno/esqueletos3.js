@@ -1,3 +1,6 @@
+import * as THREE from "three";
+import {OrbitControls} from "three/addons/controls/OrbitControls.js";
+
 // Create the scenes
 const scene1 = new THREE.Scene();
 const scene2 = new THREE.Scene();
@@ -65,10 +68,10 @@ renderer4.domElement.style.top = `${window.innerHeight / 2}px`;
 document.body.appendChild(renderer4.domElement);
 
 // Set up event listeners to control the cameras
-const controls1 = new THREE.OrbitControls(camera1, renderer1.domElement);
-const controls2 = new THREE.OrbitControls(camera2, renderer2.domElement);
-const controls3 = new THREE.OrbitControls(camera3, renderer3.domElement);
-const controls4 = new THREE.OrbitControls(camera4, renderer4.domElement);
+const controls1 = new OrbitControls(camera1, renderer1.domElement);
+const controls2 = new OrbitControls(camera2, renderer2.domElement);
+const controls3 = new OrbitControls(camera3, renderer3.domElement);
+const controls4 = new OrbitControls(camera4, renderer4.domElement);
 
 controls1.addEventListener('change', render);
 controls2.addEventListener('change', render);
@@ -80,5 +83,12 @@ function render() {
   renderer1.render(scene1, camera1);
   renderer2.render(scene2, camera2);
   renderer3.render(scene3, camera3);
-  renderer.render(scene4, camera4); // cut off here again
+  renderer4.render(scene4, camera4); // cut off here again
 }
+
+function animate() {
+  requestAnimationFrame(animate);
+  render();
+}
+
+animate();

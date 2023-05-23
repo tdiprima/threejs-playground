@@ -1,3 +1,6 @@
+import * as THREE from "three";
+import {OrbitControls} from "three/addons/controls/OrbitControls.js";
+
 // Set up the four scenes
 const scene1 = new THREE.Scene();
 const scene2 = new THREE.Scene();
@@ -44,22 +47,22 @@ mesh4.position.set(2, -2, 0);
 scene4.add(mesh4);
 
 // Set up the controls for each camera
-const controls1 = new THREE.OrbitControls(camera1, renderer.domElement);
+const controls1 = new OrbitControls(camera1, renderer.domElement);
 controls1.target.set(mesh1.position.x, mesh1.position.y, mesh1.position.z);
 controls1.enableZoom = true;
 controls1.enablePan = true;
 
-const controls2 = new THREE.OrbitControls(camera2, renderer.domElement);
+const controls2 = new OrbitControls(camera2, renderer.domElement);
 controls2.target.set(mesh2.position.x, mesh2.position.y, mesh2.position.z);
 controls2.enableZoom = true;
 controls2.enablePan = true;
 
-const controls3 = new THREE.OrbitControls(camera3, renderer.domElement);
+const controls3 = new OrbitControls(camera3, renderer.domElement);
 controls3.target.set(mesh3.position.x, mesh3.position.y, mesh3.position.z);
 controls3.enableZoom = true;
 controls3.enablePan = true;
 
-const controls4 = new THREE.OrbitControls(camera4, renderer.domElement);
+const controls4 = new OrbitControls(camera4, renderer.domElement);
 controls4.target.set(mesh4.position.x, mesh4.position.y, mesh4.position.z);
 controls4.enableZoom = true;
 controls4.enablePan = true;

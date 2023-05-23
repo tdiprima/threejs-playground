@@ -1,3 +1,6 @@
+import * as THREE from "three";
+import {OrbitControls} from "three/addons/controls/OrbitControls.js";
+
 // Create the four scenes and cameras
 const scene1 = new THREE.Scene();
 const camera1 = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -26,17 +29,21 @@ parentScene.add(scene4);
 const target = new THREE.Object3D();
 parentScene.add(target);
 
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
 // Create the four controls
-const controls1 = new THREE.OrbitControls(camera1, renderer.domElement);
+const controls1 = new OrbitControls(camera1, renderer.domElement);
 controls1.target = target;
 
-const controls2 = new THREE.OrbitControls(camera2, renderer.domElement);
+const controls2 = new OrbitControls(camera2, renderer.domElement);
 controls2.target = target;
 
-const controls3 = new THREE.OrbitControls(camera3, renderer.domElement);
+const controls3 = new OrbitControls(camera3, renderer.domElement);
 controls3.target = target;
 
-const controls4 = new THREE.OrbitControls(camera4, renderer.domElement);
+const controls4 = new OrbitControls(camera4, renderer.domElement);
 controls4.target = target;
 
 // Set up event listeners to control the cameras
@@ -92,10 +99,17 @@ function onWindowResize() {
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-// Add the four images to the scenes
+// TODO: Add the four images to the scenes
 const loader = new THREE.TextureLoader();
 
+const geometry = new THREE.PlaneGeometry(5, 5);
 const image1 = loader.load('image1.jpg');
 const material1 = new THREE.MeshBasicMaterial({ map: image1 })
 const mesh1 = new THREE.Mesh(geometry, material1);
 mesh1.position.set(-2, 2, 0);
+
+// todo:
+renderer.render(scene1, camera1);
+renderer.render(scene2, camera2);
+renderer.render(scene3, camera3);
+renderer.render(scene4, camera4);

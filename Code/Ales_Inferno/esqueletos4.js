@@ -1,3 +1,4 @@
+// INCOMPLETE
 renderer1.setSize(width / 2, height / 2);
 renderer1.domElement.style.position = 'absolute';
 renderer1.domElement.style.top = '0';
