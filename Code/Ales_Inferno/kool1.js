@@ -171,7 +171,6 @@ function render() {
 
   // Update the selected camera's controls
   if (selectedCamera) {
-    // todo: this never changes with subsequent clicks, but we're also getting false-positive clicks
     console.log(selectedCamera.name);
     selectedCamera.updateProjectionMatrix();
     selectedCamera.updateMatrixWorld();
@@ -191,4 +190,3 @@ function render() {
 }
 
 render();
-

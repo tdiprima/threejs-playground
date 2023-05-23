@@ -168,6 +168,7 @@ Yes, that makes sense. In that case, you can create a separate scene for each im
 And kool-aid-kids.html
 
 ```javascript
+// kool1.js
 // Set up the parent scene and camera
 const parentScene = new THREE.Scene();
 const parentCamera = new THREE.PerspectiveCamera(
@@ -218,17 +219,14 @@ camera4.position.set(0, 0, 5);
 
 // Create controls for each camera
 // TODO: 2nd argument renderer.domElement
-const controls1 = new THREE.OrbitControls(camera1); 
-const controls2 = new THREE.OrbitControls(camera2);
-const controls3 = new THREE.OrbitControls(camera3);
-const controls4 = new THREE.OrbitControls(camera4);
+// Set up the renderer and add it to the DOMconst renderer = new THREE.WebGLRenderer();renderer.setSize(window.innerWidth, window.innerHeight);document.body.appendChild(renderer.domElement);// Create controls for each camera// TODO: 2nd argument renderer.domElementconst controls1 = new OrbitControls(camera1, renderer.domElement);const controls2 = new OrbitControls(camera2, renderer.domElement);const controls3 = new OrbitControls(camera3, renderer.domElement);const controls4 = new OrbitControls(camera4, renderer.domElement);
 
 // Load each image and add it to its corresponding scene
 const loader = new THREE.TextureLoader();
-const image1 = loader.load('image1.png');
-const image2 = loader.load('image2.png');
-const image3 = loader.load('image3.png');
-const image4 = loader.load('image4.png');
+const image1 = loader.load('image1.jpg');
+const image2 = loader.load('image2.jpg');
+const image3 = loader.load('image3.jpg');
+const image4 = loader.load('image4.jpg');
 
 const geometry = new THREE.PlaneGeometry(1, 1);
 const material1 = new THREE.MeshBasicMaterial({ map: image1 });
@@ -241,6 +239,8 @@ const mesh2 = new THREE.Mesh(geometry, material2);
 const mesh3 = new THREE.Mesh(geometry, material3);
 const mesh4 = new THREE.Mesh(geometry, material4);
 
+// Position the imagemesh1.position.set(-1, 1, 0);mesh2.position.set(1, 1, 0);mesh3.position.set(-1, -1, 0);mesh4.position.set(1, -1, 0);
+
 scene1.add(mesh1);
 scene2.add(mesh2);
 scene3.add(mesh3);
@@ -251,11 +251,6 @@ parentScene.add(scene1);
 parentScene.add(scene2);
 parentScene.add(scene3);
 parentScene.add(scene4);
-
-// Set up the renderer and add it to the DOM
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
 
 // Set up a function to handle window resizing
 function onWindowResize() {
@@ -335,6 +330,7 @@ function render() {
     selectedCamera.updateMatrix();
     selectedCamera.updateWorldMatrix(true, true);
   }
+  selectedCamera = null;
 
   // Render the parent scene
   renderer.render(parentScene, parentCamera);
@@ -357,9 +353,9 @@ Finally, in the **render function,** we've added code to update the selected cam
 Ah, it seems that we need to **add the four images to the parent scene and position them correctly.** This positions the four images at the corners of the parent scene:
 
 ```javascript
-// kool-aid-kids.html
+// kool-aid-kids.html, kool2.js
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 const scene1 = new THREE.Scene();
 const camera1 = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -467,6 +463,7 @@ function onDocumentMouseMove(event) {
     selectedCamera.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), theta);
     selectedCamera.rotateOnWorldAxis(new THREE.Vector3(1, 0, 0), phi);
   }
+  selectedCamera = null;
 }
 
 function onWindowResize() {
