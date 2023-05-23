@@ -1,6 +1,16 @@
 import * as THREE from 'three';
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 
+function f(object) {
+  if (object instanceof THREE.Object3D) {
+    // The object is an instance of or inherits from THREE.Object3D
+    console.log("%cYes.", "color: #ccff00;");
+  } else {
+    // The object does not inherit from THREE.Object3D
+    console.log("%cNo.", "color: deeppink", object);
+  }
+}
+
 const Z = 5;
 const FOV = 50;
 
@@ -12,19 +22,24 @@ camera1.name = "camera1";
 
 const scene2 = new THREE.Scene();
 const camera2 = new THREE.PerspectiveCamera(FOV, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera2.position.x = Z;
+camera2.position.x = Z; // TODO: Wait, what? Why?
 camera2.name = "camera2";
 
 const scene3 = new THREE.Scene();
 const camera3 = new THREE.PerspectiveCamera(FOV, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera3.position.y = Z;
+camera3.position.y = Z; // DITTO
 camera3.name = "camera3";
 
 const scene4 = new THREE.Scene();
 const camera4 = new THREE.PerspectiveCamera(FOV, window.innerWidth / window.innerHeight, 0.1, 1000);
-// camera4.position.set(-Z, 0, Z);
-camera4.position.set(-5, 0, 5);
+camera4.position.set(-Z, 0, Z); // DITTO
 camera4.name = "camera4";
+
+console.log("\nScenes:");
+f(scene1);
+f(scene2);
+f(scene3);
+f(scene4);
 
 // Add the scenes to a parent scene
 const parentScene = new THREE.Scene();
@@ -35,9 +50,10 @@ parentScene.add(scene4);
 
 // Create a target object to control the camera
 const target = new THREE.Object3D();
+console.log("\nTarget:");
+f(target);
 parentScene.add(target);
 
-// TODO: HE FORGOT TO ADD THE RENDERER
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
@@ -102,10 +118,22 @@ function onDocumentMouseMove(event) {
   selectedCamera = null;
 }
 
-// TODO: DEFINE PARENT CAMERA
 const parentCamera = new THREE.PerspectiveCamera(FOV, window.innerWidth / window.innerHeight, 0.1, 1000);
-parentCamera.position.set(0, 0, 10);
+// parentCamera.position.set(0, 0, 10);
+parentCamera.position.set(0, 0, 0);
+parentCamera.rotation.set(0, 0, 0);
+
 // I suppose we need to add all the cameras to this too, huh?
+console.log("\nCameras:");
+f(camera1);
+f(camera2);
+f(camera3);
+f(camera4);
+
+parentCamera.add(camera1);
+parentCamera.add(camera2);
+parentCamera.add(camera3);
+parentCamera.add(camera4);
 
 function onWindowResize() {
   parentCamera.aspect = window.innerWidth / window.innerHeight;
@@ -117,14 +145,13 @@ function onWindowResize() {
 // Add the four images to the scenes
 const loader = new THREE.TextureLoader();
 
-// TODO: DEFINE GEOMETRY IN HERE
 const geometry = new THREE.PlaneGeometry(1, 1);
 
 const image1 = loader.load('image1.jpg');
-const material1 = new THREE.MeshBasicMaterial({ map: image1 })
+const material1 = new THREE.MeshBasicMaterial({ map: image1 });
+
 const mesh1 = new THREE.Mesh(geometry, material1);
 mesh1.position.set(-2, 2, 0);
-// TODO: He left a lot out, and then he crapped out.
 scene1.add(mesh1);
 
 const image2 = loader.load('image2.jpg');
@@ -145,6 +172,12 @@ const mesh4 = new THREE.Mesh(geometry, material4);
 mesh4.position.set(-2, 2, 0);
 scene4.add(mesh4);
 
+console.log("\nMeshes:");
+f(mesh1);
+f(mesh2);
+f(mesh3);
+f(mesh4);
+
 function animate() {
   requestAnimationFrame(animate);
 
@@ -161,5 +194,5 @@ document.addEventListener('mouseup', onDocumentMouseUp);
 document.addEventListener('mousemove', onDocumentMouseMove);
 window.addEventListener('resize', onWindowResize);
 
-// animate();
+// animate(); // TODO: uncomment, comment.
 renderer.render(parentScene, parentCamera);

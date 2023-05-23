@@ -518,11 +518,10 @@ scene1.add(mesh1);
 
 ## panorámica y zoom
 
-<span style="color:#0000dd;">Otherwise the code looks good, except - the images are not panning and zooming.  Any ideas?
-
-It looks like we forgot to **update the controls for each image** to use the same target object, so they all pan and zoom together:
+It looks like we forgot to update the controls for each image to **use the same target object,** so they all pan and zoom together:
 
 ```javascript
+// kool3.js
 // Create the four scenes and cameras
 const scene1 = new THREE.Scene();
 const camera1 = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -609,7 +608,7 @@ function onDocumentMouseMove(event) {
   }
 }
 
-// DEFINE PARENT CAMERA
+// TODO: DEFINE PARENT CAMERA
 
 function onWindowResize() {
   parentCamera.aspect = window.innerWidth / window.innerHeight;
@@ -621,7 +620,7 @@ function onWindowResize() {
 // Add the four images to the scenes
 const loader = new THREE.TextureLoader();
 
-// DEFINE GEOMETRY IN HERE
+// TODO: DEFINE GEOMETRY IN HERE
 
 const image1 = loader.load('image1.jpg');
 const material1 = new THREE.MeshBasicMaterial({ map: image1 })
@@ -635,7 +634,7 @@ Please continue, starting with "Add the four images to the scenes".
 
 Sure! **Here's the complete updated code** with the images added to the scenes...
 
-See esqueletos.
+See **esqueletos.**
 
 ## Create ParentCamera in Three.js
 
@@ -681,29 +680,6 @@ renderer.render(scene, parentCamera.activeCamera);
 
 Note that when you move or rotate the `ParentCamera`, all of its child cameras will also move and rotate accordingly.
 
-## three.js Errors: Camera & Objects
-
-This is freakin' ridiculous.  I'm not getting good code, and I'm getting incomplete code.
-
-I'm getting the following errors in three.js.  what does it mean?
-
-```
-THREE.WebGLRenderer.render: camera is not an instance of THREE.Camera.
-
-THREE.Object3D.add: object not an instance of THREE.Object3D.
-Object { x: 0, y: 0, z: 0 }
-```
-
-<br>
-
-These errors indicate that there are issues with the objects being passed as arguments in your three.js code.
-
-The first error, "**THREE.WebGLRenderer.render**: camera is not an instance of THREE.Camera," suggests that you are passing an object that is not an instance of THREE.Camera as the camera argument in the render method of the WebGLRenderer.
-
-Make sure that you have created a THREE.Camera object and that you are passing it correctly as the camera argument. You can create a new instance of the camera object using one of the available camera types in three.js, such as THREE.PerspectiveCamera or THREE.OrthographicCamera.
-
-The second error, "**THREE.Object3D.add**: object not an instance of THREE.Object3D," indicates that you are trying to add an object that is not an instance of THREE.Object3D to a THREE.Object3D container.
-
-Make sure that you are creating instances of the Object3D class and adding them to other Object3D instances or using them as the base class for other objects. You can create a new instance of the Object3D class using **`new THREE.Object3D()`**.
+See: Object3D error on mousedown.
 
 <br>
