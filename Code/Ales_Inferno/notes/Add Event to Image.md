@@ -115,7 +115,9 @@ Check if **any other element is capturing** the event: If there are other elemen
 
 This will ensure that the image can receive the mouse event even if there are other elements on top of it.
 
-<mark>**Using click or mousedown won't work.**</mark>
+Using click or mousedown didn't work.
+
+What if I put `event.preventDefault();` at the top of the event listener?
 
 ```js
 // el bugueo, b1.js
