@@ -46,6 +46,7 @@ controls.enableDamping = true;
 controls.dampingFactor = 0.05;
 
 // Add event listeners to the images to pan and zoom together
+// TODO: I think it's just that you can't add click events to a *mesh*
 image1.addEventListener('mousedown', onImageMouseDown);
 image2.addEventListener('mousedown', onImageMouseDown);
 image3.addEventListener('mousedown', onImageMouseDown);
@@ -56,10 +57,15 @@ image2.addEventListener('touchstart', onImageMouseDown);
 image3.addEventListener('touchstart', onImageMouseDown);
 image4.addEventListener('touchstart', onImageMouseDown);
 
+// Works, but it's not what we want
+// document.addEventListener('mousedown', onImageMouseDown);
+
 function onImageMouseDown(event) {
+  // console.log("onImageMouseDown"); // Nooope.
+  event.preventDefault();
   // Set the camera target to the position of the clicked image
   controls.target.copy(event.target.position);
-  console.log("target:", event.target); // todo: not firing. why?
+  console.log("target:", event.target);
 
   // Add event listeners to the document to pan and zoom the images together
   document.addEventListener('mousemove', onDocumentMouseMove);
@@ -69,22 +75,25 @@ function onImageMouseDown(event) {
 }
 
 function onDocumentMouseMove(event) {
-  console.log("Hello?");
+  event.preventDefault();
+  // console.log("onDocumentMouseMove"); // And again, no.
   // Calculate the mouse/touch movement and update the camera position
   const movementX = event.movementX || event.touches[0].clientX - event.touches[1].clientX;
   const movementY = event.movementY || event.touches[0].clientY - event.touches[1].clientY;
   const distance = Math.sqrt(movementX * movementX + movementY * movementY);
-  // move the camera closer or farther away from its target
+  // Move the camera closer or farther away from its target
   controls.dolly(Math.exp(distance * -0.01));
   controls.pan(new THREE.Vector3(-movementX, movementY, 0));
 }
 
 function onDocumentMouseUp(event) {
+  event.preventDefault();
+  // console.log("onDocumentMouseUp"); // No.
   // Remove the event listeners from the document
-  // document.removeEventListener('mousemove', onDocumentMouseMove);
-  // document.removeEventListener('touchmove', onDocumentMouseMove);
-  // document.removeEventListener('mouseup', onDocumentMouseUp);
-  // document.removeEventListener('touchend', onDocumentMouseUp);
+  document.removeEventListener('mousemove', onDocumentMouseMove);
+  document.removeEventListener('touchmove', onDocumentMouseMove);
+  document.removeEventListener('mouseup', onDocumentMouseUp);
+  document.removeEventListener('touchend', onDocumentMouseUp);
 }
 
 // Render the scene
@@ -94,4 +103,3 @@ function render() {
   renderer.render(scene, camera);
 }
 render();
-

@@ -8,8 +8,7 @@
   <style>
     body {
       margin: 0;
-      /* woodsmoke */
-      background-color: #171717;
+      background-color: #171717; /* woodsmoke */
     }
 
     canvas {
@@ -94,12 +93,14 @@
 
   // Event handler for changes in controls1
   function onControlsChange1() {
+    // console.log("onControlsChange1"); // YEP! IT WORKS.
     camera2.copy(camera1);
     camera2.updateProjectionMatrix();
   }
 
   // Event handler for changes in controls2
   function onControlsChange2() {
+    // console.log("onControlsChange2"); // WORKS :)
     camera1.copy(camera2);
     camera1.updateProjectionMatrix();
   }
