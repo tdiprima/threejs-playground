@@ -642,44 +642,44 @@ In Three.js, you can create a `ParentCamera` that acts as a container for other 
 
 1. Create the four cameras you want to include in the `ParentCamera`. For example, you could create four `PerspectiveCamera` objects with different `fov`, `aspect`, `near`, and `far` properties.
 
-```javascript
-const camera1 = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-const camera2 = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-const camera3 = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const camera4 = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000);
-```
+    ```javascript
+    const camera1 = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera2 = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera3 = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera4 = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000);
+    ```
 
 2. Create a `ParentCamera` using the `THREE.Group()` object.
 
-```javascript
-const parentCamera = new THREE.Group(); // <-- Group? Hellooo!
-```
+    ```javascript
+    const parentCamera = new THREE.Group(); // <-- Group? Hellooo!
+    ```
 
 3. Add the four cameras to the `ParentCamera` using the `add()` method.
 
-```javascript
-parentCamera.add(camera1);
-parentCamera.add(camera2);
-parentCamera.add(camera3);
-parentCamera.add(camera4);
-```
+    ```javascript
+    parentCamera.add(camera1);
+    parentCamera.add(camera2);
+    parentCamera.add(camera3);
+    parentCamera.add(camera4);
+    ```
 
 4. Set the position and rotation of the `ParentCamera` to control the view of the child cameras.
 
-```javascript
-parentCamera.position.set(0, 0, 0);
-parentCamera.rotation.set(0, 0, 0);
-```
+    ```javascript
+    parentCamera.position.set(0, 0, 0);
+    parentCamera.rotation.set(0, 0, 0);
+    ```
 
 5. When you want to render a scene with the `ParentCamera`, you can use any of the four child cameras by setting the `activeCamera` property of the `ParentCamera` to the desired camera.
 
-```javascript
-parentCamera.activeCamera = camera1;
-renderer.render(scene, parentCamera.activeCamera);
-```
+    ```javascript
+    parentCamera.activeCamera = camera1;
+    renderer.render(scene, parentCamera.activeCamera);
+    ```
 
 Note that when you move or rotate the `ParentCamera`, all of its child cameras will also move and rotate accordingly.
 
-See: Object3D error on mousedown.
+See: [Object3D error on mousedown](Object3D Error on Mousedown.md)
 
 <br>
