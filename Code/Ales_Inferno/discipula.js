@@ -85,6 +85,7 @@ function handleZoom(event) {
     controls3.dollyOut(event.deltaY);
     controls4.dollyOut(event.deltaY);
     // todo: controls1.dollyOut is not a function
+    // No matter what; zoom, zoomOut, dollyOut, it doesn't matter.
   }
 }
 

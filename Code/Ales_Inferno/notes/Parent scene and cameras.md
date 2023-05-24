@@ -36,19 +36,37 @@ So, by having the parent scene, multiple scenes, multiple cameras, and OrbitCont
 
 Certainly! To achieve the desired functionality of being able to zoom in and out of all four scenes together or separately, you can use a **combination** of **toggling** and **controlling the cameras.**
 
+```html
+<button id="zoom-toggle">Zoom Toggle</button>
+```
+
 ```javascript
+import * as THREE from "three";
+import {OrbitControls} from "three/addons/controls/OrbitControls.js";
+
 // Create a parent scene
 const parentScene = new THREE.Scene();
 
 // Create individual scenes and cameras
 const scene1 = new THREE.Scene();
-const camera1 = new THREE.PerspectiveCamera(/* camera parameters */);
+scene1.background = new THREE.Color("#ff0088");
+const camera1 = new THREE.PerspectiveCamera(75, window.innerWidth / innerHeight, 1, 1000);
+camera1.position.z = 5;
+
 const scene2 = new THREE.Scene();
-const camera2 = new THREE.PerspectiveCamera(/* camera parameters */);
+scene2.background = new THREE.Color("#880088");
+const camera2 = new THREE.PerspectiveCamera(75, window.innerWidth / innerHeight, 1, 1000);
+camera2.position.z = 5;
+
 const scene3 = new THREE.Scene();
-const camera3 = new THREE.PerspectiveCamera(/* camera parameters */);
+scene3.background = new THREE.Color("#00ffff");
+const camera3 = new THREE.PerspectiveCamera(75, window.innerWidth / innerHeight, 1, 1000);
+camera3.position.z = 5;
+
 const scene4 = new THREE.Scene();
-const camera4 = new THREE.PerspectiveCamera(/* camera parameters */);
+scene4.background = new THREE.Color("#0000ff");
+const camera4 = new THREE.PerspectiveCamera(75, window.innerWidth / innerHeight, 1, 1000);
+camera4.position.z = 5;
 
 // Add scenes to the parent scene
 parentScene.add(scene1);
@@ -56,11 +74,24 @@ parentScene.add(scene2);
 parentScene.add(scene3);
 parentScene.add(scene4);
 
+// Create meshes
+const arr = [scene1, scene2, scene3, scene4];
+for (let i = 0; i < arr.length; i++) {
+  let material = new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe: true});
+  let geometry = new THREE.BoxGeometry(1, 1, 1);
+  let cube = new THREE.Mesh(geometry, material);
+  arr[i].add(cube);
+}
+
+const renderer = new THREE.WebGLRenderer({antialias: true});
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
 // Create OrbitControls for each camera
-const controls1 = new THREE.OrbitControls(camera1, renderer.domElement);
-const controls2 = new THREE.OrbitControls(camera2, renderer.domElement);
-const controls3 = new THREE.OrbitControls(camera3, renderer.domElement);
-const controls4 = new THREE.OrbitControls(camera4, renderer.domElement);
+const controls1 = new OrbitControls(camera1, renderer.domElement);
+const controls2 = new OrbitControls(camera2, renderer.domElement);
+const controls3 = new OrbitControls(camera3, renderer.domElement);
+const controls4 = new OrbitControls(camera4, renderer.domElement);
 
 // Toggle variable to switch between collective and individual zooming
 let collectiveZoom = true;
@@ -93,6 +124,20 @@ function toggleZoomMode() {
 // Example usage: Press a button to toggle zooming mode
 const zoomToggleButton = document.getElementById("zoom-toggle");
 zoomToggleButton.addEventListener("click", toggleZoomMode);
+
+(function animLoop() {
+  requestAnimationFrame(animLoop);
+
+  controls1.update();
+  controls2.update();
+  controls3.update();
+  controls4.update();
+
+  renderer.render(scene1, camera1);
+  renderer.render(scene2, camera2);
+  renderer.render(scene3, camera3);
+  renderer.render(scene4, camera4);
+})();
 ```
 
 <br>
@@ -185,59 +230,19 @@ This way, the `parentCamera` will determine the view and perspective of the comb
 
 Creating a `parentCamera` provides you with the ability to have a unified control over the overall composition. It allows you to manipulate the camera position, rotation, and other properties to affect the view of all four scenes simultaneously.
 
-## Dos.
+## Black Screen
 
-<span style="color:#0000dd;">I have 2 questions: 1) When I click the "zoom-toggle" button, and then try to zoom in, it says "controls1.zoom is not a function." 2) I set a color for each scene.  But all I'm seeing is a black screen.  Why?</span>
+If you set a color for each scene but are seeing a black screen, there might be a few reasons for this:
 
-1) Regarding the error "controls1.zoom is not a function," it seems like there might be an issue with how the `controls1` variable is assigned. Please make sure that you have properly instantiated the `OrbitControls` for `camera1` and assigned it to `controls1`. Double-check that the `OrbitControls` script is included in your HTML file and loaded before your JavaScript code.
+Check that you have proper **lighting** in your scene. If the scenes are not properly lit, they may appear black. You can add light sources like `THREE.AmbientLight`, `THREE.DirectionalLight`, or `THREE.PointLight` to illuminate the scenes. Experiment with different types of lights and their positions to achieve the desired lighting effect.
 
-Here's an example of how the `controls1` variable should be assigned:
+Confirm that the **camera is positioned** correctly to see the objects in the scene. If the camera is not placed properly, it may be looking in the wrong direction or away from the objects. Adjust the camera's position and direction to ensure that it is focused on the objects in each scene.
 
-```javascript
-const controls1 = new THREE.OrbitControls(camera1, renderer.domElement);
-```
+## No objects on screen
 
-<br>
+The **cube geometry** and **mesh** are being added to multiple scenes. Currently, you're adding the same cube to `scene1`, `scene2`, `scene3`, and `scene4`. However, <mark>**a single mesh instance can only be added to one scene at a time.**</mark>
 
-Make sure you have a similar line for each `OrbitControls` instance corresponding to the respective camera.
-
-<span style="color:red;">What about the Camera?  Ohh...</span>
-
-```js
-const camera1 = new THREE.PerspectiveCamera(/* camera parameters */);
-
-// So then:
-const fov = 45; // Camera frustum vertical field of view.
-const aspect = window.innerWidth / window.innerHeight; // Camera frustum aspect ratio.
-const near = 1; // Camera frustum near plane.
-const far = 1000; // Camera frustum far plane.
-
-const camera1 = new THREE.PerspectiveCamera(fov, aspect, near, far);
-```
-
-<br>
-
-2) If you set a color for each scene but are seeing a black screen, there might be a few reasons for this:
-
-- Check that you have proper **lighting** in your scene. If the scenes are not properly lit, they may appear black. You can add light sources like `THREE.AmbientLight`, `THREE.DirectionalLight`, or `THREE.PointLight` to illuminate the scenes. Experiment with different types of lights and their positions to achieve the desired lighting effect.
-
-- Verify that the **materials** applied to the objects in your scenes have the correct colors. Ensure that you have set the `color` property of the materials correctly. For example, you can create a basic material with a specific color like this:
-
-  ```javascript
-  const material = new THREE.MeshBasicMaterial({ color: 0xff0000 }); // Red color
-  ```
-
-  Apply this material to the objects in each scene to ensure that the colors are visible.
-
-- Confirm that the **camera is positioned** correctly to see the objects in the scene. If the camera is not placed properly, it may be looking in the wrong direction or away from the objects. Adjust the camera's position and direction to ensure that it is focused on the objects in each scene.
-
-By addressing these potential issues, you should be able to resolve the problem of seeing a black screen and ensure that the colors in each scene are displayed correctly.
-
-## I still have no objects on the screen, and it's still saying controls1.zoom is not a function.
-
-1) Make sure you have the correct path to the `OrbitControls` module.
-
-2) The **cube geometry** and **mesh** are being added to multiple scenes. Currently, you're adding the same cube to `scene1`, `scene2`, `scene3`, and `scene4`. However, <mark>**a single mesh instance can only be added to one scene at a time.**</mark>
+Also, make sure the cameras are positioned.
 
 You need to create separate cube instances for each scene to display them correctly.
 
@@ -263,7 +268,13 @@ scene4.add(cube4);
 
 ## I'm still not seeing cubes on the screen, and I'm still getting that error.
 
-1) The `controls.update()` function is not being called in the animation loop. Add the following inside the `animLoop()` function, right before `render()`:
+1) Ya gotta set the position of each scene and camera!
+
+```js
+camera.position.z = 5;
+```
+
+2) Remember to call the `controls.update()` function in the animation loop, right before `render()`:
 
 ```javascript
 controls1.update();
@@ -274,55 +285,41 @@ controls4.update();
 
 <br>
 
-2) For zooming using `OrbitControls`, you need to call the `zoomIn` or `zoomOut` method instead of `zoom`. <span style="color:red;">Wrong.</span>
+3) For zooming using `OrbitControls`, you need to call [God knows what].
 
-```javascript
-function handleZoom(event) {
-  if (collectiveZoom) {
-    camera1.zoom += event.deltaY * 0.001;
-    camera2.zoom += event.deltaY * 0.001;
-    camera3.zoom += event.deltaY * 0.001;
-    camera4.zoom += event.deltaY * 0.001;
-  } else {
-    controls1.zoomOut(event.deltaY);
-    controls2.zoomOut(event.deltaY);
-    controls3.zoomOut(event.deltaY);
-    controls4.zoomOut(event.deltaY);
-  }
-}
-```
-
-<br>
-
-Now, the `zoomOut` method of `OrbitControls` is used to zoom out **when the toggle is not active.**
+Now, the `whatever` method of `OrbitControls` is used to zoom out **when the toggle is not active.**
 
 After applying these changes, your code should look like this:
 
 ```javascript
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 
 const parentScene = new THREE.Scene();
-const fov = 45;
+const fov = 75;
 const aspect = window.innerWidth / window.innerHeight;
 const near = 1;
 const far = 1000;
 
 const scene1 = new THREE.Scene();
-scene1.background = new THREE.Color("#ff0000");
+scene1.background = new THREE.Color("#ff0088");
 const camera1 = new THREE.PerspectiveCamera(fov, aspect, near, far);
+camera1.position.z = 5;
 
 const scene2 = new THREE.Scene();
-scene2.background = new THREE.Color("#ffff00");
+scene2.background = new THREE.Color("#880088");
 const camera2 = new THREE.PerspectiveCamera(fov, aspect, near, far);
+camera2.position.z = 5;
 
 const scene3 = new THREE.Scene();
-scene3.background = new THREE.Color("#00ff00");
+scene3.background = new THREE.Color("#00ffff");
 const camera3 = new THREE.PerspectiveCamera(fov, aspect, near, far);
+camera3.position.z = 5;
 
 const scene4 = new THREE.Scene();
 scene4.background = new THREE.Color("#0000ff");
 const camera4 = new THREE.PerspectiveCamera(fov, aspect, near, far);
+camera4.position.z = 5;
 
 parentScene.add(scene1);
 parentScene.add(scene2);
@@ -365,6 +362,7 @@ function handleZoom(event) {
     camera3.zoom += event.deltaY * 0.001;
     camera4.zoom += event.deltaY * 0.001;
   } else {
+    // TODO: This is just plain wrong.
     controls1.zoomOut(event.deltaY);
     controls2.zoomOut(event.deltaY);
     controls3.zoomOut(event.deltaY);
@@ -382,7 +380,10 @@ const zoomToggleButton = document.getElementById("zoom-toggle");
 zoomToggleButton.addEventListener("click", toggleZoomMode);
 
 function render() {
-  renderer.render(parentScene, camera1);
+  renderer.render(scene1, camera1);
+  renderer.render(scene2, camera2);
+  renderer.render(scene3, camera3);
+  renderer.render(scene4, camera4);
 }
 
 (function animLoop() {
@@ -397,62 +398,7 @@ function render() {
 
 <br>
 
-Please make these modifications and try running the code again. It should resolve the issues and display the cubes in their respective scenes without any errors.
-
-
-## Zoom
-
-<span style="color:#0000dd;">There is no "zoomOut" method for OrbitControls.  There is a "zoom" method, but the docs say "Used internally by the .saveState and .reset methods."</span>
-
-You are correct that the `OrbitControls` do not have a `zoomOut` method. Instead, you can use the `dollyIn` and `dollyOut` methods to achieve the zooming effect.
-
-```javascript
-function handleZoom(event) {
-  if (collectiveZoom) {
-    camera1.zoom += event.deltaY * 0.001;
-    camera2.zoom += event.deltaY * 0.001;
-    camera3.zoom += event.deltaY * 0.001;
-    camera4.zoom += event.deltaY * 0.001;
-  } else {
-    controls1.dollyOut(event.deltaY);
-    controls2.dollyOut(event.deltaY);
-    controls3.dollyOut(event.deltaY);
-    controls4.dollyOut(event.deltaY);
-  }
-}
-```
-
-<br>
-
 By using the `dollyOut` method, you can achieve the zooming effect for **each individual scene** when the **toggle is not active.**
-
-## 1 cube, dead-center
-
-<span style="color:#0000dd;">Thank you, that fixed the error.  But now - I only have 1 cube on the screen.  And it's dead-center.  I expect to see 4; one in the center of each individual scene.</span>
-
-The issue is that the `render()` function is currently **rendering only the parent scene with `camera1`.** To display all four scenes and their respective cubes, we need to modify the `render()` function.
-
-```javascript
-function render() {
-  // Render scene1 with camera1
-  renderer.render(scene1, camera1);
-
-  // Render scene2 with camera2
-  renderer.render(scene2, camera2);
-
-  // Render scene3 with camera3
-  renderer.render(scene3, camera3);
-
-  // Render scene4 with camera4
-  renderer.render(scene4, camera4);
-}
-```
-
-<br>
-
-By rendering each individual scene with its respective camera, you should now see all four cubes displayed on the screen.
-
-Please make this modification and run the code again to verify the results.
 
 ## 4th scene
 
