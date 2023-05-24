@@ -82,24 +82,34 @@ function z(controls, event) {
 // Function to handle zooming behavior
 function handleZoom(event) {
   if (collectiveZoom) {
+    console.log("collective");
     // Zoom all cameras collectively
     camera1.zoom += event.deltaY * 0.001;
     camera2.zoom += event.deltaY * 0.001;
     camera3.zoom += event.deltaY * 0.001;
     camera4.zoom += event.deltaY * 0.001;
   } else {
+    console.log("individual");
+    // TODO: IDK.
+    // Even if I comment out the other controls, it still moves all of them.
+    // And this is just (allegedly) affecting the zoom!  What about rotate; need to handle.
+
     // Zoom each camera separately
-    // todo: I edited OrbitControls. But now it only goes in one direction.
-    // controls1.dollyOut(event.deltaY);
+    controls1.dollyOut(event.deltaY);
     // controls2.dollyOut(event.deltaY);
     // controls3.dollyOut(event.deltaY);
     // controls4.dollyOut(event.deltaY);
 
-    // So I did delta like before, but I see no difference.
-    z(controls1, event)
-    z(controls2, event)
-    z(controls3, event)
-    z(controls4, event)
+    controls1.dollyIn(event.deltaX);
+    // controls2.dollyIn(event.deltaX);
+    // controls3.dollyIn(event.deltaX);
+    // controls4.dollyIn(event.deltaX);
+
+    // I did delta like before...
+    // z(controls1, event)
+    // z(controls2, event)
+    // z(controls3, event)
+    // z(controls4, event)
   }
 }
 

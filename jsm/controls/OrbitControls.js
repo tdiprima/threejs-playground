@@ -99,10 +99,31 @@ class OrbitControls extends EventDispatcher {
 		// public methods
 		//
 
+    // TJD START
+    this.pan = function ( deltaX, deltaY ) {
+      pan( deltaX, deltaY );
+      scope.update();
+    };
+    this.dollyIn = function() {
+      dollyIn( getZoomScale() );
+      scope.update();
+    };
+    this.dollyOut = function() {
+      dollyOut( getZoomScale() );
+      scope.update();
+    };
+    this.rotateLeft = function( angle ) {
+      rotateLeft( angle );
+      scope.update();
+    };
+    this.rotateUp = function( angle ) {
+      rotateUp( angle );
+      scope.update();
+    };
+    // END
+
 		this.getPolarAngle = function () {
-
 			return spherical.phi;
-
 		};
 
 		this.getAzimuthalAngle = function () {
