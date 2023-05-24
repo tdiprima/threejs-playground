@@ -398,6 +398,10 @@ function render() {
 
 <br>
 
+[Three.js OrbitControls.js - invoking zoom in/out with button - controls.dollyOut() is not a function](https://stackoverflow.com/questions/39856907/three-js-orbitcontrols-js-invoking-zoom-in-out-with-button-controls-dollyout)
+
+[OrbitControls: Added public methods to pan, rotate and dolly camera](https://github.com/mrdoob/three.js/pull/9005/files)
+
 By using the `dollyOut` method, you can achieve the zooming effect for **each individual scene** when the **toggle is not active.**
 
 ## 4th scene
