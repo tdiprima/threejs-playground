@@ -486,5 +486,35 @@ By setting different positions for the cameras and scenes, you can ensure that e
 
 Make these modifications to your code, and then run it again to see all four scenes with their respective cubes rendered correctly.
 
+## It's better, but it's still not right.
+
+Can you please explain this part to me as if I'm 12?  Like when we're using window.innerWidth / 2 versus window.innerWidth, for example?  What is each of these 4 lines doing? 
+
+```js
+renderer.setViewport(0, 0, window.innerWidth / 2, window.innerHeight);
+```
+
+This line sets the viewport for the first scene and camera. The viewport defines the portion of the renderer's output canvas (the window where the graphics are displayed) that the scene will occupy. In this case, we're setting the viewport to start from the leftmost side (0) of the canvas, at the top (0) of the canvas, and have a width equal to half (`window.innerWidth / 2`) of the canvas's total width. The height is set to match the full height (`window.innerHeight`) of the canvas.
+
+```js
+renderer.setViewport(window.innerWidth / 2, 0, window.innerWidth / 2, window.innerHeight);
+```
+
+This line sets the viewport for the second scene and camera. Similar to the previous line, we're setting the viewport to start from the middle of the canvas horizontally (`window.innerWidth / 2`), at the top (0) of the canvas, and have a width equal to half of the canvas's total width. The height is set to match the full height of the canvas.
+
+```js
+renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
+```
+
+This line sets the viewport for the third scene and camera. Here, we're setting the viewport to **cover the entire canvas.** The viewport starts at the leftmost side (0) of the canvas, at the top (0) of the canvas, and has a width equal to the full width (`window.innerWidth`) of the canvas. The height is set to match the full height of the canvas.
+
+```js
+renderer.setViewport(window.innerWidth / 2, window.innerHeight / 2, window.innerWidth / 2, window.innerHeight / 2);
+```
+
+This line sets the viewport for the fourth scene and camera. We're placing the viewport in the bottom-right quadrant of the canvas. The viewport starts from the middle of the canvas horizontally (`window.innerWidth / 2`) and the middle of the canvas vertically (`window.innerHeight / 2`). The width and height are both set to half of the canvas's total width and height, respectively.
+
+By setting different viewports for each scene and camera, we can ensure that each scene is rendered in its designated area of the canvas. This allows us to display multiple scenes simultaneously within the same window.
+
 <br>
 
