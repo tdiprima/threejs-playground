@@ -6,7 +6,7 @@ Sure! I'll explain it in a simple way.
 
 Imagine you have a big box that contains four smaller boxes inside it. The big box is like the parent scene, and the smaller boxes are the individual scenes. The parent scene holds everything together and helps organize the smaller scenes.
 
-Now, why do we need this parent scene? Well, think of it as a way to manage and control the smaller scenes more easily. It allows us to treat all the scenes as a single entity and perform certain actions on them collectively.
+Now, **why do we need this parent scene?** Well, think of it as a way to manage and control the smaller scenes more easily. It allows us to treat all the scenes as a single entity and perform certain actions on them collectively.
 
 For example, let's say you want to move or rotate all the smaller scenes at once. Instead of having to manipulate each individual scene separately, you can just manipulate the parent scene, and all the smaller scenes will move or rotate accordingly. It simplifies the process and makes it more efficient.
 
@@ -14,27 +14,27 @@ In addition to the parent scene, we also have cameras to view each individual sc
 
 OrbitControls is a tool that helps us move and interact with the cameras. It allows us to rotate the camera around a target object (like a point of interest) and zoom in or out. By attaching OrbitControls to each camera, we can navigate and explore each scene more easily.
 
-So, to sum it up, the parent scene helps organize and manage multiple scenes together, while cameras and OrbitControls allow us to view and interact with each scene effectively.
+So, to sum it up, the parent scene **helps organize and manage** multiple scenes together, while cameras and OrbitControls allow us to view and interact with each scene effectively.
 
 ## Thinking...
 
 <span style="color:#0000dd;">But essentially, isn't this like adding 4 objects to a scene and having one camera and one OrbitControls to move them?  Or - does having the 4 scenes, 4 cameras, and one parent scene give me flexibility.  For example, I don't want to zoom in and out of the entire thing, as with 1 scene.  I want the 4 objects to be stationary, and we zoom in and out of the scene, but all the other scenes zoom in and out too.  Is that right?</span>
 
-Yes, you're correct! Having the four scenes, four cameras, and one parent scene gives you flexibility and allows you to have individual control over each scene while also having the option to control them collectively.
+Yes, you're correct! Having the four scenes, four cameras, and one parent scene gives you flexibility and allows you to have **individual control over each scene** while also having the option to **control them collectively.**
 
-In your example, if you want the four objects to remain stationary and zoom in and out of the entire scene, you can achieve that with the parent scene setup. By attaching OrbitControls to the parent scene's camera, you can control the zooming in and out of the entire scene, including all the individual scenes within it.
+In your example, if you want the four objects to remain **stationary** and zoom in and out of the entire scene, you can achieve that with the **parent scene setup.** By attaching OrbitControls to the parent scene's camera, you can control the zooming in and out of the entire scene, including all the individual scenes within it.
 
 This means that when you zoom in or out, all four scenes will appear to zoom in or out together because they are part of the parent scene. It provides a consistent zooming experience across all the scenes, maintaining their relative positions and scales.
 
 However, it's important to note that although the objects within the scenes may appear to zoom in and out together, you can still manipulate each individual scene separately if needed. You have the flexibility to modify or interact with each scene independently, such as moving objects within a specific scene or applying unique effects.
 
-So, by having the parent scene, multiple scenes, multiple cameras, and OrbitControls, you gain the ability to control the entire scene as a whole while retaining the flexibility to manipulate each scene individually when necessary.
+So, by having the parent scene, multiple scenes, multiple cameras, and OrbitControls, you gain the ability to **control** the entire scene as a whole while retaining the flexibility to manipulate each scene individually when necessary.
 
 ## Example
 
 <span style="color:#0000dd;">Can you give me a code example of being able to zoom in and out of all 4 scenes together and also separately?  Do I toggle a switch?  How do I do this?</span>
 
-Certainly! To achieve the desired functionality of being able to zoom in and out of all four scenes together or separately, you can use a combination of toggling and controlling the cameras. Here's a simplified code example using three.js:
+Certainly! To achieve the desired functionality of being able to zoom in and out of all four scenes together or separately, you can use a **combination** of **toggling** and **controlling the cameras.**
 
 ```javascript
 // Create a parent scene
@@ -97,13 +97,11 @@ zoomToggleButton.addEventListener("click", toggleZoomMode);
 
 <br>
 
-In this example, we start with the default behavior of collective zooming. When you scroll the mouse wheel, the `handleZoom` function is triggered. If `collectiveZoom` is set to `true`, it adjusts the `zoom` property of all the cameras equally, effectively zooming in or out of all four scenes together.
+In this example, we start with the **default behavior of collective zooming.** When you scroll the mouse wheel, the `handleZoom` function is triggered. If `collectiveZoom` is set to `true`, it adjusts the `zoom` property of all the cameras equally, effectively zooming in or out of all four scenes together.
 
 However, if `collectiveZoom` is set to `false`, it calls the `zoom` function on each individual `OrbitControls` instance, allowing you to zoom each scene separately.
 
-To toggle between collective and individual zooming, you can use a button (in this case, with the id `"zoom-toggle"`). When the button is clicked, the `toggleZoomMode` function is called, which flips the value of `collectiveZoom`, changing the zooming behavior.
-
-You can customize this example further to suit your specific needs, such as adding buttons or UI elements for individual scene controls or modifying the zooming behavior.
+To **toggle** between collective and individual zooming, you can use a button (in this case, with the id `"zoom-toggle"`). When the button is clicked, the `toggleZoomMode` function is called, which flips the value of `collectiveZoom`, changing the zooming behavior.
 
 ## 1 Renderer
 
@@ -221,9 +219,9 @@ const camera1 = new THREE.PerspectiveCamera(fov, aspect, near, far);
 
 2) If you set a color for each scene but are seeing a black screen, there might be a few reasons for this:
 
-- Check that you have proper lighting in your scene. If the scenes are not properly lit, they may appear black. You can add light sources like `THREE.AmbientLight`, `THREE.DirectionalLight`, or `THREE.PointLight` to illuminate the scenes. Experiment with different types of lights and their positions to achieve the desired lighting effect.
+- Check that you have proper **lighting** in your scene. If the scenes are not properly lit, they may appear black. You can add light sources like `THREE.AmbientLight`, `THREE.DirectionalLight`, or `THREE.PointLight` to illuminate the scenes. Experiment with different types of lights and their positions to achieve the desired lighting effect.
 
-- Verify that the materials applied to the objects in your scenes have the correct colors. Ensure that you have set the `color` property of the materials correctly. For example, you can create a basic material with a specific color like this:
+- Verify that the **materials** applied to the objects in your scenes have the correct colors. Ensure that you have set the `color` property of the materials correctly. For example, you can create a basic material with a specific color like this:
 
   ```javascript
   const material = new THREE.MeshBasicMaterial({ color: 0xff0000 }); // Red color
@@ -231,7 +229,7 @@ const camera1 = new THREE.PerspectiveCamera(fov, aspect, near, far);
 
   Apply this material to the objects in each scene to ensure that the colors are visible.
 
-- Confirm that the camera is positioned correctly to see the objects in the scene. If the camera is not placed properly, it may be looking in the wrong direction or away from the objects. Adjust the camera's position and direction to ensure that it is focused on the objects in each scene.
+- Confirm that the **camera is positioned** correctly to see the objects in the scene. If the camera is not placed properly, it may be looking in the wrong direction or away from the objects. Adjust the camera's position and direction to ensure that it is focused on the objects in each scene.
 
 By addressing these potential issues, you should be able to resolve the problem of seeing a black screen and ensure that the colors in each scene are displayed correctly.
 
@@ -239,7 +237,9 @@ By addressing these potential issues, you should be able to resolve the problem 
 
 1) Make sure you have the correct path to the `OrbitControls` module.
 
-2) The cube geometry and mesh are being added to multiple scenes. Currently, you're adding the same cube to `scene1`, `scene2`, `scene3`, and `scene4`. However, a single mesh instance can only be added to one scene at a time. You need to create separate cube instances for each scene to display them correctly. Modify your cube creation as follows:
+2) The **cube geometry** and **mesh** are being added to multiple scenes. Currently, you're adding the same cube to `scene1`, `scene2`, `scene3`, and `scene4`. However, <mark>**a single mesh instance can only be added to one scene at a time.**</mark>
+
+You need to create separate cube instances for each scene to display them correctly.
 
 ```javascript
 let geometry1 = new THREE.BoxGeometry(1, 1, 1);
@@ -259,15 +259,11 @@ let cube4 = new THREE.Mesh(geometry4, material);
 scene4.add(cube4);
 ```
 
-With these changes, you should have separate cube instances in each scene.
-
-Once you have made these adjustments, try running your code again. It should resolve the issue with the `controls1.zoom is not a function` error, and you should see separate cubes in each scene with their corresponding colors.
+<br>
 
 ## I'm still not seeing cubes on the screen, and I'm still getting that error.
 
-Apologies for the confusion. There are a couple more issues in your code that might be causing the problem:
-
-1) The `render()` function is not being called in the animation loop. Add the following line inside the `animLoop()` function, right before `render()`:
+1) The `controls.update()` function is not being called in the animation loop. Add the following inside the `animLoop()` function, right before `render()`:
 
 ```javascript
 controls1.update();
@@ -276,7 +272,9 @@ controls3.update();
 controls4.update();
 ```
 
-2) For zooming using `OrbitControls`, you need to call the `zoomIn` or `zoomOut` method instead of `zoom`. Modify the `handleZoom` function as follows:
+<br>
+
+2) For zooming using `OrbitControls`, you need to call the `zoomIn` or `zoomOut` method instead of `zoom`. <span style="color:red;">Wrong.</span>
 
 ```javascript
 function handleZoom(event) {
@@ -294,7 +292,9 @@ function handleZoom(event) {
 }
 ```
 
-Now, the `zoomOut` method of `OrbitControls` is used to zoom out when the toggle is not active.
+<br>
+
+Now, the `zoomOut` method of `OrbitControls` is used to zoom out **when the toggle is not active.**
 
 After applying these changes, your code should look like this:
 
@@ -356,9 +356,7 @@ const controls2 = new OrbitControls(camera2, renderer.domElement);
 const controls3 = new OrbitControls(camera3, renderer.domElement);
 const controls4 = new OrbitControls(camera4, renderer.domElement);
 
-let collectiveZoom = true
-
-;
+let collectiveZoom = true;
 
 function handleZoom(event) {
   if (collectiveZoom) {
@@ -397,14 +395,16 @@ function render() {
 })();
 ```
 
+<br>
+
 Please make these modifications and try running the code again. It should resolve the issues and display the cubes in their respective scenes without any errors.
 
 
 ## Zoom
 
-There is no "zoomOut" method for OrbitControls.  There is a "zoom" method, but the docs say "Used internally by the .saveState and .reset methods."
+<span style="color:#0000dd;">There is no "zoomOut" method for OrbitControls.  There is a "zoom" method, but the docs say "Used internally by the .saveState and .reset methods."</span>
 
-Apologies for the confusion. You are correct that the `OrbitControls` do not have a `zoomOut` method. Instead, you can use the `dollyIn` and `dollyOut` methods to achieve the zooming effect. Modify the `handleZoom` function as follows:
+You are correct that the `OrbitControls` do not have a `zoomOut` method. Instead, you can use the `dollyIn` and `dollyOut` methods to achieve the zooming effect.
 
 ```javascript
 function handleZoom(event) {
@@ -422,17 +422,15 @@ function handleZoom(event) {
 }
 ```
 
-By using the `dollyOut` method, you can achieve the zooming effect for each individual scene when the toggle is not active.
+<br>
 
-Please make this adjustment to your code and try running it again. The cubes should be displayed correctly in each scene, and the zooming should work without any errors.
+By using the `dollyOut` method, you can achieve the zooming effect for **each individual scene** when the **toggle is not active.**
 
 ## 1 cube, dead-center
 
-Thank you, that fixed the error.  But now - I only have 1 cube on the screen.  And it's dead-center.  I expect to see 4; one in the center of each individual scene.
+<span style="color:#0000dd;">Thank you, that fixed the error.  But now - I only have 1 cube on the screen.  And it's dead-center.  I expect to see 4; one in the center of each individual scene.</span>
 
-Apologies for the confusion once again. I made an oversight in the code I provided. The issue is that the `render()` function is currently rendering only the parent scene with `camera1`. To display all four scenes and their respective cubes, we need to modify the `render()` function.
-
-Please update the `render()` function as follows:
+The issue is that the `render()` function is currently **rendering only the parent scene with `camera1`.** To display all four scenes and their respective cubes, we need to modify the `render()` function.
 
 ```javascript
 function render() {
@@ -450,21 +448,23 @@ function render() {
 }
 ```
 
+<br>
+
 By rendering each individual scene with its respective camera, you should now see all four cubes displayed on the screen.
 
 Please make this modification and run the code again to verify the results.
 
 ## 4th scene
 
-OK!  I think that helped.  I see what the problem is now.  Now, it's only rendering the 4th scene.  Do we have to position the cubes?  Or position the scenes within the parent?  Or something?  In order to see all 4 scenes.
+<span style="color:#0000dd;">OK!  I think that helped.  I see what the problem is now.  Now, it's only rendering the 4th scene.  Do we have to position the cubes?  Or position the scenes within the parent?  Or something?  In order to see all 4 scenes.</span>
 
-Great! I'm glad that helped. Now, regarding the issue where only the 4th scene is rendering, the problem lies in the positioning of the cameras.
+Great! I'm glad that helped. Now, regarding the issue where only the 4th scene is rendering, the problem lies in the **positioning of the cameras.**
 
-By default, the cameras are positioned at the same coordinates (0, 0, 0) in the parent scene. Therefore, when rendering each scene with its respective camera, they all render from the same position, resulting in only the last scene being visible.
+By default, the cameras are positioned at the same coordinates **(0, 0, 0)** in the parent scene. Therefore, when rendering each scene with its respective camera, they all **render from the same position**, resulting in only the last scene being visible.
 
-To address this, you need to position the cameras and the scenes within the parent scene so that they are not overlapping. You can modify the positions of the cameras and scenes to achieve the desired arrangement.
+To address this, you need to **position the cameras and the scenes** within the parent scene so that they are not overlapping. You can modify the positions of the cameras and scenes to achieve the desired arrangement.
 
-For example, you can update the camera positions as follows:
+Update the **camera positions:**
 
 ```javascript
 camera1.position.set(0, 0, 5); // Move camera1 along the z-axis
@@ -473,7 +473,9 @@ camera3.position.set(5, 0, 0); // Move camera3 along the x-axis
 camera4.position.set(-5, 0, 0); // Move camera4 along the negative x-axis
 ```
 
-Additionally, you can adjust the positions of the scenes within the parent scene. For example:
+<br>
+
+Adjust the **positions of the scenes** within the parent scene.
 
 ```javascript
 scene1.position.set(0, 0, 5); // Move scene1 along the z-axis
@@ -482,39 +484,54 @@ scene3.position.set(5, 0, 0); // Move scene3 along the x-axis
 scene4.position.set(-5, 0, 0); // Move scene4 along the negative x-axis
 ```
 
-By setting different positions for the cameras and scenes, you can ensure that each scene is visible and not overlapping with others.
+<br>
 
-Make these modifications to your code, and then run it again to see all four scenes with their respective cubes rendered correctly.
-
-## It's better, but it's still not right.
-
-Can you please explain this part to me as if I'm 12?  Like when we're using window.innerWidth / 2 versus window.innerWidth, for example?  What is each of these 4 lines doing? 
+## The scissor section
 
 ```js
 renderer.setViewport(0, 0, window.innerWidth / 2, window.innerHeight);
 ```
 
-This line sets the viewport for the first scene and camera. The viewport defines the portion of the renderer's output canvas (the window where the graphics are displayed) that the scene will occupy. In this case, we're setting the viewport to start from the leftmost side (0) of the canvas, at the top (0) of the canvas, and have a width equal to half (`window.innerWidth / 2`) of the canvas's total width. The height is set to match the full height (`window.innerHeight`) of the canvas.
+<br>
+<span style="color:#0000dd;">I asked him to spell this out because something's not quite right in Denmark.</span>
+
+This line sets the viewport for the first scene and camera. The **viewport** defines the portion of the **renderer's output canvas** (the window where the graphics are displayed) that the scene will occupy.
+
+In this case, we're setting the viewport to start from the **leftmost side (0)** of the canvas, **at the top (0)** of the canvas.
+
+And have a **width** equal to half (`window.innerWidth / 2`) of the canvas's total width. The **height** is set to match the full height (`window.innerHeight`) of the canvas.
+
+<span style="color:#0000dd;">And that's why it's messed up.</span>
 
 ```js
 renderer.setViewport(window.innerWidth / 2, 0, window.innerWidth / 2, window.innerHeight);
 ```
 
-This line sets the viewport for the second scene and camera. Similar to the previous line, we're setting the viewport to start from the middle of the canvas horizontally (`window.innerWidth / 2`), at the top (0) of the canvas, and have a width equal to half of the canvas's total width. The height is set to match the full height of the canvas.
+This line sets the viewport for the second scene and camera. Similar to the previous line, we're setting the viewport to start from the **middle of the canvas** horizontally (`window.innerWidth / 2`), **at the top (0)** of the canvas, and have a width equal to half of the canvas's total width. The height is set to match the full height of the canvas.
 
 ```js
 renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
 ```
 
-This line sets the viewport for the third scene and camera. Here, we're setting the viewport to **cover the entire canvas.** The viewport starts at the leftmost side (0) of the canvas, at the top (0) of the canvas, and has a width equal to the full width (`window.innerWidth`) of the canvas. The height is set to match the full height of the canvas.
+This line sets the viewport for the third scene and camera. Here, we're setting the viewport to cover the entire canvas.
+
+<span style="color:#0000dd;">¿Por qué? ¿Cuán estúpido puedes llegar a ser?</span>
+
+The viewport starts at the **leftmost side (0)** of the canvas, at the **top (0)** of the canvas, and has a width equal to the full width (`window.innerWidth`) of the canvas. The height is set to match the full height of the canvas.
 
 ```js
 renderer.setViewport(window.innerWidth / 2, window.innerHeight / 2, window.innerWidth / 2, window.innerHeight / 2);
 ```
 
-This line sets the viewport for the fourth scene and camera. We're placing the viewport in the bottom-right quadrant of the canvas. The viewport starts from the middle of the canvas horizontally (`window.innerWidth / 2`) and the middle of the canvas vertically (`window.innerHeight / 2`). The width and height are both set to half of the canvas's total width and height, respectively.
+This line sets the viewport for the fourth scene and camera. We're placing the viewport in the **bottom-right** quadrant of the canvas.
+
+The viewport starts from the **middle** of the canvas **horizontally** (`window.innerWidth / 2`) and the middle of the canvas **vertically** (`window.innerHeight / 2`). The width and height are both set to half of the canvas's total width and height, respectively. <span style="color:#0000dd;">Finally correct!</span>
 
 By setting different viewports for each scene and camera, we can ensure that each scene is rendered in its designated area of the canvas. This allows us to display multiple scenes simultaneously within the same window.
+
+## Conclusion
+
+I ended up doing my own fixes.
 
 <br>
 
