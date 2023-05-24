@@ -70,6 +70,15 @@ const controls4 = new OrbitControls(camera4, renderer.domElement);
 // Toggle variable to switch between collective and individual zooming
 let collectiveZoom = true;
 
+function z(controls, event) {
+  const movementX = event.movementX || event.touches[0].clientX - event.touches[1].clientX;
+  const movementY = event.movementY || event.touches[0].clientY - event.touches[1].clientY;
+  const distance = Math.sqrt(movementX * movementX + movementY * movementY);
+  // Move the camera closer or farther away from its target
+  controls.dolly(Math.exp(distance * -0.01));
+  controls.pan(new THREE.Vector3(-movementX, movementY, 0));
+}
+
 // Function to handle zooming behavior
 function handleZoom(event) {
   if (collectiveZoom) {
@@ -80,12 +89,17 @@ function handleZoom(event) {
     camera4.zoom += event.deltaY * 0.001;
   } else {
     // Zoom each camera separately
-    controls1.dollyOut(event.deltaY);
-    controls2.dollyOut(event.deltaY);
-    controls3.dollyOut(event.deltaY);
-    controls4.dollyOut(event.deltaY);
-    // todo: controls1.dollyOut is not a function
-    // No matter what; zoom, zoomOut, dollyOut, it doesn't matter.
+    // todo: I edited OrbitControls. But now it only goes in one direction.
+    // controls1.dollyOut(event.deltaY);
+    // controls2.dollyOut(event.deltaY);
+    // controls3.dollyOut(event.deltaY);
+    // controls4.dollyOut(event.deltaY);
+
+    // So I did delta like before, but I see no difference.
+    z(controls1, event)
+    z(controls2, event)
+    z(controls3, event)
+    z(controls4, event)
   }
 }
 
