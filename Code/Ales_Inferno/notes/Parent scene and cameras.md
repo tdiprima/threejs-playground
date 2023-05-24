@@ -507,5 +507,46 @@ By setting different viewports for each scene and camera, we can ensure that eac
 
 I ended up doing my own fixes.
 
-<br>
+## Multiple OrbitControls Affect Cameras
 
+Based on the code snippet you provided, it seems like you are using separate instances of OrbitControls (`controls1`, `controls2`, etc.) for each camera. The issue you are facing is that when you try to individually control a single camera's OrbitControls, all the cameras' controls are being affected.
+
+To resolve this issue, you need to disable the controls for the cameras that you don't want to be affected when you are in individual mode. Here's how you can modify your code:
+
+```javascript
+function handleZoom(event) {
+  if (collectiveZoom) {
+    console.log("collective");
+    // Zoom all cameras collectively
+    camera1.zoom += event.deltaY * 0.001;
+    camera2.zoom += event.deltaY * 0.001;
+    camera3.zoom += event.deltaY * 0.001;
+    camera4.zoom += event.deltaY * 0.001;
+  } else {
+    console.log("individual");
+    if (camera1Active) {
+      controls1.dollyOut(event.deltaY);
+      controls1.dollyIn(event.deltaX);
+    } else if (camera2Active) {
+      controls2.dollyOut(event.deltaY);
+      controls2.dollyIn(event.deltaX);
+    } else if (camera3Active) {
+      controls3.dollyOut(event.deltaY);
+      controls3.dollyIn(event.deltaX);
+    } else if (camera4Active) {
+      controls4.dollyOut(event.deltaY);
+      controls4.dollyIn(event.deltaX);
+    }
+  }
+}
+```
+
+In the above code, I assume that you have some variables (`camera1Active`, `camera2Active`, etc.) that determine which camera's controls are active at a given time. You need to set the appropriate variable to `true` before calling `handleZoom()` to indicate which camera's controls should be affected.
+
+Make sure to replace `camera1Active`, `camera2Active`, etc. with the actual variables or logic that determines the active camera.
+
+<span style="color:#0000dd;">Right, that makes sense.  I ran the code, as is, with only camera1Active set to true.  But still - all 4 cameras move the same, regardless of whether I'm in individual mode or not.  Is it because I have a parent scene?</span>
+
+The issue might be related to how you're handling the camera controls in your code. Instead of using separate instances of OrbitControls for each camera, you can try using a single instance of OrbitControls and assign it to the active camera dynamically.
+
+<br>

@@ -70,16 +70,17 @@ const controls4 = new OrbitControls(camera4, renderer.domElement);
 // Toggle variable to switch between collective and individual zooming
 let collectiveZoom = true;
 
-function z(controls, event) {
-  const movementX = event.movementX || event.touches[0].clientX - event.touches[1].clientX;
-  const movementY = event.movementY || event.touches[0].clientY - event.touches[1].clientY;
-  const distance = Math.sqrt(movementX * movementX + movementY * movementY);
-  // Move the camera closer or farther away from its target
-  controls.dolly(Math.exp(distance * -0.01));
-  controls.pan(new THREE.Vector3(-movementX, movementY, 0));
-}
+// function z(controls, event) {
+//   const movementX = event.movementX || event.touches[0].clientX - event.touches[1].clientX;
+//   const movementY = event.movementY || event.touches[0].clientY - event.touches[1].clientY;
+//   const distance = Math.sqrt(movementX * movementX + movementY * movementY);
+//   // Move the camera closer or farther away from its target
+//   controls.dolly(Math.exp(distance * -0.01));
+//   controls.pan(new THREE.Vector3(-movementX, movementY, 0));
+// }
 
 // Function to handle zooming behavior
+/*
 function handleZoom(event) {
   if (collectiveZoom) {
     console.log("collective");
@@ -96,20 +97,52 @@ function handleZoom(event) {
 
     // Zoom each camera separately
     controls1.dollyOut(event.deltaY);
-    // controls2.dollyOut(event.deltaY);
-    // controls3.dollyOut(event.deltaY);
-    // controls4.dollyOut(event.deltaY);
+    controls2.dollyOut(event.deltaY);
+    controls3.dollyOut(event.deltaY);
+    controls4.dollyOut(event.deltaY);
 
     controls1.dollyIn(event.deltaX);
-    // controls2.dollyIn(event.deltaX);
-    // controls3.dollyIn(event.deltaX);
-    // controls4.dollyIn(event.deltaX);
+    controls2.dollyIn(event.deltaX);
+    controls3.dollyIn(event.deltaX);
+    controls4.dollyIn(event.deltaX);
 
     // I did delta like before...
     // z(controls1, event)
     // z(controls2, event)
     // z(controls3, event)
     // z(controls4, event)
+  }
+}
+*/
+
+let camera1Active = true;
+let camera2Active = false;
+let camera3Active = false;
+let camera4Active = false;
+
+function handleZoom(event) {
+  if (collectiveZoom) {
+    console.log("collective");
+    // Zoom all cameras collectively
+    camera1.zoom += event.deltaY * 0.001;
+    camera2.zoom += event.deltaY * 0.001;
+    camera3.zoom += event.deltaY * 0.001;
+    camera4.zoom += event.deltaY * 0.001;
+  } else {
+    console.log("individual");
+    if (camera1Active) {
+      controls1.dollyOut(event.deltaY);
+      controls1.dollyIn(event.deltaX);
+    } else if (camera2Active) {
+      controls2.dollyOut(event.deltaY);
+      controls2.dollyIn(event.deltaX);
+    } else if (camera3Active) {
+      controls3.dollyOut(event.deltaY);
+      controls3.dollyIn(event.deltaX);
+    } else if (camera4Active) {
+      controls4.dollyOut(event.deltaY);
+      controls4.dollyIn(event.deltaX);
+    }
   }
 }
 
@@ -122,7 +155,7 @@ function toggleZoomMode() {
   console.log("collectiveZoom:", collectiveZoom);
 }
 
-// todo: Example usage: Press a button to toggle zooming mode
+// Example usage: Press a button to toggle zooming mode
 const zoomToggleButton = document.getElementById("zoom-toggle");
 zoomToggleButton.addEventListener("click", toggleZoomMode);
 
