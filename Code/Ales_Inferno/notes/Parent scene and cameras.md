@@ -404,6 +404,30 @@ function render() {
 
 By using the `dollyOut` method, you can achieve the zooming effect for **each individual scene** when the **toggle is not active.**
 
+I tried this, but it didn't like whichever "super". But the IDE liked it, so.
+
+```js
+class CustomOrbitControls extends OrbitControls {
+  constructor(camera, domElement) {
+    super(camera, domElement);
+    this.dollyIn = function (zoomScale) {
+      super.dollyIn(zoomScale);
+      super.scope.update();
+    };
+
+    this.dollyOut = function (zoomScale) {
+      super.dollyOut(zoomScale);
+      super.scope.update();
+    };
+  }
+}
+
+const controls1 = new CustomOrbitControls(camera1, renderer.domElement);
+const controls2 = new CustomOrbitControls(camera2, renderer.domElement);
+const controls3 = new CustomOrbitControls(camera3, renderer.domElement);
+const controls4 = new CustomOrbitControls(camera4, renderer.domElement);
+```
+
 ## 4th scene
 
 <span style="color:#0000dd;">OK!  I think that helped.  I see what the problem is now.  Now, it's only rendering the 4th scene.  Do we have to position the cubes?  Or position the scenes within the parent?  Or something?  In order to see all 4 scenes.</span>
