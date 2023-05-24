@@ -545,8 +545,59 @@ In the above code, I assume that you have some variables (`camera1Active`, `came
 
 Make sure to replace `camera1Active`, `camera2Active`, etc. with the actual variables or logic that determines the active camera.
 
+## Um...
+
 <span style="color:#0000dd;">Right, that makes sense.  I ran the code, as is, with only camera1Active set to true.  But still - all 4 cameras move the same, regardless of whether I'm in individual mode or not.  Is it because I have a parent scene?</span>
 
 The issue might be related to how you're handling the camera controls in your code. Instead of using separate instances of OrbitControls for each camera, you can try using a single instance of OrbitControls and assign it to the active camera dynamically.
+
+To achieve that, you can follow these steps:
+
+1. Define a single instance of `OrbitControls` that will be shared among all cameras.
+2. Create an array of cameras and an array of corresponding controls.
+3. Set the initial active camera index to determine which camera is active.
+4. In the `handleZoom` function, use the active camera index to control the corresponding camera and controls.
+
+```javascript
+var cameras = [camera1, camera2, camera3, camera4]; // Array of cameras
+var controls = [controls1, controls2, controls3, controls4]; // Array of controls
+
+var activeCameraIndex = 0; // Initial active camera index
+
+var orbitControls = new THREE.OrbitControls(cameras[activeCameraIndex], renderer.domElement); // Single instance of OrbitControls assigned to the active camera
+
+function handleZoom(event) {
+  if (collectiveZoom) {
+    console.log("collective");
+    // Zoom all cameras collectively
+    cameras.forEach(function (camera) {
+      camera.zoom += event.deltaY * 0.001;
+    });
+  } else {
+    console.log("individual");
+    var activeCamera = cameras[activeCameraIndex];
+    var activeControls = controls[activeCameraIndex];
+    
+    activeControls.dollyOut(event.deltaY);
+    activeControls.dollyIn(event.deltaX);
+  }
+}
+```
+
+<br>
+
+In the above code, we use the `activeCameraIndex` variable to determine which camera and controls are currently active. When the `handleZoom` function is called, it uses the active camera index to control the corresponding camera and controls.
+
+To switch between cameras, you can modify the `activeCameraIndex` variable based on your application logic. For example, you can have buttons or user interactions that increment or decrement the `activeCameraIndex` or directly set it to a specific index.
+
+## activeCamera not used
+
+**You're correct** that in the provided example, the variable `activeCamera` is not being used.
+
+The `activeCamera` variable is not used because we directly access the active controls from the `controls` array using the `activeCameraIndex`.
+
+This ensures that we are correctly controlling the active camera's OrbitControls.
+
+**You are correct,** in the provided code, the `orbitControls` variable is not being used. Instead, we can directly use the `activeControls` variable to control the active camera's OrbitControls.
 
 <br>
