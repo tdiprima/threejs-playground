@@ -2,6 +2,11 @@
 import * as THREE from "three";
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 
+const numScenes = 4;
+const loader = new THREE.TextureLoader();
+const geometry = new THREE.PlaneGeometry(1, 1);
+let selectedCamera = null;
+
 // Set up the parent scene and camera. ¿Por qué?
 const parentScene = new THREE.Scene();
 const parentCamera = new THREE.PerspectiveCamera(
@@ -12,97 +17,58 @@ const parentCamera = new THREE.PerspectiveCamera(
 );
 parentCamera.position.set(0, 0, 10);
 
-// Create a separate scene for each image
-const scene1 = new THREE.Scene();
-const scene2 = new THREE.Scene();
-const scene3 = new THREE.Scene();
-const scene4 = new THREE.Scene();
-
-// Create a separate camera for each image
-const camera1 = new THREE.PerspectiveCamera(
-  45,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  1000
-);
-camera1.name = "camera1";
-
-const camera2 = new THREE.PerspectiveCamera(
-  45,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  1000
-);
-camera2.name = "camera2";
-
-const camera3 = new THREE.PerspectiveCamera(
-  45,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  1000
-);
-camera3.name = "camera3";
-
-const camera4 = new THREE.PerspectiveCamera(
-  45,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  1000
-);
-camera4.name = "camera4";
-
-// Set the position of each camera
-camera1.position.set(0, 0, 5);
-camera2.position.set(0, 0, 5);
-camera3.position.set(0, 0, 5);
-camera4.position.set(0, 0, 5);
-
 // Set up the renderer and add it to the DOM
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Create controls for each camera
-// TODO: 2nd argument renderer.domElement
-const controls1 = new OrbitControls(camera1, renderer.domElement);
-const controls2 = new OrbitControls(camera2, renderer.domElement);
-const controls3 = new OrbitControls(camera3, renderer.domElement);
-const controls4 = new OrbitControls(camera4, renderer.domElement);
+let scenes = [];
+let cameras = [];
+let controls = [];
+let meshes = [];
 
-// Load each image and add it to its corresponding scene
-const loader = new THREE.TextureLoader();
-const image1 = loader.load('image1.jpg');
-const image2 = loader.load('image2.jpg');
-const image3 = loader.load('image3.jpg');
-const image4 = loader.load('image4.jpg');
+for (let i = 0; i < numScenes; i++) {
+  // Create a separate scene for each image
+  const scene = new THREE.Scene();
+  scenes.push(scene);
 
-const geometry = new THREE.PlaneGeometry(1, 1);
-const material1 = new THREE.MeshBasicMaterial({ map: image1, side: THREE.DoubleSide });
-const material2 = new THREE.MeshBasicMaterial({ map: image2, side: THREE.DoubleSide });
-const material3 = new THREE.MeshBasicMaterial({ map: image3, side: THREE.DoubleSide });
-const material4 = new THREE.MeshBasicMaterial({ map: image4, side: THREE.DoubleSide });
+  // Create a separate camera for each image
+  const camera = new THREE.PerspectiveCamera(
+    45,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  );
+  camera.name = `camera${i + 1}`;
+  // Set position of camera
+  camera.position.set(0, 0, 5);
+  cameras.push(camera);
 
-const mesh1 = new THREE.Mesh(geometry, material1);
-const mesh2 = new THREE.Mesh(geometry, material2);
-const mesh3 = new THREE.Mesh(geometry, material3);
-const mesh4 = new THREE.Mesh(geometry, material4);
+  // Create controls for each camera
+  const control = new OrbitControls(camera, renderer.domElement);
+  controls.push(control);
 
-// Position the image
-mesh1.position.set(-1, 1, 0);
-mesh2.position.set(1, 1, 0);
-mesh3.position.set(-1, -1, 0);
-mesh4.position.set(1, -1, 0);
+  // Load each image and add it to its corresponding scene
+  const image = loader.load(`image${i}.jpg`);
+  const material = new THREE.MeshBasicMaterial({ map: image, side: THREE.DoubleSide });
+  const mesh = new THREE.Mesh(geometry, material);
+  scene.add(mesh);
+  meshes.push(mesh);
 
-scene1.add(mesh1);
-scene2.add(mesh2);
-scene3.add(mesh3);
-scene4.add(mesh4);
+  // Add each scene to the parent scene
+  parentScene.add(scene);
 
-// Add each scene to the parent scene
-parentScene.add(scene1);
-parentScene.add(scene2);
-parentScene.add(scene3);
-parentScene.add(scene4);
+  // Set up event listeners to control the cameras
+  control.addEventListener('start', () => {
+    selectedCamera = camera;
+  });
+}
+
+// Position the images
+meshes[0].position.set(-1, 1, 0);
+meshes[1].position.set(1, 1, 0);
+meshes[2].position.set(-1, -1, 0);
+meshes[3].position.set(1, -1, 0);
 
 // Set up a function to handle window resizing
 function onWindowResize() {
@@ -113,57 +79,41 @@ function onWindowResize() {
 
 window.addEventListener('resize', onWindowResize, false);
 
-// Set up event listeners to control the cameras
-let selectedCamera = null;
-
-controls1.addEventListener('start', () => {
-  selectedCamera = camera1;
-});
-controls2.addEventListener('start', () => {
-  selectedCamera = camera2;
-});
-controls3.addEventListener('start', () => {
-  selectedCamera = camera3;
-});
-controls4.addEventListener('start', () => {
-  selectedCamera = camera4;
+// todo: ¿Esto te parece familiar? Make this less clunky.
+controls[0].addEventListener('change', () => {
+  cameras[1].position.copy(cameras[0].position);
+  cameras[1].rotation.copy(cameras[0].rotation);
+  cameras[2].position.copy(cameras[0].position);
+  cameras[2].rotation.copy(cameras[0].rotation);
+  cameras[3].position.copy(cameras[0].position);
+  cameras[3].rotation.copy(cameras[0].rotation);
 });
 
-// ¿Esto te parece familiar?
-controls1.addEventListener('change', () => {
-  camera2.position.copy(camera1.position);
-  camera2.rotation.copy(camera1.rotation);
-  camera3.position.copy(camera1.position);
-  camera3.rotation.copy(camera1.rotation);
-  camera4.position.copy(camera1.position);
-  camera4.rotation.copy(camera1.rotation);
+controls[1].addEventListener('change', () => {
+  cameras[0].position.copy(cameras[1].position);
+  cameras[0].rotation.copy(cameras[1].rotation);
+  cameras[2].position.copy(cameras[1].position);
+  cameras[2].rotation.copy(cameras[1].rotation);
+  cameras[3].position.copy(cameras[1].position);
+  cameras[3].rotation.copy(cameras[1].rotation);
 });
 
-controls2.addEventListener('change', () => {
-  camera1.position.copy(camera2.position);
-  camera1.rotation.copy(camera2.rotation);
-  camera3.position.copy(camera2.position);
-  camera3.rotation.copy(camera2.rotation);
-  camera4.position.copy(camera2.position);
-  camera4.rotation.copy(camera2.rotation);
+controls[2].addEventListener('change', () => {
+  cameras[0].position.copy(cameras[2].position);
+  cameras[0].rotation.copy(cameras[2].rotation);
+  cameras[1].position.copy(cameras[2].position);
+  cameras[1].rotation.copy(cameras[2].rotation);
+  cameras[3].position.copy(cameras[2].position);
+  cameras[3].rotation.copy(cameras[2].rotation);
 });
 
-controls3.addEventListener('change', () => {
-  camera1.position.copy(camera3.position);
-  camera1.rotation.copy(camera3.rotation);
-  camera2.position.copy(camera3.position);
-  camera2.rotation.copy(camera3.rotation);
-  camera4.position.copy(camera3.position);
-  camera4.rotation.copy(camera3.rotation);
-});
-
-controls4.addEventListener('change', () => {
-  camera1.position.copy(camera4.position);
-  camera1.rotation.copy(camera4.rotation);
-  camera2.position.copy(camera4.position);
-  camera2.rotation.copy(camera4.rotation);
-  camera3.position.copy(camera4.position);
-  camera3.rotation.copy(camera4.rotation);
+controls[3].addEventListener('change', () => {
+  cameras[0].position.copy(cameras[3].position);
+  cameras[0].rotation.copy(cameras[3].rotation);
+  cameras[1].position.copy(cameras[3].position);
+  cameras[1].rotation.copy(cameras[3].rotation);
+  cameras[2].position.copy(cameras[3].position);
+  cameras[2].rotation.copy(cameras[3].rotation);
 });
 
 // Render the scene
