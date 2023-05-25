@@ -44,27 +44,31 @@ mesh4.position.set(2, -2, 0);
 scene4.add(mesh4);
 
 // Create the renderers
+const width = window.innerWidth / 2;
+const height = window.innerHeight / 2;
+
 const renderer1 = new THREE.WebGLRenderer();
-renderer1.setSize(window.innerWidth / 2, window.innerHeight / 2);
+renderer1.setSize(width, height);
 document.body.appendChild(renderer1.domElement);
 
 const renderer2 = new THREE.WebGLRenderer();
-renderer2.setSize(window.innerWidth / 2, window.innerHeight / 2);
+renderer2.setSize(width, height);
 renderer2.domElement.style.position = 'absolute';
-renderer2.domElement.style.left = `${window.innerWidth / 2}px`;
+renderer2.domElement.style.top = "0px";
+renderer2.domElement.style.left = `${width}px`;
 
 document.body.appendChild(renderer2.domElement);
 const renderer3 = new THREE.WebGLRenderer();
-renderer3.setSize(window.innerWidth / 2, window.innerHeight / 2);
+renderer3.setSize(width, height);
 renderer3.domElement.style.position = 'absolute';
-renderer3.domElement.style.top = `${window.innerHeight / 2}px`;
+renderer3.domElement.style.top = `${height}px`;
 document.body.appendChild(renderer3.domElement);
 
 const renderer4 = new THREE.WebGLRenderer();
-renderer4.setSize(window.innerWidth / 2, window.innerHeight / 2);
+renderer4.setSize(width, height);
 renderer4.domElement.style.position = 'absolute';
-renderer4.domElement.style.left = `${window.innerWidth / 2}px`;
-renderer4.domElement.style.top = `${window.innerHeight / 2}px`;
+renderer4.domElement.style.left = `${width}px`;
+renderer4.domElement.style.top = `${height}px`;
 document.body.appendChild(renderer4.domElement);
 
 // Set up event listeners to control the cameras
@@ -83,11 +87,15 @@ function render() {
   renderer1.render(scene1, camera1);
   renderer2.render(scene2, camera2);
   renderer3.render(scene3, camera3);
-  renderer4.render(scene4, camera4); // cut off here again
+  renderer4.render(scene4, camera4);
 }
 
 function animate() {
   requestAnimationFrame(animate);
+  controls1.update();
+  controls2.update();
+  controls3.update();
+  controls4.update();
   render();
 }
 
