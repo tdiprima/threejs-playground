@@ -577,7 +577,7 @@ function handleZoom(event) {
     console.log("individual");
     var activeCamera = cameras[activeCameraIndex];
     var activeControls = controls[activeCameraIndex];
-    
+
     activeControls.dollyOut(event.deltaY);
     activeControls.dollyIn(event.deltaX);
   }
@@ -600,4 +600,5 @@ This ensures that we are correctly controlling the active camera's OrbitControls
 
 **You are correct,** in the provided code, the `orbitControls` variable is not being used. Instead, we can directly use the `activeControls` variable to control the active camera's OrbitControls.
 
+<span style="color:red;">One renderer, they all spin. No parent scene.</span>
 <br>

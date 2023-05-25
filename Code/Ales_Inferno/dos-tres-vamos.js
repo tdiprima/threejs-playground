@@ -30,11 +30,9 @@ for (let i = 0; i < numScenes; i++) {
 }
 
 // SCENES
-const parentScene = new THREE.Scene();
 let scenes = [];
 for (let i = 0; i < numScenes; i++) {
   let scene = new THREE.Scene();
-  parentScene.add(scene);
   scenes.push(scene);
 }
 
@@ -49,9 +47,6 @@ for (let i = 0; i < numScenes; i++) {
 // Initial active camera index
 let activeCameraIndex = 0;
 
-// Single instance of OrbitControls assigned to the active camera
-// let orbitControls = new OrbitControls(cameras[activeCameraIndex], renderer.domElement);
-
 let collectiveZoom = false;
 
 function handleZoom(event) {
@@ -63,7 +58,6 @@ function handleZoom(event) {
     });
   } else {
     console.log("individual");
-    // let activeCamera = cameras[activeCameraIndex];
     let activeControls = controls[activeCameraIndex];
     console.log(activeControls.name)
 
@@ -73,9 +67,30 @@ function handleZoom(event) {
 }
 
 function render() {
-  for (let i = 0; i < numScenes; i++) {
-    renderer.render(scenes[i], cameras[i]);
-  }
+  const width = window.innerWidth / 2;
+  const height = window.innerHeight / 2;
+
+  renderer.setScissorTest(true);
+
+  // Top left
+  renderer.setViewport(0, 0, width, height);
+  renderer.setScissor(0, 0, width, height);
+  renderer.render(scenes[0], cameras[0]);
+
+  // Top right
+  renderer.setViewport(width, 0, width, height);
+  renderer.setScissor(width, 0, width, height);
+  renderer.render(scenes[1], cameras[1]);
+
+  // Bottom left
+  renderer.setViewport(0, height, width, height);
+  renderer.setScissor(0, height, width, height);
+  renderer.render(scenes[2], cameras[2]);
+
+  // Bottom right
+  renderer.setViewport(width, height, width, height);
+  renderer.setScissor(width, height, width, height);
+  renderer.render(scenes[3], cameras[3]);
 }
 
 (function animLoop() {
