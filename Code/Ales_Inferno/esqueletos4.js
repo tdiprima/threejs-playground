@@ -14,6 +14,7 @@ for (let i = 0; i < numScenes; i++) {
   // SCENES AND CAMERAS
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.z = 5;
 
   // CUBES
   let cube = new THREE.Mesh(
@@ -39,24 +40,18 @@ for (let i = 0; i < numScenes; i++) {
   renderers.push(renderer);
 }
 
-// Position the cameras
-cameras[0].position.z = 5;
-cameras[1].position.x = 5;
-cameras[2].position.y = 5;
-cameras[3].position.set(-5, 0, 5);
-
 // Position the renderers
-// renderers[1].domElement.style.top = '0';
+renderers[1].domElement.style.top = '0';
 renderers[1].domElement.style.left = `${windowHalfX}px`;
 renderers[2].domElement.style.position = 'absolute';
 renderers[2].domElement.style.top = `${windowHalfY}px`;
-// renderers[2].domElement.style.left = '0';
+renderers[2].domElement.style.left = '0';
 renderers[3].domElement.style.top = `${windowHalfY}px`;
 renderers[3].domElement.style.left = `${windowHalfX}px`;
 
-// EVENT LISTENERS TO CONTROL THE CAMERAS
-
+// EVENT LISTENERS ON THE DOCUMENT - TO CONTROL THE CAMERAS
 function onDocumentMouseDown(event) {
+  // console.log("onDocumentMouseDown");
   event.preventDefault();
 
   // todo: IDK why we're adding and removing and adding...
@@ -65,6 +60,7 @@ function onDocumentMouseDown(event) {
 }
 
 function onDocumentMouseMove(event) {
+  // console.log("onDocumentMouseMove");
   const mouseX = event.clientX - windowHalfX;
   const mouseY = event.clientY - windowHalfY;
 
@@ -99,6 +95,7 @@ function onDocumentMouseMove(event) {
 }
 
 function onDocumentMouseUp(event) {
+  // console.log("onDocumentMouseUp");
   document.removeEventListener('mousemove', onDocumentMouseMove);
   document.removeEventListener('mouseup', onDocumentMouseUp);
 }
