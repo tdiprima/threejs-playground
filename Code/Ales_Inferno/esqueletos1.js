@@ -16,7 +16,7 @@ document.body.appendChild(renderer.domElement);
 let scenes = [];
 let cameras = [];
 let controls = [];
-let meshes = [];
+// let meshes = [];
 
 for (let i = 0; i < numScenes; i++) {
   // Create the four scenes and cameras
@@ -41,12 +41,13 @@ for (let i = 0; i < numScenes; i++) {
       wireframe: true
     })
   );
+  cube.position.set(0, 0, 0);
   scene.add(cube);
 
   scenes.push(scene);
   cameras.push(camera);
   controls.push(control);
-  meshes.push(cube);
+  // meshes.push(cube);
 }
 
 // Position the cameras
@@ -56,10 +57,11 @@ cameras[2].position.y = 5;
 cameras[3].position.set(-5, 0, 5);
 
 // Position the meshes
-meshes[0].position.set(-1, 1, 0);
-meshes[1].position.set(1, 1, 0);
-meshes[2].position.set(-1, -1, 0);
-meshes[3].position.set(1, -1, 0);
+// meshes[0].position.set(-1, 1, 0);
+// meshes[1].position.set(1, 1, 0);
+// meshes[2].position.set(-1, -1, 0);
+// meshes[3].position.set(1, -1, 0);
+// todo: Yeah! Do this instead: cube.position.set(0, 0, 0);
 
 // Set up event listeners to control the cameras
 let selectedCamera = null;
