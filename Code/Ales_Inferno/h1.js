@@ -1,84 +1,130 @@
 import * as THREE from "three";
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 
+const numScenes = 2;
 const geometry = new THREE.PlaneGeometry(1, 1);
 const loader = new THREE.TextureLoader();
 
-// const width = window.innerWidth / 2;
-// const height = window.innerHeight / 2;
-// const aspect = width / height;
-const aspect = 400 / 300;
-// const aspect = 1;
+let scenes = [];
+let cameras = [];
+let renderers = [];
+let controls = [];
 
-// Create the first scene
-const scene1 = new THREE.Scene();
-const camera1 = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);
-camera1.position.z = 1;
-const renderer1 = new THREE.WebGLRenderer({antialias: true});
+// EXTEND CLASS
 
-// ... Set up renderer, controls, and other necessary configurations for scene1
-const canvas1 = document.getElementById('image1');
-canvas1.appendChild(renderer1.domElement);
+// Extend the OrbitControls class to emit zoom events
+class CustomOrbitControls1 extends OrbitControls {
+  constructor(camera, domElement) {
+    // The constructor gets called twice
+    super(camera, domElement);
+    this.zoomEvent = {type: 'zoom', zoom: this.object.zoom};
+  }
 
-const controls1 = new OrbitControls(camera1, renderer1.domElement);
+  update() {
+    // Why is this not working?
+    const zoomChanged = this.zoomEvent.zoom !== this.object.zoom;
 
-const texture1 = loader.load('image1.jpg');
-const material1 = new THREE.MeshBasicMaterial({map: texture1, side: THREE.DoubleSide});
-const mesh1 = new THREE.Mesh(geometry, material1);
-// mesh1.position.set(-1, 1, 0)
-scene1.add(mesh1);
+    super.update();
 
-// Create the second scene
-const scene2 = new THREE.Scene();
-const camera2 = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);
-camera2.position.z = 1;
-const renderer2 = new THREE.WebGLRenderer({antialias: true});
+    if (zoomChanged) {
+      this.zoomEvent.zoom = this.object.zoom;
+      this.dispatchEvent(this.zoomEvent);
+    }
+  }
+}
 
-// ... Set up renderer, controls, and other necessary configurations for scene2
-const canvas2 = document.getElementById('image2');
-canvas2.appendChild(renderer2.domElement);
+class CustomOrbitControls extends THREE.EventDispatcher {
+  constructor(camera, domElement) {
+    // This gets called twice, obviously.
+    super();
+    this.object = camera;
+    this.domElement = domElement;
+    this.zoomEvent = {type: 'zoom', zoom: this.object.zoom};
 
-const controls2 = new OrbitControls(camera2, renderer2.domElement);
+    // ... Add your existing OrbitControls code here
 
-const texture2 = loader.load('image2.jpg');
-const material2 = new THREE.MeshBasicMaterial({map: texture2, side: THREE.DoubleSide});
-const mesh2 = new THREE.Mesh(geometry, material2);
-// mesh2.position.set(1, 1, 0)
-scene2.add(mesh2);
+    // Add an event listener for the 'change' event
+    this.addEventListener('change', this.update.bind(this));
+  }
 
-// Create event system
+  update() {
+    // This gets called repeatedly (calling from rendering loop)
+    const zoomChanged = this.zoomEvent.zoom !== this.object.zoom;
+
+    // ... Add your existing OrbitControls update code here
+
+    if (zoomChanged) {
+      this.zoomEvent.zoom = this.object.zoom;
+      this.dispatchEvent(this.zoomEvent);
+    }
+  }
+}
+
+
+for (let i = 0; i < numScenes; i++) {
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.z = 1;
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  document.getElementById(`image${i + 1}`).appendChild(renderer.domElement);
+
+  const texture = loader.load(`image${i + 1}.jpg`);
+  const material = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide});
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.userData.interactive = true;
+  scene.add(mesh);
+
+  // Create the custom controls for scene
+  const control = new CustomOrbitControls(camera, renderer.domElement);
+  // const control = new CustomOrbitControls1(camera, renderer.domElement);
+  // const control = new OrbitControls(camera, renderer.domElement);
+
+  scenes.push(scene);
+  cameras.push(camera);
+  renderers.push(renderer);
+  controls.push(control);
+}
+
+// CREATE EVENT SYSTEM
 const eventDispatcher = new THREE.EventDispatcher();
+
+controls[0].addEventListener('zoom', (event) => {
+  console.log("controls1");
+  eventDispatcher.dispatchEvent({type: 'scene1zoom', zoom: event.zoom});
+});
+
+// Create the custom controls for scene2
+controls[1].addEventListener('zoom', (event) => {
+  console.log("controls2");
+  eventDispatcher.dispatchEvent({type: 'scene2zoom', zoom: event.zoom});
+});
 
 // Listen for zoom event on scene1
 const onScene1Zoom = (event) => {
   console.log("onScene1Zoom");
   // Adjust the zoom level of camera2 in scene2
-  camera2.zoom = event.zoom;
-  camera2.updateProjectionMatrix();
+  cameras[1].zoom = event.zoom;
+  cameras[1].updateProjectionMatrix();
 };
 eventDispatcher.addEventListener('scene1zoom', onScene1Zoom);
-// eventDispatcher.addEventListener('change', onScene1Zoom);
 
 // Listen for zoom event on scene2
 const onScene2Zoom = (event) => {
   console.log("onScene2Zoom");
   // Adjust the zoom level of camera1 in scene1
-  camera1.zoom = event.zoom;
-  camera1.updateProjectionMatrix();
+  cameras[0].zoom = event.zoom;
+  cameras[0].updateProjectionMatrix();
 };
 eventDispatcher.addEventListener('scene2zoom', onScene2Zoom);
-// eventDispatcher.addEventListener('change', onScene2Zoom);
-// todo: Still no.
 
 // Update function for rendering the scenes
 function update() {
-  // Render scene1
-  controls1.update();
-  renderer1.render(scene1, camera1);
-
-  // Render scene2
-  controls2.update();
-  renderer2.render(scene2, camera2);
+  // Render scenes
+  for (let i = 0; i < numScenes; i++) {
+    controls[i].update();
+    renderers[i].render(scenes[i], cameras[i]);
+  }
 
   // Call the update function recursively for smooth animation
   requestAnimationFrame(update);

@@ -10,7 +10,7 @@ let parentCamera = new THREE.PerspectiveCamera(50, window.innerWidth / window.in
 // parentScene.add(target);
 
 const renderer = new THREE.WebGLRenderer({antialias: true});
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(window.innerWidth / 2, window.innerHeight / 2);
 document.body.appendChild(renderer.domElement);
 
 let scenes = [];
@@ -22,6 +22,7 @@ for (let i = 0; i < numScenes; i++) {
   // Create the four scenes and cameras
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.z = 5;
 
   // Add the scenes to a parent scene
   parentScene.add(scene);
@@ -51,10 +52,10 @@ for (let i = 0; i < numScenes; i++) {
 }
 
 // Position the cameras
-cameras[0].position.z = 5;
-cameras[1].position.x = 5;
-cameras[2].position.y = 5;
-cameras[3].position.set(-5, 0, 5);
+// cameras[0].position.z = 5;
+// cameras[1].position.x = 5;
+// cameras[2].position.y = 5;
+// cameras[3].position.set(-5, 0, 5);
 
 // Position the meshes
 // meshes[0].position.set(-1, 1, 0);
