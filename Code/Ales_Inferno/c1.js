@@ -3,7 +3,7 @@ import * as THREE from "three";
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 
 // Create a scene; todo: note, we probably want 4 scenes, etc.
-let scene = new THREE.Scene();
+const scene = new THREE.Scene();
 
 // Create a camera and position it so that all the images are visible
 const fov = 45; // 75
@@ -12,7 +12,7 @@ const camera = new THREE.PerspectiveCamera(fov, window.innerWidth / window.inner
 camera.position.z = pos;
 
 // Create a renderer
-let renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
