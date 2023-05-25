@@ -29,9 +29,9 @@ textureLoader.load('image1.jpg', function (texture) {
 
   // Add the mesh to the scene
   scene.add(mesh);
-  clickableObjects.push(mesh);
 
   // Add the mesh to the list of clickable objects
+  clickableObjects.push(mesh);
 
 });
 
