@@ -23,7 +23,7 @@ The second error, "**THREE.Object3D.add**: object not an instance of THREE.Objec
 
 Make sure that you are creating instances of the Object3D class and adding them to other Object3D instances or using them as the base class for other objects. You can create a new instance of the Object3D class using **`new THREE.Object3D()`**.
 
-<span style="font-size:larger;color:red;">I'm getting this error on mousedown.  But I'm not adding anything on mousedown! 💢</span>
+<span style="font-size:larger;color:red;">It's the stupid "target" crap. 💢</span>
 
 ## Object3D Error on Mousedown
 

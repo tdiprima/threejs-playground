@@ -1,50 +1,65 @@
 import * as THREE from "three";
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 
-// Create the four scenes and cameras
-const scene1 = new THREE.Scene();
-const camera1 = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera1.position.z = 5;
-
-const scene2 = new THREE.Scene();
-const camera2 = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera2.position.x = 5;
-
-const scene3 = new THREE.Scene();
-const camera3 = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera3.position.y = 5;
-
-const scene4 = new THREE.Scene();
-const camera4 = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera4.position.set(-5, 0, 5);
-
-// Add the scenes to a parent scene
+const numScenes = 4;
 const parentScene = new THREE.Scene();
-parentScene.add(scene1);
-parentScene.add(scene2);
-parentScene.add(scene3);
-parentScene.add(scene4);
+let parentCamera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
 
 // Create a target object to control the camera
-const target = new THREE.Object3D();
-parentScene.add(target);
+// const target = new THREE.Object3D();
+// parentScene.add(target);
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Create the four controls
-const controls1 = new OrbitControls(camera1, renderer.domElement);
-controls1.target = target;
+let scenes = [];
+let cameras = [];
+let controls = [];
+let meshes = [];
 
-const controls2 = new OrbitControls(camera2, renderer.domElement);
-controls2.target = target;
+for (let i = 0; i < numScenes; i++) {
+  // Create the four scenes and cameras
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-const controls3 = new OrbitControls(camera3, renderer.domElement);
-controls3.target = target;
+  // Add the scenes to a parent scene
+  parentScene.add(scene);
 
-const controls4 = new OrbitControls(camera4, renderer.domElement);
-controls4.target = target;
+  // Create the four controls
+  const control = new OrbitControls(camera, renderer.domElement);
+  // control.target = target;
+
+  control.addEventListener('start', () => {
+    selectedCamera = camera;
+  });
+
+  let cube = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1),
+    new THREE.MeshBasicMaterial({
+      color: 0x00ff00,
+      wireframe: true
+    })
+  );
+  scene.add(cube);
+
+  scenes.push(scene);
+  cameras.push(camera);
+  controls.push(control);
+  meshes.push(cube);
+}
+
+// Position the cameras
+cameras[0].position.z = 5;
+cameras[1].position.x = 5;
+cameras[2].position.y = 5;
+cameras[3].position.set(-5, 0, 5);
+
+// Position the meshes
+meshes[0].position.set(-1, 1, 0);
+meshes[1].position.set(1, 1, 0);
+meshes[2].position.set(-1, -1, 0);
+meshes[3].position.set(1, -1, 0);
 
 // Set up event listeners to control the cameras
 let selectedCamera = null;
@@ -55,24 +70,24 @@ function onDocumentMouseDown(event) {
     const mouseY = event.clientY;
 
     if (mouseX < window.innerWidth / 2 && mouseY < window.innerHeight / 2) {
-      selectedCamera = camera1;
+      selectedCamera = cameras[0];
     } else if (mouseX >= window.innerWidth / 2 && mouseY < window.innerHeight / 2) {
-      selectedCamera = camera2;
+      selectedCamera = cameras[1];
     } else if (mouseX < window.innerWidth / 2 && mouseY >= window.innerHeight / 2) {
-      selectedCamera = camera3;
+      selectedCamera = cameras[2];
     } else {
-      selectedCamera = camera4;
+      selectedCamera = cameras[3];
     }
   }
 }
 
-controls4.addEventListener('start', () => {
-  selectedCamera = camera4;
-});
+document.addEventListener('mousedown', onDocumentMouseDown);
 
 function onDocumentMouseUp(event) {
   selectedCamera = null;
 }
+
+document.addEventListener('mouseup', onDocumentMouseUp);
 
 function onDocumentMouseMove(event) {
   event.preventDefault();
@@ -92,6 +107,8 @@ function onDocumentMouseMove(event) {
   }
 }
 
+document.addEventListener('mousemove', onDocumentMouseMove);
+
 function onWindowResize() {
   parentCamera.aspect = window.innerWidth / window.innerHeight;
   parentCamera.updateProjectionMatrix();
@@ -99,17 +116,27 @@ function onWindowResize() {
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-// TODO: Add the four images to the scenes
-const loader = new THREE.TextureLoader();
+window.addEventListener('resize', onWindowResize);
 
-const geometry = new THREE.PlaneGeometry(5, 5);
-const image1 = loader.load('image1.jpg');
-const material1 = new THREE.MeshBasicMaterial({ map: image1 })
-const mesh1 = new THREE.Mesh(geometry, material1);
-mesh1.position.set(-2, 2, 0);
+function render() {
+  for (let i = 0; i < numScenes; i++) {
+    renderer.render(scenes[i], cameras[i]);
+  }
+}
 
-// todo:
-renderer.render(scene1, camera1);
-renderer.render(scene2, camera2);
-renderer.render(scene3, camera3);
-renderer.render(scene4, camera4);
+function animate() {
+  requestAnimationFrame(animate);
+  for (let i = 0; i < numScenes; i++) {
+    controls[i].update();
+  }
+  render();
+}
+
+animate();
+
+// const loader = new THREE.TextureLoader();
+// const geometry = new THREE.PlaneGeometry(5, 5);
+// const image1 = loader.load('image1.jpg');
+// const material1 = new THREE.MeshBasicMaterial({ map: image1 })
+// const mesh1 = new THREE.Mesh(geometry, material1);
+// mesh1.position.set(-2, 2, 0);
