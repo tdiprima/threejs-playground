@@ -9,44 +9,39 @@ const renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// CAMERAS
 let cameras = [];
-for (let i = 0; i < numScenes; i++) {
-  cameras.push(new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000))
-}
+let controls = [];
+let scenes = [];
 
-// CAMERA POSITIONS
-cameras[0].position.set(0, 0, 10);
-cameras[1].position.set(0, 0, -10);
-cameras[2].position.set(10, 0, 0);
-cameras[3].position.set(-10, 0, 0);
-
-// CONTROLS
-let controls = []; // Array of controls
 for (let i = 0; i < numScenes; i++) {
-  let control = new OrbitControls(cameras[i], renderer.domElement);
+  // SCENES
+  let scene = new THREE.Scene();
+  scenes.push(scene);
+
+  // CAMERAS
+  const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+  cameras.push(camera);
+  camera.position.set(0, 0, 10);
+
+  // CUBES
+  let geometry = new THREE.BoxGeometry(1, 1, 1);
+  let material = new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe: true});
+  let cube = new THREE.Mesh(geometry, material);
+  scene.add(cube);
+
+  // CONTROLS
+  let control = new OrbitControls(camera, renderer.domElement);
   control.name = `control${i + 1}`;
   controls.push(control);
 }
 
-// SCENES
-let scenes = [];
-for (let i = 0; i < numScenes; i++) {
-  let scene = new THREE.Scene();
-  scenes.push(scene);
-}
-
-// CUBES
-for (let i = 0; i < numScenes; i++) {
-  let geometry = new THREE.BoxGeometry(1, 1, 1);
-  let material = new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe: true});
-  let cube = new THREE.Mesh(geometry, material);
-  scenes[i].add(cube);
-}
+// cameras[0].position.set(0, 0, 10);
+// cameras[1].position.set(0, 0, -10);
+// cameras[2].position.set(10, 0, 0);
+// cameras[3].position.set(-10, 0, 0);
 
 // Initial active camera index
 let activeCameraIndex = 0;
-
 let collectiveZoom = false;
 
 function handleZoom(event) {
