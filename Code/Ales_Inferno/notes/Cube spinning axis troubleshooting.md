@@ -65,3 +65,7 @@ cube.position.set(0, 0, 0);
 ```
 
 <br>
+
+<mark>**By the way,**</mark> if you get some stupid thing that says THREE isn't mapped to anything, just close the browser and start again.
+
+<br>
