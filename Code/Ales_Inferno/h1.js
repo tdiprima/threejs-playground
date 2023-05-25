@@ -10,56 +10,8 @@ let cameras = [];
 let renderers = [];
 let controls = [];
 
-// EXTEND CLASS
-
-// Extend the OrbitControls class to emit zoom events
-class CustomOrbitControls1 extends OrbitControls {
-  constructor(camera, domElement) {
-    // The constructor gets called twice
-    super(camera, domElement);
-    this.zoomEvent = {type: 'zoom', zoom: this.object.zoom};
-  }
-
-  update() {
-    // Why is this not working?
-    const zoomChanged = this.zoomEvent.zoom !== this.object.zoom;
-
-    super.update();
-
-    if (zoomChanged) {
-      this.zoomEvent.zoom = this.object.zoom;
-      this.dispatchEvent(this.zoomEvent);
-    }
-  }
-}
-
-class CustomOrbitControls extends THREE.EventDispatcher {
-  constructor(camera, domElement) {
-    // This gets called twice, obviously.
-    super();
-    this.object = camera;
-    this.domElement = domElement;
-    this.zoomEvent = {type: 'zoom', zoom: this.object.zoom};
-
-    // ... Add your existing OrbitControls code here
-
-    // Add an event listener for the 'change' event
-    this.addEventListener('change', this.update.bind(this));
-  }
-
-  update() {
-    // This gets called repeatedly (calling from rendering loop)
-    const zoomChanged = this.zoomEvent.zoom !== this.object.zoom;
-
-    // ... Add your existing OrbitControls update code here
-
-    if (zoomChanged) {
-      this.zoomEvent.zoom = this.object.zoom;
-      this.dispatchEvent(this.zoomEvent);
-    }
-  }
-}
-
+const width = window.innerWidth / 2;
+const height = window.innerHeight / 2;
 
 for (let i = 0; i < numScenes; i++) {
   const scene = new THREE.Scene();
@@ -67,6 +19,7 @@ for (let i = 0; i < numScenes; i++) {
   camera.position.z = 1;
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(width, height); // ding-ding-ding!!
   document.getElementById(`image${i + 1}`).appendChild(renderer.domElement);
 
   const texture = loader.load(`image${i + 1}.jpg`);
@@ -75,10 +28,10 @@ for (let i = 0; i < numScenes; i++) {
   mesh.userData.interactive = true;
   scene.add(mesh);
 
-  // Create the custom controls for scene
-  const control = new CustomOrbitControls(camera, renderer.domElement);
+  // Create the custom controls for scene (nope)!
+  // const control = new CustomOrbitControls(camera, renderer.domElement);
   // const control = new CustomOrbitControls1(camera, renderer.domElement);
-  // const control = new OrbitControls(camera, renderer.domElement);
+  const control = new OrbitControls(camera, renderer.domElement);
 
   scenes.push(scene);
   cameras.push(camera);
@@ -132,3 +85,53 @@ function update() {
 
 // Start the rendering loop
 update();
+
+// EXTEND CLASS
+
+// Extend the OrbitControls class to emit zoom events
+class CustomOrbitControls1 extends OrbitControls {
+  constructor(camera, domElement) {
+    // The constructor gets called twice
+    super(camera, domElement);
+    this.zoomEvent = {type: 'zoom', zoom: this.object.zoom};
+  }
+
+  update() {
+    // Why is this not working?
+    const zoomChanged = this.zoomEvent.zoom !== this.object.zoom;
+
+    super.update();
+
+    if (zoomChanged) {
+      this.zoomEvent.zoom = this.object.zoom;
+      this.dispatchEvent(this.zoomEvent);
+    }
+  }
+}
+
+class CustomOrbitControls extends THREE.EventDispatcher {
+  constructor(camera, domElement) {
+    // This gets called twice, obviously.
+    super();
+    this.object = camera;
+    this.domElement = domElement;
+    this.zoomEvent = {type: 'zoom', zoom: this.object.zoom};
+
+    // ... Add your existing OrbitControls code here
+
+    // Add an event listener for the 'change' event
+    this.addEventListener('change', this.update.bind(this));
+  }
+
+  update() {
+    // This gets called repeatedly (calling from rendering loop)
+    const zoomChanged = this.zoomEvent.zoom !== this.object.zoom;
+
+    // ... Add your existing OrbitControls update code here
+
+    if (zoomChanged) {
+      this.zoomEvent.zoom = this.object.zoom;
+      this.dispatchEvent(this.zoomEvent);
+    }
+  }
+}
