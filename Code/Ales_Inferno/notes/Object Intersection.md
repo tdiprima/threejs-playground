@@ -10,6 +10,26 @@
 * dust-to-dust.html
 * bugueo.html
 
+## Accessing Loaded Textures
+
+<span style="color:#0000dd;">I'm loading a texture, and then I'm adding the mesh to a global array called clickableObjects, to be used later.  I am testing being able to access clickableObjects from outside TextureLoader.load().  I get "No" the first time, but if I refresh the page, I still get "No", but I am now able to pass the clickableObjects array to a raycaster and get a positive response.  How do I get this to work without having to refresh the page?</span>
+
+The issue you're facing is due to the **asynchronous** nature of the `TextureLoader` function. When you load the texture, it takes some time to retrieve the image file, and the rest of your code continues to execute in the meantime. Therefore, when you check the length of `clickableObjects` immediately after calling `TextureLoader.load()`, the texture may not have been loaded yet, and the array will still be empty.
+
+<span style="color:red;">Obviously.</span>
+
+To ensure that you can access the `clickableObjects` array reliably, you need to perform any operations that rely on its content inside the callback function of `TextureLoader.load()`. Here's an updated version of your code:
+
+```javascript
+let clickableObjects = [];new THREE.TextureLoader().load('image1.jpg', function (texture) {  const geometry = new THREE.PlaneGeometry(1, 1);  const material = new THREE.MeshBasicMaterial({ map: texture });  const mesh = new THREE.Mesh(geometry, material);  mesh.scale.set(1.0, texture.image.height / texture.image.width, 1.0);  mesh.userData.interactive = true;  mesh.name = "image1";  scene.add(mesh);  clickableObjects.push(mesh);  // This goes inside the closure now  if (clickableObjects.length > 0) {    console.log("Yes", clickableObjects);  } else {    console.log("No", clickableObjects);  }  // Call any other functions or operations that depend on `clickableObjects` here});
+```
+
+<br>
+
+By moving the code inside the callback function, you ensure that it will execute only after the texture has finished loading and the `clickableObjects` array has been populated. This way, you won't need to refresh the page to access the array.
+
+<span style="color:#0000dd;">Gweat.  Now what happens when I have 4 images?  That means put the other 3 image generation stuff in there as well.  Cool.  "Div soup."</span> <span style="font-size:30px;">🍜</span> <span style="color:#0000dd;">This is all because I want the aspect ratio.</span>
+
 ## Perform the object intersection successfully using the Raycaster class
 
 dust-to-dust.html, kool-aid-kids.html / kool2.js
