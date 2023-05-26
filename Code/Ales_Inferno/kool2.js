@@ -23,23 +23,13 @@ let meshes = [];
 for (let i = 0; i < numScenes; i++) {
   const scene = new THREE.Scene();
   scenes.push(scene);
-
   parentScene.add(scene);
+
   const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.name = `camera${i + 1}`;
   camera.position.set(0, 0, 2);
   scene.add(camera);
   cameras.push(camera);
-
-  // const image = loader.load(`image${i + 1}.jpg`, texture => {
-  //   let material = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide});
-  //   // Set the position and scale of the mesh so that it fits within the canvas for that image.
-  //   let mesh = new THREE.Mesh(geometry, material);
-  //   mesh.scale.set(1.0, texture.image.height / texture.image.width, 1.0);
-  //   scene.add(mesh);
-  //   // console.log("meshes", meshes);
-  //   meshes.push(mesh); // So... the global meshes var never updates.
-  // });
 
   let image = loader.load(`image${i + 1}.jpg`);
   let material = new THREE.MeshBasicMaterial({map: image, side: THREE.DoubleSide});
@@ -49,12 +39,13 @@ for (let i = 0; i < numScenes; i++) {
   scene.add(mesh);
   meshes.push(mesh);
 
+  // OrbitControls should typically be attached to the main camera that you use for rendering (parentCamera).
+  // But we want to be able to move these things separately.
   const control = new OrbitControls(camera, renderer.domElement);
   // todo: target? see esqueletos1.js
   control.addEventListener('start', () => {
     selectedCamera = camera;
   });
-
   controls.push(control);
 }
 
@@ -63,6 +54,11 @@ meshes[0].position.set(-2, 2, 0);
 meshes[1].position.set(2, 2, 0);
 meshes[2].position.set(-2, -2, 0);
 meshes[3].position.set(2, -2, 0);
+
+// const controls = new OrbitControls(parentCamera, renderer.domElement);
+// controls.addEventListener('start', () => {
+//   selectedCamera = parentCamera;
+// });
 
 // Set up a function to handle window resizing
 function onWindowResize() {
@@ -75,8 +71,6 @@ function onWindowResize() {
 window.addEventListener('resize', onWindowResize, false);
 
 function onDocumentMouseDown(event) {
-  // event.preventDefault();
-
   const mouse = new THREE.Vector2(
     (event.clientX / window.innerWidth) * 2 - 1,
     -(event.clientY / window.innerHeight) * 2 + 1
@@ -87,8 +81,6 @@ function onDocumentMouseDown(event) {
   const intersects = raycaster.intersectObjects(meshes);
 
   if (intersects.length > 0) {
-    // todo
-    // selectedCamera = intersects[0].object.parent.getObjectByName('camera');
     selectedCamera = intersects[0].object.parent.children[0];
   }
 }
@@ -102,8 +94,6 @@ function onDocumentMouseUp(event) {
 document.addEventListener('mouseup', onDocumentMouseUp);
 
 function onDocumentMouseMove(event) {
-  // event.preventDefault();
-
   if (selectedCamera) {
     console.log(selectedCamera.name);
     // Retrieve the movement distance of the mouse in the horizontal (X) and vertical (Y) directions
@@ -127,12 +117,35 @@ document.addEventListener('mousemove', onDocumentMouseMove);
 
 function animate() {
   requestAnimationFrame(animate);
-
   for (let i = 0; i < numScenes; i++) {
     controls[i].update();
+  }
+  // controls.update();
+  renderer.render(parentScene, parentCamera);
+}
+
+/*
+// Yeah, no.  This isn't just wrong, it's bad.  A browser freezer.
+function animate() {
+  requestAnimationFrame(animate);
+
+  for (let i = 0; i < numScenes; i++) {
+    controls.target = meshes[i].position; // Set the control's target to the current scene's mesh position
+    controls.update(); // Update the controls for the current camera
+
+    // If the current camera is the selected camera, update its position in the scene
+    if (selectedCamera && cameras[i] === selectedCamera) {
+      const deltaX = event.movementX;
+      const deltaY = event.movementY;
+      const theta = (deltaX / window.innerWidth) * Math.PI * 2;
+      const phi = (deltaY / window.innerHeight) * Math.PI * 2;
+      selectedCamera.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), theta);
+      selectedCamera.rotateOnWorldAxis(new THREE.Vector3(1, 0, 0), phi);
+    }
   }
 
   renderer.render(parentScene, parentCamera);
 }
+ */
 
 animate();

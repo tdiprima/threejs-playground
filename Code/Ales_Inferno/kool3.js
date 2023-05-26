@@ -1,33 +1,6 @@
 import * as THREE from 'three';
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 
-function f(object) {
-  if (object instanceof THREE.Object3D) {
-    // The object is an instance of or inherits from THREE.Object3D
-    console.log("%cYes.", "color: #ccff00;");
-  } else {
-    // The object does not inherit from THREE.Object3D
-    console.log("%cNo.", "color: deeppink", object);
-  }
-}
-
-function print() {
-  console.log("\nScenes:");
-  for (let i = 0; i < numScenes; i++) {
-    f(scenes[i]);
-  }
-
-  console.log("\nCameras:");
-  for (let i = 0; i < numScenes; i++) {
-    f(cameras[i]);
-  }
-
-  console.log("\nMeshes:");
-  for (let i = 0; i < numScenes; i++) {
-    f(meshes[i]);
-  }
-}
-
 const numScenes = 4;
 const width = window.innerWidth / 2;
 const height = window.innerHeight / 2;
@@ -44,7 +17,7 @@ parentCamera.rotation.set(0, 0, 0);
 
 let selectedCamera = null;
 
-// Create a target object to control the camera
+// todo: Create a target object to control the camera
 // const target = new THREE.Object3D();
 // console.log("\nTarget:");
 // f(target);
@@ -67,13 +40,14 @@ for (let i = 0; i < numScenes; i++) {
   const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.z = 5;
   camera.name = `camera${i + 1}`;
+  scene.add(camera);
   cameras.push(camera);
 
   // Add the scenes to a parent scene
   parentScene.add(scene);
 
   // I suppose we need to add all the cameras to this too, huh?
-  parentCamera.add(camera);
+  // parentCamera.add(camera);
 
   // Create the four controls
   const control = new OrbitControls(camera, renderer.domElement);
@@ -103,7 +77,7 @@ meshes[3].position.set(2, -2, 0);
 
 // Set up event listeners to control the cameras
 function onDocumentMouseDown(event) {
-  event.preventDefault();
+  // console.log("onDocumentMouseDown"); // Sí.
   if (event.button === 0) {
     const mouseX = event.clientX;
     const mouseY = event.clientY;
@@ -120,12 +94,17 @@ function onDocumentMouseDown(event) {
   }
 }
 
+document.addEventListener('mousedown', onDocumentMouseDown);
+
 function onDocumentMouseUp(event) {
+  // console.log("onDocumentMouseUp"); // Excelente.
   selectedCamera = null;
 }
 
+document.addEventListener('mouseup', onDocumentMouseUp);
+
 function onDocumentMouseMove(event) {
-  event.preventDefault();
+  // console.log("onDocumentMouseMove"); // Impresionante.
 
   if (selectedCamera) {
     console.log(selectedCamera.name);
@@ -139,8 +118,10 @@ function onDocumentMouseMove(event) {
     selectedCamera.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), theta);
     selectedCamera.rotateOnWorldAxis(new THREE.Vector3(1, 0, 0), phi);
   }
-  selectedCamera = null;
+  // selectedCamera = null;
 }
+
+document.addEventListener('mousemove', onDocumentMouseMove);
 
 function onWindowResize() {
   parentCamera.aspect = window.innerWidth / window.innerHeight;
@@ -148,6 +129,8 @@ function onWindowResize() {
 
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
+
+window.addEventListener('resize', onWindowResize);
 
 function animate() {
   requestAnimationFrame(animate);
@@ -159,10 +142,4 @@ function animate() {
   renderer.render(parentScene, parentCamera);
 }
 
-document.addEventListener('mousedown', onDocumentMouseDown);
-document.addEventListener('mouseup', onDocumentMouseUp);
-document.addEventListener('mousemove', onDocumentMouseMove);
-window.addEventListener('resize', onWindowResize);
-
-animate(); // TODO: uncomment, comment.
-// renderer.render(parentScene, parentCamera);
+animate();

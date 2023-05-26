@@ -61,11 +61,12 @@ for (let i = 0; i < numScenes; i++) {
 
   // Set up event listeners to control the cameras
   control.addEventListener('start', () => {
-    selectedCamera = camera; // todo: naturally the selected one is the last one (camera4)
+    selectedCamera = camera; // naturally the selected one is the last one (camera4)
   });
 
   // Move the event listener addition here
   control.addEventListener('change', () => {
+    // console.log("¿Esto es un micró?"); // ¡Sí!
     cameras.forEach((c, index) => {
       // ¿Esto te parece familiar?
       if (index !== i) {
@@ -150,7 +151,7 @@ function render() {
       selectedCamera.updateMatrixWorld(true);
       selectedCamera.updateMatrix();
       selectedCamera.updateWorldMatrix(true, true);
-      // todo: wait, then shouldn't I render the selectedCamera??
+      // Wait, then shouldn't I render the selectedCamera? Estoy confundida.
     }
     // selectedCamera = null;
   */
