@@ -121,26 +121,42 @@ window.addEventListener('resize', onWindowResize, false);
 function render() {
   requestAnimationFrame(render);
 
-  // Update the selected camera's controls
-  if (selectedCamera) {
-    console.log("HERE => ", selectedCamera.name);
-    selectedCamera.updateProjectionMatrix();
-    selectedCamera.updateMatrixWorld();
-    selectedCamera.updateWorldMatrix(true, true);
-    selectedCamera.updateMatrix();
-    selectedCamera.updateMatrixWorld(true);
-    selectedCamera.lookAt(0, 0, 0);
-    selectedCamera.updateProjectionMatrix();
-    selectedCamera.updateMatrixWorld(true);
-    selectedCamera.updateMatrix();
-    selectedCamera.updateWorldMatrix(true, true);
-    // todo: wait, then shouldn't I render the selectedCamera??
-  }
-  // selectedCamera = null;
-
-  for (let i= 0; i < numScenes; i++) {
+  for (let i = 0; i < numScenes; i++) {
+    if (selectedCamera && selectedCamera !== cameras[i]) {
+      cameras[i].position.copy(selectedCamera.position);
+      cameras[i].rotation.copy(selectedCamera.rotation);
+    }
     controls[i].update();
   }
+
+  // Update the selected camera's controls
+  if (selectedCamera) {
+    selectedCamera.lookAt(0, 0, 0);
+    selectedCamera.updateProjectionMatrix();
+  }
+
+  /*
+    if (selectedCamera) {
+      console.log("HERE => ", selectedCamera.name);
+      selectedCamera.updateProjectionMatrix();
+      selectedCamera.updateMatrixWorld();
+      selectedCamera.updateWorldMatrix(true, true);
+      selectedCamera.updateMatrix();
+      selectedCamera.updateMatrixWorld(true);
+      selectedCamera.lookAt(0, 0, 0);
+      selectedCamera.updateProjectionMatrix();
+      selectedCamera.updateMatrixWorld(true);
+      selectedCamera.updateMatrix();
+      selectedCamera.updateWorldMatrix(true, true);
+      // todo: wait, then shouldn't I render the selectedCamera??
+    }
+    // selectedCamera = null;
+  */
+  /*
+    for (let i= 0; i < numScenes; i++) {
+      controls[i].update();
+    }
+  */
 
   // Render the parent scene
   renderer.render(parentScene, parentCamera);
