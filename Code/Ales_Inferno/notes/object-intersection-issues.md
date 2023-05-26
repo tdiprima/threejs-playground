@@ -1,15 +1,3 @@
-## Raycasting
-
-* conversacion.md
-* Four Synchronized Image Viewers.md
-* Add Event to Image.md
-* Object Intersection.md
-* <lala>
-* kool-aid-kids.html
-* kool2.js
-* dust-to-dust.html
-* bugueo.html
-
 ## Accessing Loaded Textures
 
 <span style="color:#0000dd;">I'm loading a texture, and then I'm adding the mesh to a global array called clickableObjects, to be used later.  I am testing being able to access clickableObjects from outside TextureLoader.load().  I get "No" the first time, but if I refresh the page, I still get "No", but I am now able to pass the clickableObjects array to a raycaster and get a positive response.  How do I get this to work without having to refresh the page?</span>

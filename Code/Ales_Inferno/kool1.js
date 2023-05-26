@@ -1,4 +1,3 @@
-// Wasn't this just working a few minutes ago?
 import * as THREE from "three";
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 
@@ -49,9 +48,10 @@ for (let i = 0; i < numScenes; i++) {
   controls.push(control);
 
   // Load each image and add it to its corresponding scene
-  const image = loader.load(`image${i}.jpg`);
+  const image = loader.load(`image${i + 1}.jpg`);
   const material = new THREE.MeshBasicMaterial({ map: image, side: THREE.DoubleSide });
   const mesh = new THREE.Mesh(geometry, material);
+  mesh.name = `image${i + 1}`;
   scene.add(mesh);
   meshes.push(mesh);
 
@@ -60,8 +60,36 @@ for (let i = 0; i < numScenes; i++) {
 
   // Set up event listeners to control the cameras
   control.addEventListener('start', () => {
-    selectedCamera = camera;
+    selectedCamera = camera; // todo: naturally the selected one is the last one (camera4)
   });
+}
+
+// Add click event listener to the renderer's DOM element
+renderer.domElement.addEventListener('click', onClick, false);
+
+function onClick(event) {
+  // Calculate normalized device coordinates (NDC) from the click position
+  const mouse = new THREE.Vector2();
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+  // Perform raycasting from the camera
+  const raycaster = new THREE.Raycaster();
+  raycaster.setFromCamera(mouse, parentCamera);
+
+  // Intersect the ray with the meshes
+  const intersects = raycaster.intersectObjects(meshes);
+
+  if (intersects.length > 0) {
+    // Find the name of the clicked mesh
+    const clickedMesh = intersects[0].object;
+    const clickedIndex = meshes.indexOf(clickedMesh);
+    // const clickedName = meshNames[clickedIndex];
+    const clickedName = clickedMesh.name;
+
+    console.log(`Clicked: ${clickedName}, ${cameras[clickedIndex].name}`);
+    selectedCamera = cameras[clickedIndex];
+  }
 }
 
 // Position the images
@@ -79,7 +107,7 @@ function onWindowResize() {
 
 window.addEventListener('resize', onWindowResize, false);
 
-// todo: ¿Esto te parece familiar? Make this less clunky.
+// todo: ¿Esto te parece familiar?
 controls[0].addEventListener('change', () => {
   cameras[1].position.copy(cameras[0].position);
   cameras[1].rotation.copy(cameras[0].rotation);
@@ -122,7 +150,7 @@ function render() {
 
   // Update the selected camera's controls
   if (selectedCamera) {
-    console.log(selectedCamera.name);
+    console.log("HERE => ", selectedCamera.name);
     selectedCamera.updateProjectionMatrix();
     selectedCamera.updateMatrixWorld();
     selectedCamera.updateWorldMatrix(true, true);
@@ -133,8 +161,9 @@ function render() {
     selectedCamera.updateMatrixWorld(true);
     selectedCamera.updateMatrix();
     selectedCamera.updateWorldMatrix(true, true);
+    // todo: wait, then shouldn't I render the selectedCamera??
   }
-  selectedCamera = null;
+  // selectedCamera = null;
 
   // Render the parent scene
   renderer.render(parentScene, parentCamera);
