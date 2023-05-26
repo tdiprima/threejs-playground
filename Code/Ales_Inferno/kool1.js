@@ -5,6 +5,7 @@ const numScenes = 4;
 const loader = new THREE.TextureLoader();
 const geometry = new THREE.PlaneGeometry(1, 1);
 let selectedCamera = null;
+const raycaster = new THREE.Raycaster();
 
 // Set up the parent scene and camera. ¿Por qué?
 const parentScene = new THREE.Scene();
@@ -43,6 +44,7 @@ for (let i = 0; i < numScenes; i++) {
   );
   camera.name = `camera${i + 1}`;
   camera.position.set(0, 0, 5); // Set position of camera
+  scene.add(camera);
   cameras.push(camera);
 
   // Load each image and add it to its corresponding scene
@@ -84,7 +86,7 @@ function onClick(event) {
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
   // Perform raycasting from the camera
-  const raycaster = new THREE.Raycaster();
+  // const raycaster = new THREE.Raycaster(); // moved up
   raycaster.setFromCamera(mouse, parentCamera);
 
   // Intersect the ray with the meshes
@@ -153,7 +155,7 @@ function render() {
     // selectedCamera = null;
   */
   /*
-    for (let i= 0; i < numScenes; i++) {
+    for (let i = 0; i < numScenes; i++) {
       controls[i].update();
     }
   */

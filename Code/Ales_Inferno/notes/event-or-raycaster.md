@@ -6,6 +6,7 @@
 * object-intersection-issues.md
 * <lala>
 * kool-aid-kids.html
+* kool1.js
 * kool2.js
 * dust-to-dust.html
 * bugueo.html
