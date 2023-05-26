@@ -6,10 +6,12 @@ OK.  How about using a raycaster instead of a click event?
 
 Using a raycaster can provide more flexibility and precision when dealing with mouse interactions in a 3D scene.
 
-Here's how to use a raycaster to handle mouse clicks on the image:
+Here's how to use a raycaster to handle mouse clicks on the image.
+
+<span style="color:red;">There is a closure.  Either keep the closure and put everything that relies on "clickableObjects" inside the closure (including the clickableObjects array), or forget the closure and just fudge the mesh's aspect ratio.</span>
 
 ```js
-// el bugueo, b2.js
+// el_bugueo.html
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = 2;
