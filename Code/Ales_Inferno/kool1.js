@@ -31,6 +31,9 @@ for (let i = 0; i < numScenes; i++) {
   const scene = new THREE.Scene();
   scenes.push(scene);
 
+  // Add each scene to the parent scene
+  parentScene.add(scene);
+
   // Create a separate camera for each image
   const camera = new THREE.PerspectiveCamera(
     45,
@@ -39,13 +42,8 @@ for (let i = 0; i < numScenes; i++) {
     1000
   );
   camera.name = `camera${i + 1}`;
-  // Set position of camera
-  camera.position.set(0, 0, 5);
+  camera.position.set(0, 0, 5); // Set position of camera
   cameras.push(camera);
-
-  // Create controls for each camera
-  const control = new OrbitControls(camera, renderer.domElement);
-  controls.push(control);
 
   // Load each image and add it to its corresponding scene
   const image = loader.load(`image${i + 1}.jpg`);
@@ -55,12 +53,24 @@ for (let i = 0; i < numScenes; i++) {
   scene.add(mesh);
   meshes.push(mesh);
 
-  // Add each scene to the parent scene
-  parentScene.add(scene);
+  // Create controls for each camera
+  const control = new OrbitControls(camera, renderer.domElement);
+  controls.push(control);
 
   // Set up event listeners to control the cameras
   control.addEventListener('start', () => {
     selectedCamera = camera; // todo: naturally the selected one is the last one (camera4)
+  });
+
+  // Move the event listener addition here
+  control.addEventListener('change', () => {
+    cameras.forEach((c, index) => {
+      // ¿Esto te parece familiar?
+      if (index !== i) {
+        c.position.copy(cameras[i].position);
+        c.rotation.copy(cameras[i].rotation);
+      }
+    });
   });
 }
 
@@ -107,43 +117,6 @@ function onWindowResize() {
 
 window.addEventListener('resize', onWindowResize, false);
 
-// todo: ¿Esto te parece familiar?
-controls[0].addEventListener('change', () => {
-  cameras[1].position.copy(cameras[0].position);
-  cameras[1].rotation.copy(cameras[0].rotation);
-  cameras[2].position.copy(cameras[0].position);
-  cameras[2].rotation.copy(cameras[0].rotation);
-  cameras[3].position.copy(cameras[0].position);
-  cameras[3].rotation.copy(cameras[0].rotation);
-});
-
-controls[1].addEventListener('change', () => {
-  cameras[0].position.copy(cameras[1].position);
-  cameras[0].rotation.copy(cameras[1].rotation);
-  cameras[2].position.copy(cameras[1].position);
-  cameras[2].rotation.copy(cameras[1].rotation);
-  cameras[3].position.copy(cameras[1].position);
-  cameras[3].rotation.copy(cameras[1].rotation);
-});
-
-controls[2].addEventListener('change', () => {
-  cameras[0].position.copy(cameras[2].position);
-  cameras[0].rotation.copy(cameras[2].rotation);
-  cameras[1].position.copy(cameras[2].position);
-  cameras[1].rotation.copy(cameras[2].rotation);
-  cameras[3].position.copy(cameras[2].position);
-  cameras[3].rotation.copy(cameras[2].rotation);
-});
-
-controls[3].addEventListener('change', () => {
-  cameras[0].position.copy(cameras[3].position);
-  cameras[0].rotation.copy(cameras[3].rotation);
-  cameras[1].position.copy(cameras[3].position);
-  cameras[1].rotation.copy(cameras[3].rotation);
-  cameras[2].position.copy(cameras[3].position);
-  cameras[2].rotation.copy(cameras[3].rotation);
-});
-
 // Render the scene
 function render() {
   requestAnimationFrame(render);
@@ -164,6 +137,10 @@ function render() {
     // todo: wait, then shouldn't I render the selectedCamera??
   }
   // selectedCamera = null;
+
+  for (let i= 0; i < numScenes; i++) {
+    controls[i].update();
+  }
 
   // Render the parent scene
   renderer.render(parentScene, parentCamera);
