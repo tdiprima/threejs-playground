@@ -1,6 +1,18 @@
+## Raycasting
+
+* conversacion.md
+* Four Synchronized Image Viewers.md
+* Add Event to Image.md
+* Object Intersection.md
+* <lala>
+* kool-aid-kids.html
+* kool2.js
+* dust-to-dust.html
+* bugueo.html
+
 ## Perform the object intersection successfully using the Raycaster class
 
-dust-to-dust.html, pan\_and\_zoom-3.html
+dust-to-dust.html, kool-aid-kids.html / kool2.js
 
 ```js
 const intersects = raycaster.intersectObjects([image1, image2, image3, image4]);

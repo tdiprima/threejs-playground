@@ -5,10 +5,9 @@
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>El Bugueo</title>
-  <!-- EVENT LISTENER vs RAYCASTER -->
-  <!-- Note: For some reason it throws a weird error (see Chrome), but then when you refresh everything works fine. -->
-  <!-- https://discourse.threejs.org/t/how-do-i-add-click-event-to-a-mesh/43837/3 -->
-  <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+  <!-- Event listener vs Raycaster -->
+  <!-- I fixed it; everything that relies on the mesh array needs to go inside the closure. -->
+  <link href="../../favicon.ico" rel="icon" type="image/x-icon">
   <script src="/build/three.min.js"></script>
   <style>
     .overlay-element {
@@ -51,21 +50,22 @@
   // Create a global raycaster
   const raycaster = new THREE.Raycaster();
 
-  // Create a list to store objects for raycasting
-  const clickableObjects = [];
-
   // Load the image texture
   textureLoader.load('image1.jpg', function (texture) {
+    // Create a list to store objects for raycasting
+    const clickableObjects = [];
+
     // Create a PlaneGeometry with the desired size
     const geometry = new THREE.PlaneGeometry(1, 1);
 
     // Create a MeshBasicMaterial with the loaded texture
-    const material = new THREE.MeshBasicMaterial({ map: texture });
+    const material = new THREE.MeshBasicMaterial({map: texture});
 
     // Create a mesh using the geometry and material
     const mesh = new THREE.Mesh(geometry, material);
     mesh.scale.set(1.0, texture.image.height / texture.image.width, 1.0);
     mesh.userData.interactive = true;
+    mesh.name = "image1";
 
     // Add the mesh to the scene
     scene.add(mesh);
@@ -78,34 +78,48 @@
     // mesh.addEventListener('mousedown', onImageMouseDown);
     // Add the 'click' event listener after the image has loaded
     // mesh.addEventListener('click', onImageClick);
+
+    // CHECK CLICKABLE OBJECTS
+    if (clickableObjects.length > 0) {
+      console.log("%cGweat!", "color: #ccff00;", clickableObjects);
+    } else {
+      console.log("%cNope!", "color: #ff00cc;", clickableObjects);
+    }
+
+    // Event listener for mouse clicks
+    function onDocumentMouseDown(event) {
+      // Calculate the mouse position in normalized device coordinates (-1 to +1)
+      const mouse = new THREE.Vector2();
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+      // Update the picking ray with the camera and mouse position
+      raycaster.setFromCamera(mouse, camera);
+
+      // Raycast against the list of clickable objects
+      const intersects = raycaster.intersectObjects(clickableObjects);
+
+      // Check if any objects were intersected
+      if (intersects.length > 0) {
+        console.log('Image clicked!');
+      }
+    }
+
+    // Attach the mouse down event listener to the document
+    document.addEventListener('mousedown', onDocumentMouseDown);
   });
 
-  // Event listener for mouse clicks
-  function onDocumentMouseDown(event) {
-    // Calculate the mouse position in normalized device coordinates (-1 to +1)
-    const mouse = new THREE.Vector2();
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-    // Update the picking ray with the camera and mouse position
-    raycaster.setFromCamera(mouse, camera);
-
-    // Raycast against the list of clickable objects
-    const intersects = raycaster.intersectObjects(clickableObjects);
-
-    // Check if any objects were intersected
-    if (intersects.length > 0) {
-      console.log('Image clicked!');
-    }
-  }
-
-  // Attach the mouse down event listener to the document
-  document.addEventListener('mousedown', onDocumentMouseDown);
+  window.addEventListener('resize', function () {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
 
   function animate() {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
   }
+
   animate();
 </script>
 </body>
