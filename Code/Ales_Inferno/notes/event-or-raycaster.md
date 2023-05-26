@@ -1,4 +1,4 @@
-## Raycaster
+## Add Event to Image
 
 OK.  How about using a raycaster instead of a click event?
 
