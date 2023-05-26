@@ -40,7 +40,7 @@
 
     const camera = new THREE.PerspectiveCamera(75, aspectRatio, 0.1, 1000);
     camera.position.z = 5;
-    scene.add(camera); // does this get added automatically? bc it's not bitching.
+    // scene.add(camera); // does this get added automatically? bc it's not bitching.
     cameras.push(camera);
 
     // add the group object to all four scenes. wut?
@@ -94,8 +94,8 @@
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
     // use the Raycaster to detect which image the mouse is hovering over
-    raycaster.setFromCamera(mouse, cameras[0]); // TODO: need a "selected camera"
-    //raycaster.setFromCamera(mouse, parentCamera);
+    raycaster.setFromCamera(mouse, cameras[0]); // TODO: Need a "selected camera", or parent, or something.
+    // raycaster.setFromCamera(mouse, parentCamera);
 
     const intersects = raycaster.intersectObjects(meshes);
     if (intersects.length > 0) {
