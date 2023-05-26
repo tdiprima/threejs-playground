@@ -64,7 +64,7 @@
     // Create a mesh using the geometry and material
     const mesh = new THREE.Mesh(geometry, material);
     mesh.scale.set(1.0, texture.image.height / texture.image.width, 1.0);
-    mesh.userData.interactive = true;
+    // mesh.userData.interactive = true; // doesn't matter
     mesh.name = "image1";
 
     // Add the mesh to the scene
