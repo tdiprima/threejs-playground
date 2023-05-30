@@ -28,15 +28,20 @@
   document.body.appendChild(renderer.domElement);
 
   // Create a base image
-  let baseTexture = new THREE.TextureLoader().load('baseImage.jpg'); // can be jpg
-  let baseMaterial = new THREE.MeshBasicMaterial({ map: baseTexture });
+  let baseTexture = new THREE.TextureLoader().load('baseImage.jpg');
+  let baseMaterial = new THREE.MeshBasicMaterial({ map: baseTexture, side: THREE.DoubleSide });
   let baseGeometry = new THREE.PlaneGeometry(5, 5); // Adjust the size as needed
   let baseMesh = new THREE.Mesh(baseGeometry, baseMaterial);
   scene.add(baseMesh);
 
   // Create a transparent image layer
   let transparentTexture = new THREE.TextureLoader().load('transparentImage.png');
-  let transparentMaterial = new THREE.MeshBasicMaterial({ map: transparentTexture, transparent: true, opacity: 0.5 });
+  let transparentMaterial = new THREE.MeshBasicMaterial({
+    map: transparentTexture,
+    transparent: true,
+    opacity: 0.5,
+    side: THREE.DoubleSide
+  });
   let transparentGeometry = new THREE.PlaneGeometry(5, 5); // Adjust the size as needed
   let transparentMesh = new THREE.Mesh(transparentGeometry, transparentMaterial);
   scene.add(transparentMesh);
@@ -47,7 +52,7 @@
   // Create a custom shader material for colorization
   let colorizationMaterial = new THREE.ShaderMaterial({
     uniforms: {
-      texture: { value: transparentTexture },
+      myTexture: { value: transparentTexture },
       filterColor: { value: filterColor }
     },
     vertexShader: `
@@ -58,11 +63,11 @@
     }
   `,
     fragmentShader: `
-    uniform sampler2D texture;
+    uniform sampler2D myTexture;
     uniform vec3 filterColor;
     varying vec2 vUv;
     void main() {
-      vec4 texel = texture2D(texture, vUv);
+      vec4 texel = texture2D(myTexture, vUv);
       texel.rgb *= filterColor.rgb;
       gl_FragColor = texel;
     }

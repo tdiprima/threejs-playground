@@ -1,5 +1,7 @@
 ## Layering and Filtering
 
+TL;DR &ndash; see bottom of file.
+
 Certainly! Here's a code example that demonstrates layering and filtering using Three.js:
 
 ```javascript
@@ -177,7 +179,20 @@ To troubleshoot the issue, you can try the following:
 
 4. Ensure that you have included the Three.js library correctly. Make sure the **path to the Three.js** library is correct and that it is loaded before your custom code.
 
-By following these steps, you should be able to identify the cause of the error and resolve it. If the issue persists, please provide any additional error messages or relevant information from the console, and I'll be happy to assist you further.
+## O My Me
+
+If I load just the png (use it in place of the base image), the shader works, but I get "Fragment shader is not compiled."
+
+If I only load the base image, I get no errors.
+
+So it's the part that has to do with the transparent layer.
+
+The images aren't wrong.
+
+<span style="color:red;">All I had to do is rename the texture.  Holy</span> 💩
+
+[WebGL2 Breaking Custom Shader](https://discourse.threejs.org/t/webgl2-breaking-custom-shader/16603)
+
+[WebGL2 from WebGL1](https://webgl2fundamentals.org/webgl/lessons/webgl1-to-webgl2.html)
 
 <br>
-
