@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Estratificación y Filtrado</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+<script type="importmap">{
+  "imports": {
+    "three": "/build/three.module.js",
+    "three/addons/": "/jsm/"
+  }
+}
+</script>
+<script async src="/es-module-shims-1.3.6/dist/es-module-shims.js"></script>
+<script type="module">
+  import * as THREE from "three";
+  import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+  // Set up the scene, camera, and renderer
+  let scene = new THREE.Scene();
+  let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  let renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  // Create a base image
+  let baseTexture = new THREE.TextureLoader().load('baseImage.png'); // can be jpg
+  let baseMaterial = new THREE.MeshBasicMaterial({ map: baseTexture });
+  let baseGeometry = new THREE.PlaneGeometry(5, 5); // Adjust the size as needed
+  let baseMesh = new THREE.Mesh(baseGeometry, baseMaterial);
+  scene.add(baseMesh);
+
+  // Create a transparent image layer
+  let transparentTexture = new THREE.TextureLoader().load('transparentImage.png');
+  let transparentMaterial = new THREE.MeshBasicMaterial({ map: transparentTexture, transparent: true, opacity: 0.5 });
+  let transparentGeometry = new THREE.PlaneGeometry(5, 5); // Adjust the size as needed
+  let transparentMesh = new THREE.Mesh(transparentGeometry, transparentMaterial);
+  scene.add(transparentMesh);
+
+  // Create a color filter
+  let filterColor = new THREE.Color(1, 0, 0); // Red color filter
+
+  // Create a custom shader material for colorization
+  let colorizationMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+      texture: { value: transparentTexture },
+      filterColor: { value: filterColor }
+    },
+    vertexShader: `
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `,
+    fragmentShader: `
+    uniform sampler2D texture;
+    uniform vec3 filterColor;
+    varying vec2 vUv;
+    void main() {
+      vec4 texel = texture2D(texture, vUv);
+      texel.rgb *= filterColor;
+      gl_FragColor = texel;
+    }
+  `
+  });
+
+  // Apply the colorization material to the transparent mesh
+  transparentMesh.material = colorizationMaterial;
+
+  // Set up the camera position and controls
+  camera.position.z = 10;
+  let controls = new OrbitControls(camera, renderer.domElement);
+
+  // Render the scene
+  function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  animate();
+</script>
+</body>
+</html>
