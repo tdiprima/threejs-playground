@@ -48,7 +48,7 @@ for (let i = 0; i < numScenes; i++) {
   cameras.push(camera);
 
   // Load each image and add it to its corresponding scene
-  const image = loader.load(`image${i + 1}.jpg`);
+  const image = loader.load(`/images/image${i + 1}.jpg`);
   const material = new THREE.MeshBasicMaterial({ map: image, side: THREE.DoubleSide });
   const mesh = new THREE.Mesh(geometry, material);
   mesh.name = `image${i + 1}`;

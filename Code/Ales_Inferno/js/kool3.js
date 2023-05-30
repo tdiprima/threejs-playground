@@ -58,7 +58,7 @@ for (let i = 0; i < numScenes; i++) {
   controls.push(control);
 
   // Add the four images to the scenes
-  const image = loader.load(`image${i + 1}.jpg`);
+  const image = loader.load(`/images/image${i + 1}.jpg`);
   const material = new THREE.MeshBasicMaterial({ map: image });
   const mesh = new THREE.Mesh(geometry, material);
   scene.add(mesh);

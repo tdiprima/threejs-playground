@@ -5,7 +5,7 @@
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>Estratificación y Filtrado</title>
-  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
 <script type="importmap">{
@@ -28,14 +28,14 @@
   document.body.appendChild(renderer.domElement);
 
   // Create a base image
-  let baseTexture = new THREE.TextureLoader().load('baseImage.png');
+  let baseTexture = new THREE.TextureLoader().load('/images/baseImage.png');
   let baseMaterial = new THREE.MeshBasicMaterial({ map: baseTexture, side: THREE.DoubleSide });
   let baseGeometry = new THREE.PlaneGeometry(5, 5); // Adjust the size as needed
   let baseMesh = new THREE.Mesh(baseGeometry, baseMaterial);
   scene.add(baseMesh);
 
   // Create a transparent image layer
-  let transparentTexture = new THREE.TextureLoader().load('transparentImage.png');
+  let transparentTexture = new THREE.TextureLoader().load('/images/transparentImage.png');
   let transparentMaterial = new THREE.MeshBasicMaterial({
     map: transparentTexture,
     transparent: true,

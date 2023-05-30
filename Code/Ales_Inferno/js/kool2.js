@@ -31,7 +31,7 @@ for (let i = 0; i < numScenes; i++) {
   scene.add(camera);
   cameras.push(camera);
 
-  let image = loader.load(`image${i + 1}.jpg`);
+  let image = loader.load(`/images/image${i + 1}.jpg`);
   let material = new THREE.MeshBasicMaterial({map: image, side: THREE.DoubleSide});
   // Set the position and scale of the mesh so that it fits within the canvas for that image.
   let mesh = new THREE.Mesh(geometry, material);
