@@ -63,7 +63,7 @@
     varying vec2 vUv;
     void main() {
       vec4 texel = texture2D(texture, vUv);
-      texel.rgb *= filterColor;
+      texel.rgb *= filterColor.rgb;
       gl_FragColor = texel;
     }
   `
