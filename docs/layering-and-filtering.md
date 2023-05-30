@@ -142,21 +142,10 @@ The HTML part of the code for the vertex shader and fragment shader can be writt
 ```html
 <body>
   <script id="vertexShader" type="x-shader/x-vertex">
-    varying vec2 vUv;
-    void main() {
-      vUv = uv;
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-    }
+    // code
   </script>
   <script id="fragmentShader" type="x-shader/x-fragment">
-    uniform sampler2D texture;
-    uniform vec3 filterColor;
-    varying vec2 vUv;
-    void main() {
-      vec4 texel = texture2D(texture, vUv);
-      texel.rgb *= filterColor;
-      gl_FragColor = texel;
-    }
+    // code
   </script>
 </body>
 ```
@@ -175,22 +164,23 @@ var vertexShaderSource = document.getElementById('vertexShader').textContent;
 var fragmentShaderSource = document.getElementById('fragmentShader').textContent;
 ```
 
+<br>
+
 <span style="color:red;font-size:larger;">Fine...</span>
 
 ## Must have a compiled fragment shader attached
 
-<span style="color:red;">All I had to do is rename the texture.  Holy</span> 💩
-
-Try changing:
+<span style="color:#0000dd;">All I had to do is rename the texture.  Holy</span> 💩
 
 ```glsl
+// You could try changing:
 texel.rgb *= filterColor;
 ```
 
-to
-
 ```glsl
+// to:
 texel.rgb *= filterColor.rgb;
+// But it's the same thing.
 ```
 
 [WebGL2 Breaking Custom Shader](https://discourse.threejs.org/t/webgl2-breaking-custom-shader/16603)

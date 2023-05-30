@@ -139,7 +139,7 @@ animate();
 
 // const loader = new THREE.TextureLoader();
 // const geometry = new THREE.PlaneGeometry(5, 5);
-// const image1 = loader.load('image1.jpg');
+// const image1 = loader.load('/images/image1.jpg');
 // const material1 = new THREE.MeshBasicMaterial({ map: image1 })
 // const mesh1 = new THREE.Mesh(geometry, material1);
 // mesh1.position.set(-2, 2, 0);

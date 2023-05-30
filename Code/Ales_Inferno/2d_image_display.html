@@ -25,7 +25,7 @@
 
   function simple() {
     // Create a texture object
-    const texture = new THREE.TextureLoader().load('image1.jpg');
+    const texture = new THREE.TextureLoader().load('/images/image1.jpg');
 
     // Create a plane geometry
     const geometry = new THREE.PlaneGeometry(1, 1);
@@ -42,7 +42,7 @@
 
   function withAspectRatio() {
     let planeGeom = new THREE.PlaneGeometry(3, 3); // play around with this
-    let imgSrc = "image1.jpg"
+    let imgSrc = "/images/image1.jpg"
     let mesh;
     let tex = new THREE.TextureLoader().load(imgSrc, (tex) => {
       tex.needsUpdate = true;

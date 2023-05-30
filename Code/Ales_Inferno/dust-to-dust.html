@@ -55,7 +55,7 @@
     renderers.push(renderer);
 
     // load your images as textures
-    const texture = new THREE.TextureLoader().load(`image${i + 1}.jpg`);
+    const texture = new THREE.TextureLoader().load(`/images/image${i + 1}.jpg`);
     const material = new THREE.MeshBasicMaterial({map: texture});
     // create four instances of the Mesh, using your textures
     const mesh = new THREE.Mesh(geometry, material);

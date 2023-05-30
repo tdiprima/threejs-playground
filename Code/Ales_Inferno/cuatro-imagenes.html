@@ -40,10 +40,10 @@
   const textureLoader = new THREE.TextureLoader();
 
   // Load the images
-  const image1Texture = textureLoader.load('image1.jpg');
-  const image2Texture = textureLoader.load('image2.jpg');
-  const image3Texture = textureLoader.load('image3.jpg');
-  const image4Texture = textureLoader.load('image4.jpg');
+  const image1Texture = textureLoader.load('/images/image1.jpg');
+  const image2Texture = textureLoader.load('/images/image2.jpg');
+  const image3Texture = textureLoader.load('/images/image3.jpg');
+  const image4Texture = textureLoader.load('/images/image4.jpg');
 
   // todo: Create a plane geometry with the same aspect ratio as the images
   const planeGeometry = new THREE.PlaneGeometry(1, 1);

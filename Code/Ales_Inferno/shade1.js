@@ -11,7 +11,7 @@ const geometry = new THREE.BoxGeometry(1, 1, 1);
 // Create a texture
 // THREE.WebGLRenderer: Texture has been resized from (400x300) to (256x256)
 const textureLoader = new THREE.TextureLoader();
-const texture = textureLoader.load('image1.jpg');
+const texture = textureLoader.load('/images/image1.jpg');
 
 // Create the custom shader materials
 let originalMaterial = new THREE.MeshBasicMaterial({ map: texture }); // Original material without shading

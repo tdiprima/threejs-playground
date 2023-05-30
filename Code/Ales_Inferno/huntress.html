@@ -59,7 +59,7 @@
     renderer.setSize(width, height); // ding-ding-ding!!
     document.getElementById(`image${i + 1}`).appendChild(renderer.domElement);
 
-    const texture = loader.load(`image${i + 1}.jpg`);
+    const texture = loader.load(`/images/image${i + 1}.jpg`);
     const material = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide});
     const mesh = new THREE.Mesh(geometry, material);
     mesh.userData.interactive = true;
