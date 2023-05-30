@@ -98,4 +98,84 @@ You would need to replace the paths to the base image and transparent image with
 
 Note that this is a basic example to demonstrate the concept of layering and filtering with Three.js. Depending on your specific requirements, you may need to modify and extend this code further.
 
+## HTML?
+
+The HTML part of the code for the vertex shader and fragment shader can be written using `<script>` tags in your HTML file. Here's an example of how you can include the shaders in your HTML:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Layering and Filtering with Three.js</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <script id="vertexShader" type="x-shader/x-vertex">
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  </script>
+  <script id="fragmentShader" type="x-shader/x-fragment">
+    uniform sampler2D texture;
+    uniform vec3 filterColor;
+    varying vec2 vUv;
+    void main() {
+      vec4 texel = texture2D(texture, vUv);
+      texel.rgb *= filterColor;
+      gl_FragColor = texel;
+    }
+  </script>
+  <script src="path/to/three.js"></script>
+  <script src="path/to/orbitcontrols.js"></script>
+  <script>
+    // Your JavaScript code here
+  </script>
+</body>
+</html>
+```
+
+In the above HTML code, the vertex shader is defined inside the `<script>` tag with the `id="vertexShader"` attribute and the type set to `"x-shader/x-vertex"`. Similarly, the fragment shader is defined inside the `<script>` tag with the `id="fragmentShader"` attribute and the type set to `"x-shader/x-fragment"`.
+
+You should replace the `path/to/three.js` and `path/to/orbitcontrols.js` with the actual paths to the Three.js library and the OrbitControls script, respectively. Make sure you have included these dependencies before your custom JavaScript code.
+
+You can then access the shaders in your JavaScript code by using `document.getElementById()` to retrieve the shader source code:
+
+```javascript
+// Get the vertex shader source code
+var vertexShaderSource = document.getElementById('vertexShader').textContent;
+
+// Get the fragment shader source code
+var fragmentShaderSource = document.getElementById('fragmentShader').textContent;
+```
+
+By retrieving the shader source code using the `textContent` property, you can use it to create the shaders in Three.js using `THREE.ShaderMaterial`.
+
+<span style="color:red;font-size:larger;">Fine...</span>
+
+## Must have a compiled fragment shader attached
+
+The code you provided looks correct, and it should work as expected. The error message "Must have a compiled fragment shader attached" typically occurs when there is an issue with the fragment shader code.
+
+However, the error may not be related to the code you posted. It's possible that the error is caused by some other part of your application, or there may be an issue with the image paths you provided.
+
+To troubleshoot the issue, you can try the following:
+
+1. Verify that the **paths** to the base image (`baseImage.jpg`) and the transparent image (`transparentImage.png`) are correct. Make sure the images are accessible and in the specified locations.
+
+2. Check if there are **any other error messages** in the console that could provide more information about the problem. Sometimes, there may be additional errors preceding the "Must have a compiled fragment shader attached" error that could help pinpoint the issue.
+
+3. Try **simplifying** the code to isolate the problem. For example, you can comment out the section related to the transparent image and its material, and see if the error still occurs. If it does not, gradually add back the code until you identify the specific part causing the error.
+
+4. Ensure that you have included the Three.js library correctly. Make sure the **path to the Three.js** library is correct and that it is loaded before your custom code.
+
+By following these steps, you should be able to identify the cause of the error and resolve it. If the issue persists, please provide any additional error messages or relevant information from the console, and I'll be happy to assist you further.
+
 <br>

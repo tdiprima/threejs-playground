@@ -15,6 +15,23 @@
   }
 }
 </script>
+<script id="vertexShader" type="x-shader/x-vertex">
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+</script>
+<script id="fragmentShader" type="x-shader/x-fragment">
+  uniform sampler2D texture;
+  uniform vec3 filterColor;
+  varying vec2 vUv;
+  void main() {
+    vec4 texel = texture2D(texture, vUv);
+    texel.rgb *= filterColor;
+    gl_FragColor = texel;
+  }
+</script>
 <script async src="/es-module-shims-1.3.6/dist/es-module-shims.js"></script>
 <script type="module">
   import * as THREE from "three";
@@ -28,7 +45,7 @@
   document.body.appendChild(renderer.domElement);
 
   // Create a base image
-  let baseTexture = new THREE.TextureLoader().load('baseImage.png'); // can be jpg
+  let baseTexture = new THREE.TextureLoader().load('baseImage.jpg');
   let baseMaterial = new THREE.MeshBasicMaterial({ map: baseTexture });
   let baseGeometry = new THREE.PlaneGeometry(5, 5); // Adjust the size as needed
   let baseMesh = new THREE.Mesh(baseGeometry, baseMaterial);
@@ -44,29 +61,44 @@
   // Create a color filter
   let filterColor = new THREE.Color(1, 0, 0); // Red color filter
 
+  // Get the vertex shader source code
+  var vertexShaderSource = document.getElementById('vertexShader').textContent;
+
+  // Get the fragment shader source code
+  var fragmentShaderSource = document.getElementById('fragmentShader').textContent;
+
   // Create a custom shader material for colorization
+  // let colorizationMaterial = new THREE.ShaderMaterial({
+  //   uniforms: {
+  //     texture: { value: transparentTexture },
+  //     filterColor: { value: filterColor }
+  //   },
+  //   vertexShader: `
+  //   varying vec2 vUv;
+  //   void main() {
+  //     vUv = uv;
+  //     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  //   }
+  // `,
+  //   fragmentShader: `
+  //   uniform sampler2D texture;
+  //   uniform vec3 filterColor;
+  //   varying vec2 vUv;
+  //   void main() {
+  //     vec4 texel = texture2D(texture, vUv);
+  //     texel.rgb *= filterColor;
+  //     gl_FragColor = texel;
+  //   }
+  // `
+  // });
+
   let colorizationMaterial = new THREE.ShaderMaterial({
     uniforms: {
       texture: { value: transparentTexture },
       filterColor: { value: filterColor }
     },
-    vertexShader: `
-    varying vec2 vUv;
-    void main() {
-      vUv = uv;
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-    }
-  `,
-    fragmentShader: `
-    uniform sampler2D texture;
-    uniform vec3 filterColor;
-    varying vec2 vUv;
-    void main() {
-      vec4 texel = texture2D(texture, vUv);
-      texel.rgb *= filterColor;
-      gl_FragColor = texel;
-    }
-  `
+    vertexShader: vertexShaderSource,
+    fragmentShader: fragmentShaderSource
   });
 
   // Apply the colorization material to the transparent mesh
