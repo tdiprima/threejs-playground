@@ -82,6 +82,48 @@ You would need to replace the paths to the base image and transparent image with
 
 Note that this is a basic example to demonstrate the concept of layering and filtering with Three.js. Depending on your specific requirements, you may need to modify and extend this code further.
 
+## llorar y lluvia
+
+Can you explain this bit of three.js code, please?
+```js
+let colorizationMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+      myTexture: { value: transparentTexture },
+      filterColor: { value: filterColor }
+    },
+    vertexShader: `
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `,
+    fragmentShader: `
+    uniform sampler2D myTexture;
+    uniform vec3 filterColor;
+    varying vec2 vUv;
+    void main() {
+      vec4 texel = texture2D(myTexture, vUv);
+      texel.rgb *= filterColor.rgb;
+      gl_FragColor = texel;
+    }
+  `
+  });
+```
+
+Certainly! Let's break it down step by step:
+
+1. First, a new instance of `THREE.ShaderMaterial` is created and assigned to the variable `colorizationMaterial`. `ShaderMaterial` is a class in three.js that allows you to create custom materials by specifying vertex and fragment shaders.
+
+2. The `ShaderMaterial` constructor is passed an object that contains various properties defining the material. In this case, it has two properties:
+   - `uniforms`: An object that defines the uniforms (input values) that can be accessed within the vertex and fragment shaders. It contains two uniforms:
+     - `myTexture`: A uniform of type `sampler2D` (2D texture) with an initial value of `transparentTexture`.
+     - `filterColor`: A uniform of type `vec3` (3D vector) with an initial value of `filterColor`.
+   - `vertexShader`: A string containing the vertex shader code. This shader is responsible for processing each vertex of the geometry. In this code, it sets the varying variable `vUv` to the vertex's UV coordinates (texture coordinates) and calculates the final position of the vertex using the projection and model-view matrices.
+   - `fragmentShader`: A string containing the fragment shader code. This shader is responsible for determining the color of each pixel of the geometry. In this code, it declares the uniforms `myTexture` and `filterColor` as inputs. It samples the texture (`myTexture`) at the UV coordinates (`vUv`), multiplies the sampled color with the `filterColor`, and assigns the result to `gl_FragColor`, which represents the final color of the pixel.
+
+By creating this `ShaderMaterial` and providing the custom vertex and fragment shaders, you can define your own logic for how the geometry should be rendered and shaded. In this case, the material takes a texture as input (`myTexture`) and applies a color filter (`filterColor`) to it. The resulting color is then used as the final color of each pixel in the geometry.
+
 ## HTML?
 
 If you are defining your shaders directly in the JavaScript code, you don't need to add anything additional to the HTML file. The shaders are included as string literals within the THREE.ShaderMaterial definition in your JavaScript code, and they don't require any separate HTML tags.
