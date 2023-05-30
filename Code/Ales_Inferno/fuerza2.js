@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/controls/OrbitControls.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 let RENDER_WIDTH = window.innerWidth / 2;
 let RENDER_HEIGHT = window.innerHeight / 2;
