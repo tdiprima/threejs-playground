@@ -2,38 +2,38 @@
 
 TL;DR &ndash; see bottom of file.
 
-Certainly! Here's a code example that demonstrates layering and filtering using Three.js:
+Here's a code example that demonstrates layering and filtering:
 
 ```javascript
 // Set up the scene, camera, and renderer
-var scene = new THREE.Scene();
-var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-var renderer = new THREE.WebGLRenderer();
+let scene = new THREE.Scene();
+let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+let renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 // Create a base image
-var baseTexture = new THREE.TextureLoader().load('path/to/baseImage.jpg');
-var baseMaterial = new THREE.MeshBasicMaterial({ map: baseTexture });
-var baseGeometry = new THREE.PlaneGeometry(5, 5); // Adjust the size as needed
-var baseMesh = new THREE.Mesh(baseGeometry, baseMaterial);
+let baseTexture = new THREE.TextureLoader().load('path/to/baseImage.jpg');
+let baseMaterial = new THREE.MeshBasicMaterial({map: baseTexture});
+let baseGeometry = new THREE.PlaneGeometry(5, 5); // Adjust the size as needed
+let baseMesh = new THREE.Mesh(baseGeometry, baseMaterial);
 scene.add(baseMesh);
 
 // Create a transparent image layer
-var transparentTexture = new THREE.TextureLoader().load('path/to/transparentImage.png');
-var transparentMaterial = new THREE.MeshBasicMaterial({ map: transparentTexture, transparent: true, opacity: 0.5 });
-var transparentGeometry = new THREE.PlaneGeometry(5, 5); // Adjust the size as needed
-var transparentMesh = new THREE.Mesh(transparentGeometry, transparentMaterial);
+let transparentTexture = new THREE.TextureLoader().load('path/to/transparentImage.png');
+let transparentMaterial = new THREE.MeshBasicMaterial({map: transparentTexture, transparent: true, opacity: 0.5});
+let transparentGeometry = new THREE.PlaneGeometry(5, 5); // Adjust the size as needed
+let transparentMesh = new THREE.Mesh(transparentGeometry, transparentMaterial);
 scene.add(transparentMesh);
 
 // Create a color filter
-var filterColor = new THREE.Color(1, 0, 0); // Red color filter
+let filterColor = new THREE.Color(1, 0, 0); // Red color filter
 
 // Create a custom shader material for colorization
-var colorizationMaterial = new THREE.ShaderMaterial({
+let colorizationMaterial = new THREE.ShaderMaterial({
   uniforms: {
-    texture: { value: transparentTexture },
-    filterColor: { value: filterColor },
+    texture: {value: transparentTexture},
+    filterColor: {value: filterColor},
   },
   vertexShader: `
     varying vec2 vUv;
@@ -59,7 +59,7 @@ transparentMesh.material = colorizationMaterial;
 
 // Set up the camera position and controls
 camera.position.z = 10;
-var controls = new THREE.OrbitControls(camera, renderer.domElement);
+let controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 // Render the scene
 function animate() {
@@ -67,6 +67,7 @@ function animate() {
   controls.update();
   renderer.render(scene, camera);
 }
+
 animate();
 ```
 
@@ -131,7 +132,7 @@ Certainly! Let's break it down step by step:
 
 By creating this `ShaderMaterial` and providing the custom vertex and fragment shaders, you can define your own logic for how the geometry should be rendered and shaded. In this case, the material takes a texture as input (`myTexture`) and applies a color filter (`filterColor`) to it. The resulting color is then used as the final color of each pixel in the geometry.
 
-## HTML?
+## HTML
 
 If you are defining your shaders directly in the JavaScript code, you don't need to add anything additional to the HTML file. The shaders are included as string literals within the THREE.ShaderMaterial definition in your JavaScript code, and they don't require any separate HTML tags.
 
@@ -158,10 +159,10 @@ You can then access the shaders in your JavaScript code by using `document.getEl
 
 ```javascript
 // Get the vertex shader source code
-var vertexShaderSource = document.getElementById('vertexShader').textContent;
+let vertexShaderSource = document.getElementById('vertexShader').textContent;
 
 // Get the fragment shader source code
-var fragmentShaderSource = document.getElementById('fragmentShader').textContent;
+let fragmentShaderSource = document.getElementById('fragmentShader').textContent;
 ```
 
 <br>
@@ -170,7 +171,7 @@ var fragmentShaderSource = document.getElementById('fragmentShader').textContent
 
 ## Must have a compiled fragment shader attached
 
-<span style="color:#0000dd;">All I had to do is rename the texture.  Holy</span> 💩
+<span style="color:#0000dd;">All I had to do is rename the "texture".  Holy</span> 💩
 
 ```glsl
 // You could try changing:
