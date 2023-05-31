@@ -78,6 +78,7 @@ function handleZoom1(event) {
   }
 }
 
+/*
 let camera1Active = true;
 let camera2Active = false;
 let camera3Active = false;
@@ -92,6 +93,7 @@ function handleZoom(event) {
     }
   } else {
     console.log("individual");
+    // cameras[i].dollyOut is not a function (cuz it's controls)
     if (camera1Active) {
       cameras[0].dollyOut(event.deltaY);
       cameras[0].dollyIn(event.deltaX);
@@ -110,6 +112,7 @@ function handleZoom(event) {
 
 // Event listener for mouse wheel zooming
 document.addEventListener("wheel", handleZoom);
+*/
 
 // Function to toggle collective and individual zooming
 function toggleZoomMode() {
@@ -156,3 +159,13 @@ function render() {
   }
   render();
 })();
+
+function onWindowResize() {
+  cameras.forEach(camera => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+window.addEventListener("resize", onWindowResize);
