@@ -7,7 +7,7 @@ let color = [0.2, 0.2, 0.2];
 let rgb = [];
 
 for (let i = 0; i < color.length; i++) {
-	rgb.push(color[i] * 255.0);
+    rgb.push(color[i] * 255.0);
 }
 console.log("rgb:", rgb)
 ```
