@@ -98,7 +98,7 @@ The error you're encountering indicates that the `vNormal` varying variable used
 
 To fix this error, you need to **pass the normal attribute** from the vertex shader to the fragment shader.
 
-```glsl
+```html
 <script id="vertexShader" type="x-shader/x-vertex">
   varying vec3 vNormal; // add this
 
