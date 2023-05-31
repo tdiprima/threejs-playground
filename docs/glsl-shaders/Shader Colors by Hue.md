@@ -2,26 +2,35 @@
 
 ```glsl
 // Fragment Shader
-float hue = fract(t * 6.0);
+uniform float uTime;
+varying vec2 vUv;
 
-if (hue < 0.1667) {
-  // red - magenta
-  color = mix(vec3(1.0, 0.0, 0.0), vec3(1.0, 0.0, 1.0), hue * 6.0);
-} else if (hue < 0.3333) {
-  // magenta - blue
-  color = mix(vec3(1.0, 0.0, 1.0), vec3(0.0, 0.0, 1.0), (hue - 0.1667) * 6.0);
-} else if (hue < 0.5) {
-  // blue - cyan
-  color = mix(vec3(0.0, 0.0, 1.0), vec3(0.0, 1.0, 1.0), (hue - 0.3333) * 6.0);
-} else if (hue < 0.6667) {
-  // cyan - green
-  color = mix(vec3(0.0, 1.0, 1.0), vec3(0.0, 1.0, 0.0), (hue - 0.5) * 6.0);
-} else if (hue < 0.8333) {
-  // green - yellow
-  color = mix(vec3(0.0, 1.0, 0.0), vec3(1.0, 1.0, 0.0), (hue - 0.6667) * 6.0);
-} else {
-  // yellow - red
-  color = mix(vec3(1.0, 1.0, 0.0), vec3(1.0, 0.0, 0.0), (hue - 0.8333) * 6.0);
+void main() {
+  vec3 color = vec3(0.0);
+  float t = mod(uTime, 1.0);
+  float hue = fract(t * 6.0);
+
+  if (hue < 0.1667) {
+    // red - magenta
+    color = mix(vec3(1.0, 0.0, 0.0), vec3(1.0, 0.0, 1.0), hue * 6.0);
+  } else if (hue < 0.3333) {
+    // magenta - blue
+    color = mix(vec3(1.0, 0.0, 1.0), vec3(0.0, 0.0, 1.0), (hue - 0.1667) * 6.0);
+  } else if (hue < 0.5) {
+    // blue - cyan
+    color = mix(vec3(0.0, 0.0, 1.0), vec3(0.0, 1.0, 1.0), (hue - 0.3333) * 6.0);
+  } else if (hue < 0.6667) {
+    // cyan - green
+    color = mix(vec3(0.0, 1.0, 1.0), vec3(0.0, 1.0, 0.0), (hue - 0.5) * 6.0);
+  } else if (hue < 0.8333) {
+    // green - yellow
+    color = mix(vec3(0.0, 1.0, 0.0), vec3(1.0, 1.0, 0.0), (hue - 0.6667) * 6.0);
+  } else {
+    // yellow - red
+    color = mix(vec3(1.0, 1.0, 0.0), vec3(1.0, 0.0, 0.0), (hue - 0.8333) * 6.0);
+  }
+
+  gl_FragColor = vec4(color, 1.0);
 }
 ```
 
