@@ -5,6 +5,11 @@
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>diosa del contralto</title>
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
 </head>
 <body>
 
@@ -13,11 +18,23 @@
 <script>
   let scene = new THREE.Scene();
   let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.z = 5;
+  camera.position.z = 1;
 
   let renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
+
+  // For the free-draw line
+  let material = new THREE.LineBasicMaterial({color: 0x000000});
+  let geometry = new THREE.BufferGeometry();
+
+  let positions = new Float32Array(1000 * 3); // Assuming a maximum of 1000 points
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+  let line = new THREE.Line(geometry, material);
+  scene.add(line);
+
+  let index = 0;
 
   // Define the plane variable outside the textureLoader.load callback
   let plane;
@@ -30,15 +47,15 @@
 
   // Load the image as a texture
   let textureLoader = new THREE.TextureLoader();
-  textureLoader.load('/images/image1.jpg', function(texture) {
+  textureLoader.load('/images/image1.jpg', function (texture) {
     let imageAspectRatio = texture.image.width / texture.image.height;
     let planeGeometry = new THREE.PlaneGeometry(imageAspectRatio, 1);
-    let planeMaterial = new THREE.MeshBasicMaterial({ map: texture });
+    let planeMaterial = new THREE.MeshBasicMaterial({map: texture});
     plane = new THREE.Mesh(planeGeometry, planeMaterial);
     scene.add(plane);
   });
 
-  document.addEventListener('mousemove', function(event) {
+  document.addEventListener('mousemove', function (event) {
     if (mouseDown && plane) {
       let mouse = new THREE.Vector2();
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -50,18 +67,29 @@
       let intersects = raycaster.intersectObject(plane);
       if (intersects.length > 0) {
         let point = intersects[0].point;
-        drawingCoordinates.push({ x: point.x, y: point.y });
+        drawingCoordinates.push({x: point.x, y: point.y});
+
+        // Add to try to draw the line
+        if (index < positions.length) {
+          positions[index++] = point.x;
+          positions[index++] = point.y;
+          positions[index++] = 0;
+        } else {
+          console.warn('Drawing limit exceeded');
+        }
+
+        geometry.attributes.position.needsUpdate = true;
       }
     }
   });
 
-  document.addEventListener('mouseup', function() {
+  document.addEventListener('mouseup', function () {
     console.log("drawingCoordinates", drawingCoordinates);
     drawingCoordinates = [];
     mouseDown = false;
   });
 
-  document.addEventListener('mousedown', function() {
+  document.addEventListener('mousedown', function () {
     mouseDown = true;
   });
 
