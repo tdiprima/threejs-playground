@@ -2,11 +2,9 @@
 
 I have a question about how three.js orbit controls zooms in and out.  It seems like the camera is fixed in the center.  But what if I wanted to zoom into a corner, into a region of interest?  Can I hover the mouse over the corner and zoom in and out?
 
-By default, the OrbitControls in Three.js is designed to zoom in and out based on the center of the scene. However, you can achieve the effect of zooming into a specific region or corner of the scene by modifying the controls' behavior.
+By default, the OrbitControls in Three.js is designed to zoom in and out **based on the center of the scene.** However, you can achieve the effect of zooming into a specific region or corner of the scene by modifying the controls' behavior.
 
-To accomplish this, you can adjust the target of the controls to focus on the desired region. The target represents the point in the scene that the camera is looking at. By changing the target, you can make the camera orbit around a specific point.
-
-Here's an example of how you can achieve this:
+To accomplish this, you can **adjust the target of the controls** to focus on the desired region. The target represents the point in the scene that the camera is looking at. By changing the target, you can make the camera orbit around a specific point.
 
 ```javascript
 // Assuming you have already created a WebGLRenderer, a PerspectiveCamera, and a Scene
@@ -44,8 +42,6 @@ yourRegionOfInterest.addEventListener('mousemove', (event) => {
 In this example, we set the initial target of the controls to the center of the scene. Then, when the mouse hovers over the region of interest, we update the controls' target to the intersection point of the ray from the camera with the region. This causes the camera to orbit around the region of interest when zooming in and out.
 
 Note that `yourRegionOfInterest` is an example variable representing the object or area in your scene that you want to zoom into. You need to replace it with the actual object or area that corresponds to your region of interest.
-
-Feel free to adapt this example to suit your specific needs or integrate it into your existing code.
 
 ## Plugin
 
