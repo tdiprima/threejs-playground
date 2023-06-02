@@ -5,6 +5,7 @@
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>heroína</title>
+  <!-- Better - the zoom out works; mouse positioning... needs a little work. -->
   <link href="/css/main.css" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -39,11 +40,8 @@
 
   // The aspect ratio is 1
   const geometry = new THREE.PlaneGeometry(1, 1);
-
   const material = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide});
-
   const mesh = new THREE.Mesh(geometry, material);
-
   scene.add(mesh);
 
   // Set the initial target of the controls to the center of the scene

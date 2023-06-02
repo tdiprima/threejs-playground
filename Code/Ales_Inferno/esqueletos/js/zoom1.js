@@ -6,7 +6,7 @@ import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 const imgSrc = "/images/happy.JPG";
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 2;
+camera.position.z = 0.5;
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -14,16 +14,11 @@ document.body.appendChild(renderer.domElement);
 
 const control = new OrbitControls(camera, renderer.domElement);
 
-let planeGeom = new THREE.PlaneGeometry(3, 3);
-
-let mesh;
-new THREE.TextureLoader().load(imgSrc, (tex) => {
-  tex.needsUpdate = true;
-  let material = new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide });
-  mesh = new THREE.Mesh(planeGeom, material);
-  mesh.scale.set(1.0, tex.image.height / tex.image.width, 1.0);
-  scene.add(mesh);
-});
+const texture = new THREE.TextureLoader().load(imgSrc);
+const geometry = new THREE.PlaneGeometry(1, 1);
+const material = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide});
+const mesh = new THREE.Mesh(geometry, material);
+scene.add(mesh);
 
 // Calculate the world position from UV coordinates
 function getWorldPositionA(u, v) {
