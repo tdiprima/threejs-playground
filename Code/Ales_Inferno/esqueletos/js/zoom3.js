@@ -1,9 +1,7 @@
 // Use plugin
-// npm install --save three
-// npm install --save-dev three.js-focus-point
-import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { FocusPoint } from "three.js-focus-point";
+// import * as THREE from "three";
+// import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+// import { FocusPoint } from "three.js-focus-point";
 
 const imgSrc = "/images/happy.JPG";
 const scene = new THREE.Scene();
