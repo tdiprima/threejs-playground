@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
@@ -8,7 +7,6 @@
   <title>Free-Drawing</title>
   <link href="/css/main.css" rel="stylesheet">
 </head>
-
 <body>
   <script src="/build/three.min.js"></script>
   <script>
@@ -26,10 +24,21 @@
     // create a plane geometry with a texture
     let geometry = new THREE.PlaneGeometry(10, 10);
     let textureLoader = new THREE.TextureLoader();
-    let texture = textureLoader.load('uv_grid_opengl.jpg');
+
+    // load the texture
+    let texture = textureLoader.load('/images/uv_grid_opengl.jpg');
     let material = new THREE.MeshBasicMaterial({ map: texture });
     let mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
+
+    // load the texture (no, because we need the stupid material)
+    // textureLoader.load('uv_grid_opengl.jpg', function (texture) {
+    //   // create a plane geometry with a texture
+    //   let geometry = new THREE.PlaneGeometry(10, 10);
+    //   let material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
+    //   let mesh = new THREE.Mesh(geometry, material);
+    //   scene.add(mesh);
+    // });
 
     // create a canvas element and add it as a texture to the plane geometry
     let canvas = document.createElement('canvas');
@@ -43,7 +52,9 @@
     context.lineWidth = 2;
 
     let canvasTexture = new THREE.CanvasTexture(canvas);
-    material.map = canvasTexture;
+    // material.map = canvasTexture;
+    let planeMaterial = new THREE.MeshBasicMaterial({map: canvasTexture});
+    mesh.material = planeMaterial;
 
     // let element = canvas;
     let element = document;
@@ -60,11 +71,11 @@
 
     function onCanvasMouseMove(event) {
       if (isDrawing) {
-      let x = event.clientX - canvas.offsetLeft;
-      let y = event.clientY - canvas.offsetTop;
-      context.lineTo(x, y);
-      context.stroke();
-      canvasTexture.needsUpdate = true;
+        let x = event.clientX - canvas.offsetLeft;
+        let y = event.clientY - canvas.offsetTop;
+        context.lineTo(x, y);
+        context.stroke();
+        canvasTexture.needsUpdate = true;
       }
     }
     element.addEventListener('mousemove', onCanvasMouseMove);
@@ -90,5 +101,4 @@
     })();
   </script>
 </body>
-
 </html>
