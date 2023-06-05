@@ -21,10 +21,6 @@
 </head>
 <body>
 <table>
-  <!-- <tr>
-    <td><button id="control1Button">control1</button></td>
-    <td><button id="control2Button">control2</button></td>
-  </tr> -->
   <tr>
     <td colspan="2"><button id="toggleButton">toggleButton</button></td>
   </tr>
@@ -59,7 +55,6 @@
   let mineShaft = "#2b2b2b";
   let outerSpace = "#484848";
 
-  let activeControlIndex = 1; // Index of the currently active control
   let detachControls = false; // Flag to toggle controls detachment
 
   let scene1 = new THREE.Scene();
@@ -118,44 +113,11 @@
     camera1.updateProjectionMatrix();
   }
 
-  // "Detach" function to switch the active control
-  // function switchActiveControl(index) {
-  //   activeControlIndex = index;
-
-  //   if (index === 1) {
-  //     console.log("controls1");
-  //     controls1.enabled = true;
-  //     controls2.enabled = false;
-  //   }
-
-  //   if (index === 2) {
-  //     console.log("controls2");
-  //     controls1.enabled = false;
-  //     controls2.enabled = true;
-  //   }
-  // }
-
-  // Control switch button click event listeners
-  // document.getElementById("control1Button").addEventListener("click", () => {
-  //   switchActiveControl(1);
-  // });
-
-  // document.getElementById("control2Button").addEventListener("click", () => {
-  //   switchActiveControl(2);
-  // });
-
   // Function to detach or reattach controls based on the 'detachControls' flag
   function toggleControlsDetachment() {
     detachControls = !detachControls;
-    if (detachControls) {
-      // TODO: this is just doing the same thing, yet it works.
-      controls1.enabled = true;
-      controls2.enabled = true;
-
-    } else {
-      controls1.enabled = true;
-      controls2.enabled = true;
-    }
+    controls1.enabled = true;
+    controls2.enabled = true;
   }
 
   // Toggle button click event listener
@@ -218,7 +180,6 @@
 
   function update() {
     if (!detachControls) {
-      // todo:
       controls1.update();
       controls2.update();
     }
