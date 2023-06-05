@@ -26,7 +26,7 @@ renderer1.setSize(RENDER_WIDTH, RENDER_HEIGHT);
 document.getElementById('image1').appendChild(renderer1.domElement);
 
 // todo: position?
-let canvas1 = document.createElement('canvas1');
+let canvas1 = document.createElement('canvas');
 canvas1.width = RENDER_WIDTH;
 canvas1.height = RENDER_HEIGHT;
 
