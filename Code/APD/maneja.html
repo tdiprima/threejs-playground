@@ -25,12 +25,8 @@
     <td colspan="2"><button id="toggleButton">toggleButton</button></td>
   </tr>
   <tr>
-    <td>
-      <div id="image1"></div>
-    </td>
-    <td>
-      <div id="image2"></div>
-    </td>
+    <td><div id="image1"></div></td>
+    <td><div id="image2"></div></td>
   </tr>
 </table>
 <script type="importmap">{
@@ -123,13 +119,19 @@
   // Toggle button click event listener
   document.getElementById("toggleButton").addEventListener("click", toggleControlsDetachment);
 
-  // MOUSEDOWN / RAYCASTING
-  function onMouseDown1(event) {
-    console.log("onMouseDown1");
-
+  function updatePointer(event) {
     const mouse = new THREE.Vector2();
+
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    return mouse;
+  }
+
+  // MOUSEDOWN / RAYCASTING
+  function onMouseDown1(event) {
+    // console.log("onMouseDown1");
+    const mouse = updatePointer(event);
 
     const raycaster1 = new THREE.Raycaster();
     raycaster1.setFromCamera(mouse, camera1);
@@ -143,11 +145,8 @@
   }
 
   function onMouseDown2(event) {
-    console.log("onMouseDown2");
-
-    const mouse = new THREE.Vector2();
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    // console.log("onMouseDown2");
+    const mouse = updatePointer(event);
 
     const raycaster2 = new THREE.Raycaster();
     raycaster2.setFromCamera(mouse, camera2);
