@@ -1,10 +1,34 @@
 ## Map multiple textures to a material
 
-You can use the `THREE.MultiMaterial` class, or by using a newer approach with the `THREE.MeshStandardMaterial` and the `THREE.Texture` class. I'll explain both methods below:
+<span style="color:#0000dd;">This is because I wanted to map both the image and the drawing-canvas to the same thing, so that hopefully I could draw on it.  Remember?</span>
+
+```
+THREE.MultiMaterial has been removed. Use an Array instead. 
+```
+
+[THREE.MultiMaterial has been removed. Use an Array instead](https://stackoverflow.com/questions/45429660/three-multimaterial-has-been-removed-use-an-array-instead)
+
+[Multimaterials in THREE.js](https://discourse.threejs.org/t/multimaterials-in-three-js/2368)
+
+## Answer (sort of)
+
+TEXTURE 1: /textures/images/cut-the-rope.jpg
+
+TEXTURE 2: /textures/decal/decal-normal.jpg
+
+You can use the `THREE.MultiMaterial` class, or by using a newer approach with the `THREE.MeshStandardMaterial` and the `THREE.Texture` class.
 
 1. Using `THREE.MultiMaterial` (deprecated):
 
+    <mark>**Tried it.**</mark> Getting new error "group material is undefined", which causes another error, which...
+
+    ```html
+    <!-- Didn't work with this, so tried it right from the three.js repo and the code still didn't work.  I might just need a different version. IDK. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
+    ```
+    
    ```javascript
+   // commit e65efda9df; 84dev
    // Create the textures
    var texture1 = new THREE.TextureLoader().load('texture1.jpg');
    var texture2 = new THREE.TextureLoader().load('texture2.jpg');
@@ -25,9 +49,13 @@ You can use the `THREE.MultiMaterial` class, or by using a newer approach with t
    scene.add(mesh);
    ```
 
-   With `THREE.MultiMaterial`, you create an array of materials and assign it to the `THREE.MultiMaterial` object. Each material in the array can have its own texture.
+    <br>
+
+    With `THREE.MultiMaterial`, you create an array of materials and assign it to the `THREE.MultiMaterial` object. Each material in the array can have its own texture.
 
 2. Using `THREE.MeshStandardMaterial` and `THREE.Texture` (recommended):
+
+    <mark>**I know I freakin did this**</mark> with the stupid cube and the colors. `geometry.vertices`
 
    ```javascript
    // Create the textures
@@ -40,6 +68,9 @@ You can use the `THREE.MultiMaterial` class, or by using a newer approach with t
 
    // Create the geometry
    var geometry = new THREE.BoxGeometry(1, 1, 1);
+
+    // TODO: geometry.faces is undefined
+    // Tried r124, where geometry.faces works, but nothing shows up on screen.
 
    // Apply the materials to the geometry's faces
    geometry.faces.forEach(function (face) {
