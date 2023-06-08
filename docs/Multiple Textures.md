@@ -55,7 +55,21 @@ You can use the `THREE.MultiMaterial` class, or by using a newer approach with t
 
 2. Using `THREE.MeshStandardMaterial` and `THREE.Texture` (recommended):
 
-    <mark>**I know I freakin did this**</mark> with the stupid cube and the colors. `geometry.vertices`
+    <mark>**I know I did this**</mark> with the cube and the colors. (Thought I used `geometry.vertices` somewhere too, but.)
+    
+    ```js
+    // SEE: cameras/front-side-back.html
+    let geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+
+    let mesh = new THREE.Mesh(geometry, [
+      new THREE.MeshBasicMaterial({color: 0xffffff * Math.random()}),
+      new THREE.MeshBasicMaterial({color: 0xffffff * Math.random()}),
+      new THREE.MeshBasicMaterial({color: 0xffffff * Math.random()}),
+      new THREE.MeshBasicMaterial({color: 0xffffff * Math.random()}),
+      new THREE.MeshBasicMaterial({color: 0xffffff * Math.random()}),
+      new THREE.MeshBasicMaterial({color: 0xffffff * Math.random()})
+    ]);
+    ```
 
    ```javascript
    // Create the textures
