@@ -32,12 +32,12 @@
 
   // Create the textures
   let loader = new THREE.TextureLoader();
-  let texture1 = loader.load('/images/image1.jpg');
-  let texture2 = loader.load('/images/image2.jpg');
-  let texture3 = loader.load('/images/image3.jpg');
-  let texture4 = loader.load('/images/image4.jpg');
-  let texture5 = loader.load('/images/happy.JPG');
-  let texture6 = loader.load('/images/uv_grid_opengl.jpg');
+  let texture1 = loader.load('/images/image1.jpg'); // right
+  let texture2 = loader.load('/images/image2.jpg'); // left
+  let texture3 = loader.load('/images/image3.jpg'); // top
+  let texture4 = loader.load('/images/image4.jpg'); // bottom
+  let texture5 = loader.load('/images/happy.JPG');  // front
+  let texture6 = loader.load('/images/uv_grid_opengl.jpg'); // back
 
   // Create the geometry
   let geometry = new THREE.BoxGeometry(3, 3, 3);
