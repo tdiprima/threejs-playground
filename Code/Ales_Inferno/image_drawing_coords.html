@@ -57,6 +57,7 @@
       if (intersects.length > 0) {
         let point = intersects[0].point;
 
+        // https://threejs.org/docs/#manual/en/introduction/Drawing-lines
         // create a blue LineBasicMaterial
         material = new THREE.LineBasicMaterial( { color: 0x0000ff } );
         // drawingCoordinates.push({x: point.x, y: point.y}); // <- No.
