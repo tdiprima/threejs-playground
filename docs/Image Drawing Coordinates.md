@@ -214,4 +214,40 @@ In this example, we create a `THREE.Geometry` object called `lineGeometry` to st
 
 After that, we create a material for the line using `THREE.LineBasicMaterial`, specifying the color. Finally, we create a `THREE.Line` object with the `lineGeometry` and `lineMaterial`, and add it to your scene using `scene.add(line)`.
 
+## Convert Three.js to DOM
+
+To convert Three.js (x, y) coordinates back to DOM coordinates, you can use the `project()` method provided by Three.js. The `project()` method projects the 3D position onto the 2D screen.
+
+Here's an example of how you can convert Three.js coordinates to DOM coordinates:
+
+```javascript
+// Assuming you have a Three.js scene and camera set up
+var scene, camera;
+
+// Assuming you have the x, y coordinates in Three.js format
+var x3D = 0.5; // Example x coordinate
+var y3D = -0.2; // Example y coordinate
+
+// Create a vector with the x, y coordinates
+var vector = new THREE.Vector3(x3D, y3D, 0);
+
+// Use the project() method to convert 3D coordinates to 2D screen coordinates
+vector.project(camera);
+
+// Get the DOM container element (where the renderer is attached)
+var container = document.getElementById('container');
+
+// Calculate the DOM coordinates
+var widthHalf = container.clientWidth / 2;
+var heightHalf = container.clientHeight / 2;
+var xDOM = (vector.x * widthHalf) + widthHalf;
+var yDOM = -(vector.y * heightHalf) + heightHalf;
+
+console.log('DOM coordinates:', xDOM, yDOM);
+```
+
+In the example above, you'll need to replace `scene` and `camera` with your actual Three.js scene and camera objects. Additionally, make sure to replace `'container'` with the ID of the DOM container element where your Three.js renderer is attached.
+
+After executing this code, `xDOM` and `yDOM` will contain the converted DOM coordinates based on the provided Three.js (x, y) coordinates.
+
 <br>

@@ -71,8 +71,15 @@
     }
   });
 
-  document.addEventListener('mouseup', function () {
-    console.log("drawingCoordinates", drawingCoordinates);
+  document.addEventListener('mouseup', function (event) {
+    // console.log("drawingCoordinates", drawingCoordinates);
+    console.log(drawingCoordinates[drawingCoordinates.length - 1]);
+    // let absoluteCoordinates = {
+    //   x: event.clientX * (imgDim.w / canvDim.w),
+    //   y: event.clientY * (imgDim.h / canvDim.h)
+    // };
+    // console.log("Absolute coordinates:", absoluteCoordinates);
+
     drawingCoordinates = [];
     mouseDown = false;
   });
