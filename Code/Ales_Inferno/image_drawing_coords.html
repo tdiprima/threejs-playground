@@ -15,9 +15,7 @@
 <script src="/build/three.min.js"></script>
 <script>
   // For the free-draw line
-  let material = new THREE.LineBasicMaterial({ color: 0x000000 });
-  let geometry = new THREE.BufferGeometry();
-  let line = new THREE.Line(geometry, material);
+  let material, geometry, line;
 
   let scene = new THREE.Scene();
   let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -27,7 +25,7 @@
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
-  // Define the plane variable outside the textureLoader.load callback
+  // Create a plane object to hold the texture
   let plane;
 
   // Create an array to store the coordinates of the user's drawing
