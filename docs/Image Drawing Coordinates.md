@@ -1,6 +1,8 @@
 ## Image Drawing Coordinates
 
-Below is an example JavaScript program using Three.js that allows the user to load an image, draw on it, and retrieve the coordinates of the user's drawing. The program will write the actual image coordinates of the freedrawing to the console.
+Below is an example JavaScript program that allows the user to load an image, draw on it, and retrieve the coordinates of the user's drawing.
+
+The program will write the actual image coordinates of the freedrawing to the console.
 
 To get started, make sure you have included the Three.js library in your HTML file. You can include it using the following script tag:
 
@@ -224,5 +226,46 @@ In this updated code, the primary changes are related to the creation and update
 Inside the 'mousemove' event listener, after capturing the drawing coordinates, we push the x, y, and z coordinates of the point to the `positions` array. Then, we update the `geometry` by creating a new `THREE.Float32BufferAttribute` with the updated `positions` array. If the `line` does not exist, we create a new `THREE.Line` object with the updated geometry and add it to the scene.
 
 By making these changes, the code should work with three.js revision 125, and you should see the black line appearing as you draw on the canvas.
+
+## Drawn Coordinates to 3D Line
+
+How do I use a Line to draw an array of x,y coordinates?
+
+To use the array of x and y coordinates to create a line using `THREE.Line`, you need to convert those 2D coordinates into 3D coordinates in the scene. Here's an example of how you can achieve this:
+
+```javascript
+// Assuming you have an array of x, y coordinates called 'coordinates'
+// Create a THREE.Geometry object to hold the line vertices
+var lineGeometry = new THREE.Geometry();
+
+// Loop through the coordinates and add them to the lineGeometry
+for (var i = 0; i < coordinates.length; i++) {
+  var x = coordinates[i].x; // x-coordinate
+  var y = coordinates[i].y; // y-coordinate
+
+  // Convert 2D coordinates to 3D coordinates
+  var vector = new THREE.Vector3(x, y, 0);
+
+  // Add the vector to the lineGeometry
+  lineGeometry.vertices.push(vector);
+}
+
+// Create a material for the line
+var lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+
+// Create a line object using the lineGeometry and lineMaterial
+var line = new THREE.Line(lineGeometry, lineMaterial);
+
+// Add the line to your scene
+scene.add(line);
+```
+
+<br>
+
+In this example, we create a `THREE.Geometry` object called `lineGeometry` to store the line vertices. We then loop through the `coordinates` array, convert each 2D coordinate to a 3D coordinate using `THREE.Vector3`, and add it to the `lineGeometry.vertices` array.
+
+After that, we create a material for the line using `THREE.LineBasicMaterial`, specifying the color. Finally, we create a `THREE.Line` object with the `lineGeometry` and `lineMaterial`, and add it to your scene using `scene.add(line)`.
+
+Make sure you have a valid `scene` variable representing your three.js scene where you want to add the line.
 
 <br>
