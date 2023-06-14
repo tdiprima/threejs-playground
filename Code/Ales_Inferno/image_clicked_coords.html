@@ -16,6 +16,10 @@
 <script>
   console.log(`%cREVISION ${THREE.REVISION}`, "color: deeppink");
   let imageURL = '/images/Victoriosa.jpg';
+
+  // PlaneGeometry 10,10 seems to be actual size, square.
+  // I know my aspect ratio: 10,5
+  // I want it half-size, so it's 5,2.5 (512, 256)
   let planeGeometry = new THREE.PlaneGeometry(5, 2.5);
   console.log("planeGeometry:", planeGeometry.parameters);
 
@@ -34,6 +38,7 @@
     let canvas = { width: 512, height: 256 };
 
     // The bounding rectangle of the renderer's DOM element gives us nada, so calculate the offset:
+    // The image is centered on the screen, right?  So...
     let offsetX = (window.innerWidth / 2) - (canvas.width / 2);
     let offsetY = (window.innerHeight / 2) - (canvas.height / 2);
     console.log("Offset:", offsetX, offsetY);
@@ -41,6 +46,7 @@
     // Calculate the clicked point's coordinates relative to where the image "starts"
     let relativeX = event.clientX - offsetX;
     let relativeY = event.clientY - offsetY;
+    console.log("Relative click coordinates:", relativeX, relativeY);
 
     // Get the dimensions of the image
     let imageWidth = image.width;
@@ -68,7 +74,7 @@
       scene.add(plane);
 
       function onClick(event) {
-        console.log("Click", event.clientX, event.clientY);
+        console.log("Click:", event.clientX, event.clientY);
         let image = { width: texture.image.width, height: texture.image.height };
         getImageCoordinates(event, image);
       }
