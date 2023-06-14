@@ -6,9 +6,7 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>Get Clicked Image Coordinates</title>
   <style>
-    body {
-      margin: 0;
-    }
+    body { margin: 0; }
   </style>
 </head>
 <body>
@@ -32,64 +30,28 @@
   // instantiate a loader
   let loader = new THREE.TextureLoader();
 
-  // todo: Rect doesn't give us what we think it's gonna give us.
-  function uno(event, image) {
-    // Get the renderer's DOM element
-    let domElement = renderer.domElement;
+  function getImageCoordinates(event, image) {
+    let canvas = { width: 512, height: 256 };
 
-    // Get the bounding rectangle of the renderer's DOM element
-    let rect = domElement.getBoundingClientRect();
+    // The bounding rectangle of the renderer's DOM element gives us nada, so calculate the offset:
+    let offsetX = (window.innerWidth / 2) - (canvas.width / 2);
+    let offsetY = (window.innerHeight / 2) - (canvas.height / 2);
+    console.log("Offset:", offsetX, offsetY);
 
-    // Calculate the clicked point's coordinates relative to the renderer's DOM element
-    let relativeX = event.clientX - rect.left;
-    let relativeY = event.clientY - rect.top;
-
-    // Calculate the clicked point's normalized coordinates within the range of [0, 1]
-    let normalizedX = relativeX / rect.width;
-    let normalizedY = relativeY / rect.height;
+    // Calculate the clicked point's coordinates relative to where the image "starts"
+    let relativeX = event.clientX - offsetX;
+    let relativeY = event.clientY - offsetY;
 
     // Get the dimensions of the image
     let imageWidth = image.width;
     let imageHeight = image.height;
 
     // Calculate the clicked point's coordinates relative to the image
-    let imageX = normalizedX * imageWidth;
-    let imageY = normalizedY * imageHeight;
+    let imageX = relativeX * (imageWidth / canvas.width);
+    let imageY = relativeY * (imageHeight / canvas.height);
 
     // Log the coordinates relative to the image
-    console.log("Image coordinates:", imageX, imageY);
-  }
-
-  function dos(event, image) {
-    let canvDim = {
-      width: 512,
-      height: 256
-    }
-    // planeGeometry 10,10 seems to be actual size, square.
-    // I know my aspect ratio: 10,5
-    // I want it half-size, so it's 5,2.5 (512, 256)
-    // It's centered, right?  So...
-    // let offsetX = (window.innerWidth / 2) - (image.width / 2);
-    // let offsetY = (window.innerHeight / 2) - (image.height / 2);
-    let offsetX = (window.innerWidth / 2) - (512 / 2);
-    let offsetY = (window.innerHeight / 2) - (256 / 2);
-    console.log("Offset:", offsetX, offsetY);
-
-    let clicked = {
-      x: event.clientX - offsetX,
-      y: event.clientY - offsetY
-    };
-
-    // OK! Not bad.
-    console.log("Relative click coordinates:", clicked);
-
-    // Done! :)
-    let absoluteCoordinates = {
-      x: clicked.x * (image.width / canvDim.width),
-      y: clicked.y * (image.height / canvDim.height)
-    };
-
-    console.log("%cAbsolute coordinates:", "color: #ccff00;", absoluteCoordinates);
+    console.log("%cImage coordinates:", "color: #ccff00;", imageX, imageY);
   }
 
   // load a resource
@@ -108,8 +70,7 @@
       function onClick(event) {
         console.log("Click", event.clientX, event.clientY);
         let image = { width: texture.image.width, height: texture.image.height };
-        // uno(event, image);
-        dos(event, image);
+        getImageCoordinates(event, image);
       }
 
       renderer.domElement.addEventListener("click", onClick, false);
