@@ -1,10 +1,24 @@
-## Scale Image for HTML5 Canvas
+## Scale Image
 
-If I have an html5 canvas size 512 x 256, and I have an image of size 1024 x 512, how can I load the image using three.js such that the image is scaled to the size of the canvas, while retaining the information of the original image size?
+That's all you do.  Set it in the PlaneGeometry.  How hard is it to just tell me that?
+
+```javascript
+var planeGeometry = new THREE.PlaneGeometry(10, 5);
+var planeGeometry = new THREE.PlaneGeometry( 5, 2.5);
+```
+
+## Grr.
+
+Image: 1024 x 512<br>
+Canvas: 512 x 256<br>
+Scale the image (for display), don't just crop it.<br>
+<span style="color:green;font-weight:bold;">Go.</span>
 
 To load and scale an image while retaining the information of the original image size, you can use the `TextureLoader` and `PlaneGeometry` classes.
 
-### Right size, but it's a clipping
+### Right size, but it's a clipping.
+
+What did I just say?
 
 ```html
 <div id="container"></div>
@@ -74,9 +88,11 @@ You position the `camera` to see the plane, and then you create an `animate` fun
 
 ## Scale image to plane
 
-To scale down the loaded image and display it on a PlaneGeometry with a specific size, you can adjust the scale of the plane's material. Here's an example of how you can achieve this using the Three.js library:
+To scale down the loaded image and display it on a PlaneGeometry with a specific size, you can adjust the scale of the plane's material.
 
-### A small section of the image fills the whole screen :(
+### A small section of the image fills the whole screen
+
+Seriously?  Wtf.
 
 ```javascript
 // Define the desired size for the plane
@@ -139,13 +155,11 @@ By scaling the texture to fit the plane size, the image will be displayed at the
 
 ## Image Scaling Issue Fixed
 
-<span style="color:#0000dd;">¿Me puedes ayudar?</span>
+<span style="color:#0000dd;font-weight:bold;">¿Me puedes ayudar?</span>
 
-I have three.js code that is supposed to take a 1024x512 image and display it at 512x256 pixels.
+To display the image at the desired size of 512x256 pixels instead of cropping it, you need to adjust the scale of the plane geometry. 
 
-But my code is wrong.  It crops the image and displays it to 512x256 instead of scaling it and displaying it to 512x256.  Can you help?
-
-To display the image at the desired size of 512x256 pixels instead of cropping it, you need to adjust the scale of the plane geometry. Currently, the plane is being created with a width-to-height ratio equal to the image aspect ratio, which causes the cropping effect.
+Currently, the plane is being created with a width-to-height ratio equal to the image aspect ratio, which causes the cropping effect.
 
 Here's an updated version of your code that scales the plane geometry to fit the desired size while maintaining the image's aspect ratio:
 
@@ -199,7 +213,7 @@ textureLoader.load('/images/Victoriosa.jpg', texture => {
 ```
 
 <br>
-<span style="color:deeppink;">Close enough.  It should be:</span>
+<span style="color:deeppink;font-weight:bold;">Close enough.  It should be:</span>
 
 ```js
 // Aspect ratio (1:0.5 or 2:1)
