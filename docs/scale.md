@@ -202,8 +202,13 @@ textureLoader.load('/images/Victoriosa.jpg', texture => {
 <span style="color:deeppink;">Close enough.  It should be:</span>
 
 ```js
-let scaleX = 1;
-let scaleY = 0.5;
+// Aspect ratio (1:0.5 or 2:1)
+let scaleX = 2;
+let scaleY = 1;
+
+// Scale down by factor of 2
+scaleX = scaleX / 2;
+scaleY = scaleY / 2;
 ```
 
 In this updated code, the scale factors `scaleX` and `scaleY` are calculated based on the image's aspect ratio and the canvas's aspect ratio. These scale factors are then used to adjust the plane's geometry accordingly. By doing this, the image will be scaled to fit the canvas while maintaining its original aspect ratio.

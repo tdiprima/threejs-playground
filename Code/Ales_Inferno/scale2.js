@@ -17,16 +17,29 @@ container.appendChild(renderer.domElement);
 let textureLoader = new THREE.TextureLoader();
 textureLoader.load('/images/Victoriosa.jpg', texture => {
   // Calculate the scale factors to fit the image in the canvas
-  // let imageAspectRatio = texture.image.width / texture.image.height;
-  // let canvasAspectRatio = canvDim.w / canvDim.h;
-  let scaleX = 1;
-  // let scaleY = 1;
-  let scaleY = 0.5;
+  let imageAspectRatio = texture.image.width / texture.image.height;
+  let canvasAspectRatio = canvDim.w / canvDim.h;
 
+  console.log("%cimageAspectRatio", "color: deeppink", imageAspectRatio);
+  console.log("%ccanvasAspectRatio", "color: #ccff00;", canvasAspectRatio);
+
+  // Both aspect ratios are 2:1
+  let scaleX = imageAspectRatio;
+  let scaleY = 1;
+
+  // And we want the displayed image to be half of the actual image.
+  // So:
+  scaleX = scaleX / 2;
+  scaleY = scaleY / 2;
+
+  // let scaleX = 1;
+  // let scaleY = 1;
   // if (imageAspectRatio > canvasAspectRatio) {
   //   scaleX = canvasAspectRatio / imageAspectRatio;
+  //   console.log(`scaleX ${scaleX} = canvasAspectRatio / imageAspectRatio;`);
   // } else {
   //   scaleY = imageAspectRatio / canvasAspectRatio;
+  //   console.log(`scaleY ${scaleY} = imageAspectRatio / canvasAspectRatio`);
   // }
 
   // Create a plane with the adjusted scale

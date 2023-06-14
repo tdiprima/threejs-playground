@@ -31,7 +31,7 @@ textureLoader.load('/images/Victoriosa.jpg', texture => {
   scene.add(plane);
 
   // Position the camera to see the plane
-  camera.position.z = 1.5;
+  camera.position.z = 1;
 
   // Render the scene
   function animate() {
