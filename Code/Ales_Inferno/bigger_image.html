@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>diosa del contralto</title>
+  <style>
+    body { margin: 0; }
+  </style>
+</head>
+<body>
+<div id="container"></div>
+
+<script src="/build/three.min.js"></script>
+<script>
+  let imgDim = { w: 1024, h: 576 };
+  let canvDim = { w: 512, h: 288 };
+
+  let scene = new THREE.Scene();
+  scene.background = new THREE.Color( 0xffffff );
+
+  let camera = new THREE.PerspectiveCamera( 70, canvDim.w / canvDim.h, 1, 100 );
+  camera.position.z = 1;
+
+  let renderer = new THREE.WebGLRenderer( { antialias: true } );
+  renderer.setPixelRatio( window.devicePixelRatio );
+  renderer.setSize( window.innerWidth, window.innerHeight );
+  renderer.outputEncoding = THREE.sRGBEncoding;
+
+  let container = document.getElementById( 'container' );
+  container.appendChild( renderer.domElement );
+
+  // TODO: Normalize to 0,0
+  function handleClick(event) {
+    // Not sure yet if I should use 'click' or 'mouseup'
+    let scaleX = imgDim.w / canvDim.w;
+    let scaleY = imgDim.h / canvDim.h;
+    console.log("scaleX/Y", scaleX, scaleY);
+
+    console.log("Click coordinates:", event.clientX, event.clientY);
+
+    // let clickCoordinates = {
+    //   x: event.clientX - canvas.offset.left,
+    //   y: event.clientY - canvas.offset.top
+    // };
+    // console.log("Click coordinates:", clickCoordinates);
+
+    let absoluteCoordinates = {
+      x: event.clientX * scaleX,
+      y: event.clientY * scaleY
+    };
+
+    console.log("Absolute coordinates:", absoluteCoordinates);
+  }
+
+  renderer.domElement.addEventListener("click", handleClick);
+
+  // textureLoader.load
+  function wrong(img) {
+    // Scale the image to fit the canvas while preserving aspect ratio
+    img.scale(canvDim.w);
+
+    // Wrong.  It's gonna be 1.
+    let scaleX = canvDim.w / img.image.width;
+    let scaleY = canvDim.h / img.image.height;
+    console.log(scaleX, scaleY);
+
+    let planeGeometry = new THREE.PlaneGeometry(scaleX, scaleY);
+  }
+
+  let textureLoader = new THREE.TextureLoader();
+  textureLoader.load('/images/Victoriosa.jpg', img => {
+    // Create a plane with the adjusted scale
+    let planeGeometry = new THREE.PlaneGeometry(1, 0.5);
+    let material = new THREE.MeshBasicMaterial({ map: img });
+    let plane = new THREE.Mesh(planeGeometry, material);
+    scene.add(plane);
+  });
+
+  function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+  }
+  animate();
+</script>
+</body>
+</html>
