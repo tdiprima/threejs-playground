@@ -1,6 +1,6 @@
 ## Scale Image for HTML5 Canvas
 
-<span style="color:#0000dd;">If I have an html5 canvas size 512 x 256, and I have an image of size 1024 x 512, how can I load the image using three.js such that the image is scaled to the size of the canvas, while retaining the information of the original image size?</span>
+If I have an html5 canvas size 512 x 256, and I have an image of size 1024 x 512, how can I load the image using three.js such that the image is scaled to the size of the canvas, while retaining the information of the original image size?
 
 To load and scale an image while retaining the information of the original image size, you can use the `TextureLoader` and `PlaneGeometry` classes.
 
@@ -11,10 +11,7 @@ To load and scale an image while retaining the information of the original image
 ```
 
 ```javascript
-let width = window.innerWidth;
-let height = window.innerHeight;
-
-// Set up the image dimensions
+// Set up the desired dimensions
 let canvDim = { w: 512, h: 256 };
 
 // Create a scene, camera, and renderer
@@ -23,7 +20,7 @@ let camera = new THREE.PerspectiveCamera(75, canvDim.w / canvDim.h, 0.1, 1000);
 
 let renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(width, height);
+renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.outputEncoding = THREE.sRGBEncoding;
 
 let container = document.getElementById('container');
@@ -139,5 +136,76 @@ Next, we create a `TextureLoader` instance and load the image texture using the 
 We then create a `MeshBasicMaterial` with the loaded texture and use it to create a plane mesh (`THREE.Mesh`) with the geometry and material. Finally, we add the plane to the scene.
 
 By scaling the texture to fit the plane size, the image will be displayed at the specified dimensions (500 x 300 in this case).
+
+## Image Scaling Issue Fixed
+
+<span style="color:#0000dd;">¿Me puedes ayudar?</span>
+
+I have three.js code that is supposed to take a 1024x512 image and display it at 512x256 pixels.
+
+But my code is wrong.  It crops the image and displays it to 512x256 instead of scaling it and displaying it to 512x256.  Can you help?
+
+To display the image at the desired size of 512x256 pixels instead of cropping it, you need to adjust the scale of the plane geometry. Currently, the plane is being created with a width-to-height ratio equal to the image aspect ratio, which causes the cropping effect.
+
+Here's an updated version of your code that scales the plane geometry to fit the desired size while maintaining the image's aspect ratio:
+
+```javascript
+// Define the desired size for the plane
+let canvDim = { w: 512, h: 256 };
+
+// Create a scene, camera, and renderer
+let scene = new THREE.Scene();
+let camera = new THREE.PerspectiveCamera(75, canvDim.w / canvDim.h, 0.1, 1000);
+
+let renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.outputEncoding = THREE.sRGBEncoding;
+
+let container = document.getElementById('container');
+container.appendChild(renderer.domElement);
+
+// Load the image texture
+let textureLoader = new THREE.TextureLoader();
+textureLoader.load('/images/Victoriosa.jpg', texture => {
+  // Calculate the scale factors to fit the image in the canvas
+  let imageAspectRatio = texture.image.width / texture.image.height;
+  let canvasAspectRatio = canvDim.w / canvDim.h;
+  let scaleX = 1;
+  let scaleY = 1;
+
+  if (imageAspectRatio > canvasAspectRatio) {
+    scaleX = canvasAspectRatio / imageAspectRatio;
+  } else {
+    scaleY = imageAspectRatio / canvasAspectRatio;
+  }
+
+  // Create a plane with the adjusted scale
+  let planeGeometry = new THREE.PlaneGeometry(scaleX, scaleY);
+  let material = new THREE.MeshBasicMaterial({ map: texture });
+  let plane = new THREE.Mesh(planeGeometry, material);
+  scene.add(plane);
+
+  // Position the camera to see the plane
+  camera.position.z = 1.5;
+
+  // Render the scene
+  function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+  }
+  animate();
+});
+```
+
+<br>
+<span style="color:deeppink;">Close enough.  It should be:</span>
+
+```js
+let scaleX = 1;
+let scaleY = 0.5;
+```
+
+In this updated code, the scale factors `scaleX` and `scaleY` are calculated based on the image's aspect ratio and the canvas's aspect ratio. These scale factors are then used to adjust the plane's geometry accordingly. By doing this, the image will be scaled to fit the canvas while maintaining its original aspect ratio.
 
 <br>

@@ -13,31 +13,30 @@ renderer.outputEncoding = THREE.sRGBEncoding;
 let container = document.getElementById('container');
 container.appendChild(renderer.domElement);
 
-// Create the PlaneGeometry with the desired size
-const planeGeometry = new THREE.PlaneGeometry(canvDim.w, canvDim.h);
-
-// Create a TextureLoader instance
-const textureLoader = new THREE.TextureLoader();
-
 // Load the image texture
-textureLoader.load('/images/Victoriosa.jpg', function(texture) {
-  // Scale the texture to fit the desired plane size
-  texture.wrapS = texture.wrapT = THREE.ClampToEdgeWrapping;
-  texture.repeat.set(1, 1);
-  texture.magFilter = THREE.LinearFilter;
-  texture.minFilter = THREE.LinearMipmapLinearFilter;
+let textureLoader = new THREE.TextureLoader();
+textureLoader.load('/images/Victoriosa.jpg', texture => {
+  // Calculate the scale factors to fit the image in the canvas
+  // let imageAspectRatio = texture.image.width / texture.image.height;
+  // let canvasAspectRatio = canvDim.w / canvDim.h;
+  let scaleX = 1;
+  // let scaleY = 1;
+  let scaleY = 0.5;
 
-  // Create a material using the texture
-  const material = new THREE.MeshBasicMaterial({ map: texture });
+  // if (imageAspectRatio > canvasAspectRatio) {
+  //   scaleX = canvasAspectRatio / imageAspectRatio;
+  // } else {
+  //   scaleY = imageAspectRatio / canvasAspectRatio;
+  // }
 
-  // Create the plane mesh with the geometry and material
-  const plane = new THREE.Mesh(planeGeometry, material);
-
-  // Add the plane to the scene
+  // Create a plane with the adjusted scale
+  let planeGeometry = new THREE.PlaneGeometry(scaleX, scaleY);
+  let material = new THREE.MeshBasicMaterial({ map: texture });
+  let plane = new THREE.Mesh(planeGeometry, material);
   scene.add(plane);
 
   // Position the camera to see the plane
-  camera.position.z = 1.5;
+  camera.position.z = 1;
 
   // Render the scene
   function animate() {
