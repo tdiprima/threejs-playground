@@ -17,7 +17,6 @@
 <body>
 <div id="box"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/20.0.0/tween.umd.js"></script>
-
 <script>
   let box = document.getElementById('box'); // Get the element we want to animate.
 
@@ -32,12 +31,12 @@
       box.style.left = `${coords.x}px`;
       // box.style.setProperty('transform', `translate(${coords.x}px, ${coords.y}px)`);
     })
-    .start() // Start the tween animation
+    .start(); // Start the tween animation
 
   // Update the tween on each frame
   function animate(time) {
-    tween.update(time)
-    requestAnimationFrame(animate)
+    tween.update(time);
+    requestAnimationFrame(animate);
   }
   requestAnimationFrame(animate);
 </script>
