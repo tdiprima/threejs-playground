@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+  <title>Draw line with real-time measurement</title>
+  <!-- <script src="/build/three.min.js"></script> -->
+  <style>
+    div { border: 1px solid blueviolet; }
+  </style>
+</head>
+<body>
+<script type="importmap">{
+  "imports": {
+    "three": "/build/three.module.js",
+    "three/addons/": "/jsm/"
+  }
+}
+</script>
+<script async src="/es-module-shims-1.3.6/dist/es-module-shims.js"></script>
+<div id="canvas"></div>
+<button id="selec">Selection Mode</button>
+<script type="module" src="draw-line-measure.js"></script>
+</body>
+</html>
