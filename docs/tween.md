@@ -12,9 +12,48 @@ The term "tween" is commonly used in the animation industry to describe these in
 
 By using Tween.js, developers can easily create smooth and visually appealing animations by specifying the starting and ending states of an object, and the library takes care of generating the necessary in-between frames to create the animation effect.
 
+## Object-Based Tweening
+
+When creating a new tween, I've seen either coordinates OR an object being passed, such as `controls.target` (as in OrbitControls).
+
+```js
+let tween = new TWEEN.Tween(position);
+let tween = new TWEEN.Tween(controls.target);
+```
+
+In tween.js, the `new TWEEN.Tween()` constructor can accept either numerical values or objects as parameters.
+
+When you pass **numerical values**, you are specifying the target values for the tween to animate towards.
+
+When you pass an **object**, the tween will animate each property of the object independently.
+
+```javascript
+// Numerical values example
+var position = 0;
+var targetPosition = 100;
+var tween = new TWEEN.Tween(position)
+  .to(targetPosition, 1000) // Tween from current position to targetPosition over 1000ms
+  .start();
+
+// Object example
+var object = { x: 0, y: 0 };
+var targetObject = { x: 100, y: 200 };
+var tween = new TWEEN.Tween(object)
+  .to(targetObject, 1000) // Tween from current object properties to targetObject properties over 1000ms
+  .start();
+```
+
+<span style="color:#ff00cc;">This is basically the same thing (an object is an object).  But controls.target has a whole bunch of stuff other than {...}, so.</span>
+
+In the first example, the tween animates a numerical value from the current position (0) to the target position (100) over a duration of 1000 milliseconds.
+
+In the second example, the tween animates an object with properties `x` and `y` from its current values `{ x: 0, y: 0 }` to the target values `{ x: 100, y: 200 }` over a duration of 1000 milliseconds.
+
+You can use this **object-based approach** to animate multiple properties of an object simultaneously.
+
 ## Three and Tween Example
 
-Here's an example of using Three.js with Tween.js to animate a rotating cube:
+Animate a rotating cube:
 
 ```php
 <!DOCTYPE html>
@@ -83,7 +122,11 @@ In this example, we first set up the Three.js scene by creating a scene, camera,
 
 Next, we set up the animation loop using the `requestAnimationFrame` function. Inside the loop, we call `renderer.render(scene, camera)` to render the scene.
 
-To animate the cube, we define an initial rotation value and create a tween animation using Tween.js. In this case, we rotate the cube 360 degrees around the y-axis in 2 seconds. We use the `onUpdate` callback to update the cube's rotation on each frame.
+To animate the cube, we define an initial rotation value and create a tween animation using Tween.js.
+
+In this case, we **rotate the cube 360 degrees** around the y-axis in 2 seconds.
+
+We use the `onUpdate` callback to update the cube's rotation on each frame.
 
 Finally, we start the animation by calling `.start()` on the tween. We also set up a separate update loop using `TWEEN.update()` and `requestAnimationFrame` to update the Tween.js animations on each frame.
 
@@ -91,7 +134,7 @@ When you open this HTML file in a browser, you should see a green cube rotating 
 
 ## Example
 
-Here's an example of how you can use Tween.js to animate the position of an HTML element using JavaScript:
+Here's ahow you can use Tween.js to animate the position of an HTML element:
 
 ```php
 <!DOCTYPE html>
@@ -140,7 +183,9 @@ Here's an example of how you can use Tween.js to animate the position of an HTML
 
 In this example, we include the Tween.js library from a CDN (Content Delivery Network). We create a red box element with the id "box" and position it absolutely using CSS. 
 
-We then define a new tween using `new TWEEN.Tween()` and specify the initial and target values for the animation. In this case, we animate the 'x' property from 0 to 200 over a duration of 2 seconds. We also specify the easing function as quadratic easing for smooth acceleration and deceleration.
+We then define a new tween using `new TWEEN.Tween()` and specify the **initial** and **target values** for the animation.
+
+In this case, we animate the 'x' property from 0 to 200 over a duration of 2 seconds. We also specify the easing function as quadratic easing for smooth acceleration and deceleration.
 
 The `onUpdate` callback is called on each frame update of the tween, where we update the position of the box element by changing its `left` CSS property.
 
