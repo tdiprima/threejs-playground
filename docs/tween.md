@@ -2,7 +2,9 @@
 
 What the h3ll is a "tween"?
 
-Tween.js is a popular JavaScript library used for creating smooth animations and transitions. The name "tween" in Tween.js is derived from the term "tweening" or "in-betweening," which refers to the process of generating intermediate frames between two keyframes in animation.
+[tween.js user guide](https://tweenjs.github.io/tween.js/docs/user_guide.html)
+
+Tween.js is used for creating smooth animations and transitions. The name "tween" in Tween.js is derived from the term "tweening" or "in-betweening," which refers to the process of generating intermediate frames between two keyframes in animation.
 
 In animation, keyframes are the specific frames that define the start and end points of an animation sequence. The frames in between these keyframes are generated through interpolation, which calculates the values for properties such as position, scale, or opacity to create a smooth transition between the keyframes.
 
