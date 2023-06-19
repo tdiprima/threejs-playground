@@ -1,4 +1,5 @@
 // https://cdnjs.cloudflare.com/ajax/libs/three.js/r80/three.min.js
+console.log(`%cREVISION ${THREE.REVISION}`, "color: #ff00cc;");
 let scene = new THREE.Scene();
 let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = 5;
@@ -7,26 +8,41 @@ let renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Create initial polygon vertices
 const initialVertices = [
   new THREE.Vector3(0, 0, 0),
   new THREE.Vector3(1, 0, 0),
   new THREE.Vector3(1, 1, 0),
+  new THREE.Vector3(0, 0, 0)
 ];
 
 // Create geometry
 const geometry = new THREE.Geometry();
 geometry.vertices = initialVertices;
 
-// Create material
-const material = new THREE.MeshBasicMaterial({color: 0x00ff00});
+function createGeo() {
+  // Create material
+  const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 
-// Create mesh
-const mesh = new THREE.Mesh(geometry, material);
+  // Create mesh
+  const mesh = new THREE.Mesh(geometry, material);
 
-// Add mesh to scene
-// todo: where's my mesh?
-scene.add(mesh);
+  // Add mesh to scene
+  scene.add(mesh); // where's my mesh?
+}
+
+function createGeo1() {
+  // Made line instead, but needed to add another point for the last line to be drawn.
+  let material = new THREE.LineBasicMaterial({ color: 0x00ff00, depthWrite: false, linewidth: 4 });
+  let line = new THREE.Line(geometry, material);
+  scene.add(line);
+}
+
+// createGeo();
+createGeo1();
+
+document.body.addEventListener("mousedown", function () {
+  console.log("%cdocument mousedown", "color: #ccff00");
+});
 
 // Create handles for each vertex
 const handles = [];
