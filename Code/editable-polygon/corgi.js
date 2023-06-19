@@ -1,6 +1,7 @@
-console.log(`%cREVISION ${THREE.REVISION}`, "color: #ff00cc;");
 import * as THREE from 'three';
 import { DragControls } from '/jsm/controls/DragControls.js';
+
+console.log(`%cREV: ${THREE.REVISION}`, "color: #ccff00; font-size: larger;");
 
 let scene = new THREE.Scene();
 let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -48,13 +49,13 @@ const dragControls = new DragControls(handles, camera, renderer.domElement);
 
 // Function to handle dragging start
 dragControls.addEventListener('dragstart', function (event) {
-  console.log('Drag start');
+  // console.log('Drag start');
   event.object.material.color.set(0xffff00);
 });
 
 // Function to handle dragging end
 dragControls.addEventListener('dragend', function (event) {
-  console.log('Drag end');
+  // console.log('Drag end');
   event.object.material.color.set(0xff0000);
 });
 
