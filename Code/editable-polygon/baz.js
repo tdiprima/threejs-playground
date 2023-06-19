@@ -3,7 +3,7 @@ let scene = new THREE.Scene();
 let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = 5;
 
-let renderer = new THREE.WebGLRenderer({antialias: true});
+let renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
@@ -31,7 +31,7 @@ scene.add(mesh);
 const handles = [];
 for (let i = 0; i < initialVertices.length; i += 3) {
   const handleGeometry = new THREE.SphereGeometry(0.1);
-  const handleMaterial = new THREE.MeshBasicMaterial({color: 0xff0000});
+  const handleMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
   const handleMesh = new THREE.Mesh(handleGeometry, handleMaterial);
   handleMesh.position.fromArray(initialVertices.slice(i, i + 3));
   handles.push(handleMesh);

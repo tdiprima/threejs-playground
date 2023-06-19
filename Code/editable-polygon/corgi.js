@@ -34,9 +34,7 @@ scene.add(mesh);
 const handles = [];
 for (let i = 0; i < initialVertices.length; i += 3) {
   const handleGeometry = new THREE.SphereGeometry(0.1);
-  const handleMaterial = new THREE.MeshBasicMaterial({
-    color: 0xff0000
-  });
+  const handleMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
   const handleMesh = new THREE.Mesh(handleGeometry, handleMaterial);
   handleMesh.position.fromArray(initialVertices.slice(i, i + 3));
   handles.push(handleMesh);
@@ -75,9 +73,7 @@ window.addEventListener("resize", function() {
   renderer.render(scene, camera);
 });
 
-// Render the scene
 (function animate() {
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
 })();
-
