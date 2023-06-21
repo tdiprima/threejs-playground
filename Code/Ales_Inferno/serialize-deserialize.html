@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Cereal Killer... as in Fruit Loops?</title>
+  <link href="/css/main.css" rel="stylesheet">
+</head>
+<body>
+<script src="/build/three.min.js"></script>
+<script>
+  // Set up the scene
+  let scene = new THREE.Scene();
+  let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.z = 5;
+
+  let renderer = new THREE.WebGLRenderer({antialias: true});
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  // Add a cube to the scene
+  let geometry = new THREE.BoxGeometry(1, 1, 1);
+  let material = new THREE.MeshBasicMaterial({color: "red"});
+  let cube = new THREE.Mesh(geometry, material);
+  scene.add(cube);
+
+  // Serialize the scene
+  const serializedScene = JSON.stringify(scene.toJSON());
+
+  console.log('%cscene to json', 'color: lime;', serializedScene);
+  console.log('%ctype', 'color: blue;', typeof serializedScene);
+
+  // Restore the scene
+  scene.clear();
+  const parsedScene = JSON.parse(serializedScene);
+  const loader = new THREE.ObjectLoader();
+  const restoredObjects = loader.parse(parsedScene);
+  scene.add(restoredObjects);
+
+  window.addEventListener("resize", function () {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.render(scene, camera);
+  });
+
+  (function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+  })();
+</script>
+</body>
+</html>
