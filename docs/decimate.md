@@ -85,7 +85,24 @@ function _finalizeAndAddPath() {
 }
 ```
 
-### Straight Outta Buddy
+### I can explain...
+
+```js
+const _points0 = fabPath.path.map(item => ({
+  x: item[1],
+  y: item[2]
+}));
+
+// THERE ARE WAY TOO MANY POINTS; REDUCE THEM:
+let points = _points0.reduce(
+  function(accumulator, currentValue, currentIndex) {
+    if (currentIndex % 7 === 0)
+      accumulator.push(currentValue);
+    return accumulator;
+  }, []);
+```
+
+## Try it in Three.js
 
 In three.js, there isn't a built-in function specifically dedicated to reducing the number of points in a line based on their proximity. However, you can implement a similar functionality by manually iterating over the points and removing those that are close to each other.
 
