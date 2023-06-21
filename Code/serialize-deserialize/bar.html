@@ -19,7 +19,7 @@
   document.body.appendChild(renderer.domElement);
 
   let geometry = new THREE.BoxGeometry(1, 1, 1);
-  let material = new THREE.MeshBasicMaterial({color: "red"});
+  let material = new THREE.MeshBasicMaterial({ color: "red" });
   let cube = new THREE.Mesh(geometry, material);
   cube.position.set(2, 0.5, 0);
   scene.add(cube);
@@ -29,7 +29,7 @@
     meshes: []
   };
 
-  scene.traverse((object) => {
+  scene.traverse(object => {
     if (object instanceof THREE.Mesh) {
       serializedData.meshes.push({
         position: object.position.toArray()
@@ -39,8 +39,8 @@
   });
 
   let jsonString = JSON.stringify(serializedData);
-  console.log('%cscene to json', 'color: lime;', jsonString);
-  console.log('%cserializedData type', 'color: blue;', typeof serializedData);
+  console.log("%cscene to json", "color: lime;", jsonString);
+  console.log("%ccube", "color: blue;", typeof cube);
 
   // Storing jsonString to the database
 
@@ -50,7 +50,7 @@
   // Deserializing
   let restoredData = JSON.parse(jsonString);
 
-  restoredData.meshes.forEach((meshData) => {
+  restoredData.meshes.forEach(meshData => {
     let mesh = new THREE.Mesh(geometry, material);
     mesh.position.fromArray(meshData.position);
     // Set other necessary properties
