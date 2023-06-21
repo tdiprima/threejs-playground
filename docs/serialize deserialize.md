@@ -1,6 +1,6 @@
 ## Serialize and Deserialize Canvas
 
-In fabric.js, we can serialize and deserialize our canvas, in order to save it to a database and restore it.  Can we do the same in three.js?  I have a fabric.js code sample below; can it be converted to three.js?
+In fabric.js, we can serialize and deserialize our canvas, in order to save it to a database and restore it.  I have a fabric.js code sample below; can it be converted to three.js?
 
 ```javascript
 let canvas = new fabric.Canvas('c');
@@ -27,7 +27,7 @@ canvas.loadFromJSON(c);
 
 In Three.js, there isn't a built-in serialization and deserialization functionality like in fabric.js. However, you can still achieve similar functionality by manually storing and restoring the necessary properties of objects in your scene.
 
-Here's an example of how you could convert your fabric.js code sample to a basic Three.js equivalent:
+Here we're gonna serialize the whole scene, like the whole canvas:
 
 ```javascript
 // Set up the scene
@@ -44,9 +44,7 @@ scene.add(cube);
 
 // Serialize the scene
 const serializedScene = JSON.stringify(scene.toJSON());
-
 console.log('%cscene to json', 'color: lime;', serializedScene);
-console.log('%ctype', 'color: blue;', typeof serializedScene);
 
 // Restore the scene
 scene.clear();
@@ -56,94 +54,67 @@ const restoredObjects = loader.parse(parsedScene);
 scene.add(restoredObjects);
 ```
 
-In this example, we manually create a scene, add a cube to it, and then serialize the scene using `JSON.stringify(scene.toJSON())`. To restore the scene, we parse the serialized JSON, create a `THREE.ObjectLoader` to load the parsed objects, and add them back to the scene.
+<br>
 
-Note that this is a basic example and may not cover all possible scenarios. You may need to adapt and customize the serialization and deserialization process based on the specific objects and properties you're using in your Three.js scene.
+**Serialize the scene** using `JSON.stringify(scene.toJSON())`.
+
+**To restore the scene**, we parse the serialized JSON, create a `THREE.ObjectLoader` to load the parsed objects, and add them back to the scene.
+
+Note that this is a basic example and may not cover all possible scenarios <span style="color:#ff00cc;">...yadda yadda.</span>
 
 ## Position Update Not Working
 
-<span style="color:#0000dd;">It's because I'm reserializing &ndash; see below.</span>
+<span style="color:lime;">It's because I'm reserializing &ndash; see below.</span>
 
-Using the Three.js library for rendering 3D graphics. In your code, you are correctly setting the position of the cube using `cube.position.set(2, 0.5, 0)`. However, the `needsUpdate` property does not affect the position of the mesh. It is used for notifying Three.js that certain attributes of the geometry or material have been updated and need to be reprocessed.
+I tried using `needsUpdate`.
 
-To update the position of the cube, you don't need to set `needsUpdate` to `true`. Instead, make sure that you are using the correct scene and renderer setup, and that the cube is being added to the scene properly.
+But the `needsUpdate` property does not affect the position of the mesh.
+
+It is used for notifying Three.js that certain attributes of the geometry or material have been updated and need to be reprocessed.
 
 ## Aha! Position not saved
 
-If you're serializing and deserializing the scene using `scene.toJSON()`, you're correct that the position information of the mesh won't be included in the resulting JSON data. The `toJSON()` method of Three.js excludes certain properties, including the position, rotation, and scale of objects.
+If you're serializing and deserializing the scene using `scene.toJSON()`, you're correct that the position information of the mesh won't be included in the resulting JSON data.
 
-If you need to store and restore the positions of objects in your scene, you have a couple of options:
+The `toJSON()` method of Three.js excludes certain properties, including the position, rotation, and scale of objects.
 
-1. **Serialize/Deserialize Additional Data:** You can manually collect the position information of each mesh in the scene and include it as part of your serialized data. When deserializing, you can set the positions of the meshes based on the restored position data. Here's an example:
+### Serialize/Deserialize Additional Data
 
-   ```javascript
-   // Serializing
-   let serializedData = {
-     meshes: []
-   };
+This is what people mean when they say "Use a Custom Serialization Approach".
 
-   scene.traverse((object) => {
-     if (object instanceof THREE.Mesh) {
-       serializedData.meshes.push({
-         position: object.position.toArray()
-         // Include other necessary properties
-       });
-     }
-   });
+You can manually collect the position information (and other necessary properties) of each mesh in the scene and include it as part of your serialized data.
+    
+During deserialization, you would create new mesh objects and set their properties based on the restored data.
 
-   let jsonString = JSON.stringify(serializedData);
+```javascript
+// Serializing
+let serializedData = {
+  meshes: []
+};
 
-   // Storing jsonString to the database
+scene.traverse((object) => {
+  if (object instanceof THREE.Mesh) {
+    serializedData.meshes.push({
+      position: object.position.toArray()
+      // Include other necessary properties
+    });
+  }
+});
 
-   // Deserializing
-   let restoredData = JSON.parse(jsonString);
+let jsonString = JSON.stringify(serializedData);
 
-   restoredData.meshes.forEach((meshData) => {
-     let mesh = new THREE.Mesh(geometry, material);
-     mesh.position.fromArray(meshData.position);
-     // Set other necessary properties
+// Storing jsonString to the database
 
-     scene.add(mesh);
-   });
-   ```
+// Deserializing
+let restoredData = JSON.parse(jsonString);
 
-   In this approach, you collect the positions (and other necessary properties) of the meshes in the scene and include them in your serialized data. During deserialization, you create new mesh objects and set their positions based on the restored data.
+restoredData.meshes.forEach((meshData) => {
+  let mesh = new THREE.Mesh(geometry, material);
+  mesh.position.fromArray(meshData.position);
+  // Set other necessary properties
 
-2. **Use a Custom Serialization Approach:** Instead of relying on the `toJSON()` method, you can implement a custom serialization approach where you explicitly include the position information in the serialized data. This gives you more control over what properties are included in the serialization process.
-
-   ```javascript
-   // Serializing
-   let serializedData = {
-     meshes: []
-   };
-
-   scene.traverse((object) => {
-     if (object instanceof THREE.Mesh) {
-       serializedData.meshes.push({
-         position: object.position.toArray()
-         // Include other necessary properties
-       });
-     }
-   });
-
-   let jsonString = JSON.stringify(serializedData);
-
-   // Storing jsonString to the database
-
-   // Deserializing
-   let restoredData = JSON.parse(jsonString);
-
-   restoredData.meshes.forEach((meshData) => {
-     let mesh = new THREE.Mesh(geometry, material);
-     mesh.position.fromArray(meshData.position);
-     // Set other necessary properties
-
-     scene.add(mesh);
-   });
-   ```
-
-   This approach is similar to the first one, but **you have more control over which properties to include** in the serialization process. You can manually define the structure of the serialized data and ensure that the position information is included.
-
-Both approaches have their pros and cons, so you can choose the one that best fits your requirements and the complexity of your scene.
+  scene.add(mesh);
+});
+```
 
 <br>
