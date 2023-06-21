@@ -34,21 +34,21 @@
   // Problem. If we click on canvas, and click button, another line is drawn.
   // If we draw and don't click on canvas, and click button, works as expected.
   btnDraw.addEventListener('click', function () {
-    positions = [];
+    positions = []; // okay, well try resetting it
     if (isDrawing) {
       // Drawing off
       isDrawing = false;
       controls.enabled = true;
-      // Set up the mouse event listeners
-      document.removeEventListener("mousemove", onMouseMove, false);
-      document.removeEventListener("mouseup", onMouseUp, false);
+      // Remove the mouse event listeners
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
     } else {
       // Drawing on
       isDrawing = true;
       controls.enabled = false;
       // Set up the mouse event listeners
-      document.addEventListener("mousemove", onMouseMove, false);
-      document.addEventListener("mouseup", onMouseUp, false);
+      document.addEventListener("mousemove", onMouseMove);
+      document.addEventListener("mouseup", onMouseUp);
     }
     console.log("isDrawing?", isDrawing, "\ncontrols enabled?", controls.enabled);
   });
@@ -64,29 +64,18 @@
 
   controls = new OrbitControls(camera, renderer.domElement);
 
-  // Set up geometry to raycast against
   const loader = new THREE.TextureLoader();
   const planeGeom = new THREE.PlaneGeometry(10, 10);
-
-  // Get texture
   const texture = loader.load(imageSource);
-
-  // Set material texture todo: not sure if I wanna make double-side or not
-  // const material = new THREE.MeshBasicMaterial({ map: texture });
   const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
-
   const mesh = new THREE.Mesh(planeGeom, material);
   scene.add(mesh);
 
-  // Set up the raycaster and mouse vector
   let raycaster = new THREE.Raycaster();
   let mouse = new THREE.Vector2();
 
-  // Set up line material and geometry
   let lineMaterial = new THREE.LineBasicMaterial({ color: "#0000ff" });
   let bufferGeometry = new THREE.BufferGeometry();
-
-  // Set up line object
   let line = new THREE.Line(bufferGeometry, lineMaterial);
   scene.add(line);
 
@@ -112,7 +101,6 @@
     if (isDrawing) {
       // todo: make fewer points
       // console.log("positions", positions);
-
       // Draw the final line
       line.geometry.setDrawRange(0, positions.length / 3);
       line.geometry.computeBoundingSphere();
