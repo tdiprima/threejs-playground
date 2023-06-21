@@ -25,21 +25,33 @@
   import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
   console.log(`%cREVISION: ${THREE.REVISION}`, "color: #ccff00;");
+  let btnDraw = document.getElementById("toggleButton");
   let imageSource = "/images/image1.jpg";
   let isDrawing = false;
+  let positions = []; // Set up arrays to hold line data
   let controls;
 
-  function toggleControls() {
-    // Toggle drawing
-    isDrawing = !isDrawing;
-    // toggle controls detachment
-    controls.enabled = !isDrawing;
-    console.log("isDrawing?", isDrawing);
-    console.log("controls enabled?", controls.enabled);
-  }
-
-  // Toggle button click event listener
-  document.getElementById("toggleButton").addEventListener("click", toggleControls);
+  // Problem. If we click on canvas, and click button, another line is drawn.
+  // If we draw and don't click on canvas, and click button, works as expected.
+  btnDraw.addEventListener('click', function () {
+    positions = [];
+    if (isDrawing) {
+      // Drawing off
+      isDrawing = false;
+      controls.enabled = true;
+      // Set up the mouse event listeners
+      document.removeEventListener("mousemove", onMouseMove, false);
+      document.removeEventListener("mouseup", onMouseUp, false);
+    } else {
+      // Drawing on
+      isDrawing = true;
+      controls.enabled = false;
+      // Set up the mouse event listeners
+      document.addEventListener("mousemove", onMouseMove, false);
+      document.addEventListener("mouseup", onMouseUp, false);
+    }
+    console.log("isDrawing?", isDrawing, "\ncontrols enabled?", controls.enabled);
+  });
 
   let scene = new THREE.Scene();
   let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -74,16 +86,9 @@
   let lineMaterial = new THREE.LineBasicMaterial({ color: "#0000ff" });
   let bufferGeometry = new THREE.BufferGeometry();
 
-  // Set up arrays to hold line data
-  let positions = [];
-
   // Set up line object
   let line = new THREE.Line(bufferGeometry, lineMaterial);
   scene.add(line);
-
-  // Set up the mouse event listeners
-  document.addEventListener("mousemove", onMouseMove, false);
-  document.addEventListener("mouseup", onMouseUp, false);
 
   function onMouseMove(event) {
     if (isDrawing) {
@@ -105,10 +110,8 @@
 
   function onMouseUp() {
     if (isDrawing) {
-      // isDrawing = false; // <- eventually I will work something out
-
       // todo: make fewer points
-      console.log("positions", positions);
+      // console.log("positions", positions);
 
       // Draw the final line
       line.geometry.setDrawRange(0, positions.length / 3);
