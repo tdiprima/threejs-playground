@@ -11,7 +11,7 @@
   </style>
 </head>
 <body>
-<button id="toggleButton">toggleButton</button>
+<button id="toggleButton">drawing toggle</button>
 <script type="importmap">{
   "imports": {
     "three": "/build/three.module.js",
@@ -59,8 +59,9 @@
   // Get texture
   const texture = loader.load(imageSource);
 
-  // Set material texture
-  const material = new THREE.MeshBasicMaterial({ map: texture });
+  // Set material texture todo: not sure if I wanna make double-side or not
+  // const material = new THREE.MeshBasicMaterial({ map: texture });
+  const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
 
   const mesh = new THREE.Mesh(planeGeom, material);
   scene.add(mesh);
