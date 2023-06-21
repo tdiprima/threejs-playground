@@ -14,6 +14,8 @@ let clickableObjects = [];new THREE.TextureLoader().load('image1.jpg', functio
 
 <br>
 
+`userData` needs to be set by you; it doesn't get set for free.  But notice &ndash; we're not checking it anywhere, either.
+
 By moving the code inside the callback function, you ensure that it will execute only after the texture has finished loading and the `clickableObjects` array has been populated. This way, you won't need to refresh the page to access the array.
 
 <span style="color:#0000dd;">Gweat.  Now what happens when I have 4 images?  That means put the other 3 image generation stuff in there as well.  Cool.  "Div soup."</span> <span style="font-size:30px;">🍜</span> <span style="color:#0000dd;">This is all because I want the aspect ratio.</span>

@@ -1,17 +1,10 @@
 ## Raycasting
 
-* conversacion.md
-* Four Synchronized Image Viewers.md
-* event-or-raycaster.md
-* object-intersection-issues.md
-* <lala>
-* kool-aid-kids.html
-* kool1.js
-* kool2.js
-* dust-to-dust.html
-* bugueo.html
+### TL;DR
 
-## Add Event to Image
+<mark>**Either use or make a freaking control like DragControls.**</mark>
+
+### Add Event to Image
 
 OK.  How about using a raycaster instead of a click event?
 
@@ -90,7 +83,9 @@ function animate() {
 animate();
 ```
 
-<br>
+### userData
+
+`userData` needs to be set by you. 😘 But we're also not checking it, so idk.
 
 In this example, we create a `raycaster` object that will be used to perform raycasting against the **clickable objects** in the scene. We also define a `clickableObjects` array to store the objects that should respond to mouse clicks.
 
