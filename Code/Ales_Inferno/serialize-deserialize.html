@@ -19,17 +19,22 @@
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
-  // Add a cube to the scene
+  // Create the cube geometry and material
   let geometry = new THREE.BoxGeometry(1, 1, 1);
-  let material = new THREE.MeshBasicMaterial({color: "red"});
+  let material = new THREE.MeshBasicMaterial({ color: "red" });
+
+  // Create the cube mesh and set its position
   let cube = new THREE.Mesh(geometry, material);
+  cube.position.set(2, 0.5, 0);
+
+  // Add the cube to the scene
   scene.add(cube);
 
   // Serialize the scene
   const serializedScene = JSON.stringify(scene.toJSON());
 
   console.log('%cscene to json', 'color: lime;', serializedScene);
-  console.log('%ctype', 'color: blue;', typeof serializedScene);
+  console.log('%ccube', 'color: blue;', cube);
 
   // Restore the scene
   scene.clear();
