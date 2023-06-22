@@ -374,4 +374,30 @@ Here are the changes that have been made:
 
 With these changes, the code should now zoom into the top-right corner of the image.
 
+## Start Tween on Click
+
+<span style="color:#0000dd;">The start() method starts the tween immediately.  Well, what if you want to start it during the onclick method of a button?</span>
+
+In tween.js, the `start()` method is indeed used to start a tween immediately. If you want to start a tween when a button is clicked, you can achieve that by attaching an `onclick` event handler to the button and calling the `start()` method inside the handler function.
+
+Here's an example of how you can accomplish this:
+
+```javascript
+// Assuming you have already created a Tween object called 'myTween'
+
+// Get a reference to the button element
+var button = document.getElementById('myButton');
+
+// Attach an onclick event handler to the button
+button.onclick = function() {
+  myTween.start();
+};
+```
+
+In this example, we assume you have an HTML button element with the id `'myButton'`. When the button is clicked, the `onclick` event handler function is executed, and within that function, the `start()` method of the `myTween` object is called, which starts the tween.
+
+Make sure to replace `'myButton'` with the actual id of your button element, and `'myTween'` with the name of your Tween object instance.
+
+By associating the `start()` method with the `onclick` event of the button, the tween will begin when the button is clicked rather than immediately upon script execution.
+
 <br>
