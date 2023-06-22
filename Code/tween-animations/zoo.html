@@ -29,10 +29,23 @@
 
   // Tween
   let tweenGroup = new TWEEN.Group();
-  let targetPosition = new THREE.Vector3(7, 7, 7); // Adjust the values according to your scene
   let targetZoom = 2; // Adjust the desired zoom level
+  const topRightCorner = new THREE.Vector3(7, 7, 0); // Adjust the values according to your scene
+  let initialPosition = camera.position.clone();
+  let initialZoom = camera.zoom;
+  let targetPosition;
 
   function updateCamera() {
+    // Calculate the offset based on the target zoom and the size of the viewport
+    const offset = new THREE.Vector3();
+    const frustumHeight = 2 * Math.tan((camera.fov * Math.PI) / 180 / 2) * camera.position.z;
+    offset.x = frustumHeight * camera.aspect * targetZoom * 0.5;
+    offset.y = frustumHeight * targetZoom * 0.5;
+
+    // Calculate the target position by adding the offset to the top-right corner
+    // targetPosition = new THREE.Vector3().copy(topRightCorner).add(offset);
+    targetPosition = topRightCorner.clone().add(offset);
+
     // Update camera position
     camera.position.copy(targetPosition);
 
@@ -41,17 +54,14 @@
     camera.updateProjectionMatrix();
   }
 
-  let initialPosition = camera.position.clone();
-  let initialZoom = camera.zoom;
-
   let tween = new TWEEN.Tween({ t: 0 })
     .to({ t: 1 }, 1000) // Adjust the duration as desired
     .easing(TWEEN.Easing.Quadratic.InOut)
     .onUpdate(obj => {
+      updateCamera();
       // Interpolate position
       let position = initialPosition.clone().lerp(targetPosition, obj.t);
       camera.position.copy(position);
-
       // Interpolate zoom
       let zoom = initialZoom + (targetZoom - initialZoom) * obj.t;
       camera.zoom = zoom;
