@@ -1,29 +1,27 @@
 ## Zoom into corner with Tween.js
 
-To enable zooming into a specific corner of a rendered image using tween.js and three.js, you can follow these general steps:
+To enable zooming into a specific corner of a rendered image using tween.js and three.js:
 
-1. Set up your scene, camera, and renderer using three.js as usual.
-
-2. Include the tween.js library in your project. You can either download it and link it in your HTML file or use a CDN. For example, you can add the following script tag in your HTML file:
+Include the tween.js library in your project. You can either download it and link it in your HTML file or use a CDN. For example, you can add the following script tag in your HTML file:
 
 ```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.umd.js"></script>
 ```
 
-3. Create an instance of `TWEEN.Group` to manage your tween animations. This step is optional but can help organize and control multiple tweens simultaneously.
+Create an instance of `TWEEN.Group` to manage your tween animations. This step is optional but can help organize and control multiple tweens simultaneously.
 
 ```javascript
 const tweenGroup = new TWEEN.Group();
 ```
 
-4. Define the target position and zoom level that you want to animate to. Let's say you want to zoom into the top-right corner of the scene.
+Define the target position and zoom level that you want to animate to. Let's say you want to zoom into the top-right corner of the scene.
 
 ```javascript
 const targetPosition = new THREE.Vector3(10, 10, 10); // Adjust the values according to your scene
 const targetZoom = 2; // Adjust the desired zoom level
 ```
 
-5. Create a function that will be called during the tween animation to update the camera's position and zoom level. This function will be used as a callback for the tween.
+Create a function that will be called during the tween animation to update the camera's position and zoom level. This function will be used as a callback for the tween.
 
 ```javascript
 function updateCamera() {
@@ -36,7 +34,7 @@ function updateCamera() {
 }
 ```
 
-6. Set up a tween animation to interpolate the camera's position and zoom level from their current values to the target values. You can use `TWEEN.Tween` to define the animation.
+Set up a tween animation to interpolate the camera's position and zoom level from their current values to the target values. You can use `TWEEN.Tween` to define the animation.
 
 ```javascript
 const initialPosition = camera.position.clone();
@@ -62,7 +60,7 @@ const tween = new TWEEN.Tween({ t: 0 })
   .start();
 ```
 
-7. In your animation/render loop, call `tweenGroup.update()` to update the ongoing tweens.
+In your animation/render loop, call `tweenGroup.update()` to update the ongoing tweens.
 
 ```javascript
 function animate() {
@@ -76,7 +74,7 @@ function animate() {
 }
 ```
 
-8. Trigger the zoom animation when desired. For example, you can add an event listener to a button click or any other user interaction.
+Trigger the zoom animation when desired. For example, you can add an event listener to a button click or any other user interaction.
 
 ```javascript
 button.addEventListener('click', () => {
