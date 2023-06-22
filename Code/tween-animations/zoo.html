@@ -9,10 +9,21 @@
 </head>
 <body>
 <button id="myButton">Trigger the zoom animation</button>
-<script src="/build/three.min.js"></script>
+<script type="importmap">{
+  "imports": {
+    "three": "/build/three.module.js",
+    "three/addons/": "/jsm/"
+  }
+}
+</script>
+<script async src="/es-module-shims-1.3.6/dist/es-module-shims.js"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.umd.js"></script> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/20.0.0/tween.umd.js"></script>
-<script>
+<script type="module">
+  import * as THREE from "three";
+  // When you add orbit controls, that's how it gets twisted.
+  // import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
   let animationStarted = false;
   let scene = new THREE.Scene();
 
@@ -22,6 +33,7 @@
   let renderer = new THREE.WebGLRenderer({antialias: true});
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
+  // let controls = new OrbitControls(camera, renderer.domElement);
 
   let planeGeometry = new THREE.PlaneGeometry(7.5, 7.5);
   let texture = new THREE.TextureLoader().load('/images/uv_grid_opengl.jpg');
@@ -30,10 +42,11 @@
   plane.position.set(0, 0, 0);
   scene.add(plane);
 
-  let targetPosition = new THREE.Vector3(10, 10, 10);
+  let targetPosition = new THREE.Vector3(3.3, 3.3, 1);
   let targetZoom = 2; // Adjust the desired zoom level
 
   let initialPosition = camera.position.clone();
+
   let initialZoom = camera.zoom;
 
   let myTween = new TWEEN.Tween({t: 0})
@@ -66,6 +79,7 @@
     if (animationStarted) {
       myTween.update(); // Update tween animations
     }
+    // controls.update();
     renderer.render(scene, camera);
   })();
 

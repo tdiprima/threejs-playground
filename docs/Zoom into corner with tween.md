@@ -1,3 +1,5 @@
+## How hard can it be??
+
 <span style="color:#0000dd;">How can I use tween.js with three.js to allow the user to zoom into a corner of a rendered image?  Currently one can zoom using orbit controls, but it only zooms to the center of the image.</span>
 
 To enable zooming into a specific corner of a rendered image using tween.js and three.js, you can follow these general steps:
@@ -7,7 +9,7 @@ To enable zooming into a specific corner of a rendered image using tween.js and 
 2. Include the tween.js library in your project. You can either download it and link it in your HTML file or use a CDN. For example, you can add the following script tag in your HTML file:
 
     ```html
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.umd.js"></script>
     ```
 
 3. Create an instance of `TWEEN.Group` to manage your tween animations. This step is optional but can help organize and control multiple tweens simultaneously.
@@ -90,16 +92,6 @@ To enable zooming into a specific corner of a rendered image using tween.js and 
     ```
 
 With these steps, you should be able to zoom into a specific corner of your rendered image using tween.js and three.js. Adjust the target position and zoom level according to your desired corner and zoom level.
-
-### Wrong script url
-
-Apologies for the outdated information. Thank you for pointing out the correct URL. You can indeed use the updated URL for tween.js:
-
-```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.umd.js"></script>
-```
-
-Please make sure to replace the incorrect URL with the updated one in your project.
 
 ### updateCamera
 
