@@ -22,22 +22,23 @@
 <script type="module">
   import * as THREE from "three";
   // When you add orbit controls, that's how it gets twisted.
-  // import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+  import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
   let animationStarted = false;
   let scene = new THREE.Scene();
 
   let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.z = 5;
+  window._camera = camera; // Check _camera.position
 
   let renderer = new THREE.WebGLRenderer({antialias: true});
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
-  // let controls = new OrbitControls(camera, renderer.domElement);
+  let controls = new OrbitControls(camera, renderer.domElement);
 
   let planeGeometry = new THREE.PlaneGeometry(7.5, 7.5);
   let texture = new THREE.TextureLoader().load('/images/uv_grid_opengl.jpg');
-  let planeMaterial = new THREE.MeshBasicMaterial({map: texture});
+  let planeMaterial = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
   let plane = new THREE.Mesh(planeGeometry, planeMaterial);
   plane.position.set(0, 0, 0);
   scene.add(plane);
@@ -49,10 +50,15 @@
 
   let initialZoom = camera.zoom;
 
-  let myTween = new TWEEN.Tween({t: 0})
-    .to({t: 1}, 1000) // Adjust the duration as desired
+  let myTween = new TWEEN.Tween({ t: 0 })
+    .to({ t: 1 }, 1000) // Adjust the duration as desired
     .easing(TWEEN.Easing.Quadratic.InOut)
     .onUpdate(obj => {
+      if (camera.position.z < 1) {
+        // Turn it around
+        camera.position.set(0, 0, 0);
+        camera.lookAt(0, 0, 0);
+      }
       // Interpolate position
       let position = initialPosition.clone().lerp(targetPosition, obj.t);
       camera.position.copy(position);
@@ -65,7 +71,7 @@
     .onComplete(() => {
       // Animation complete
       // Add any additional logic here
-      console.log('%cHere!', 'color: #ff6a5a; font-size: larger;');
+      console.log('%cCompleted!', 'color: #ff6a5a; font-size: larger;');
     })
 
   let button = document.getElementById("myButton");
@@ -79,6 +85,7 @@
     if (animationStarted) {
       myTween.update(); // Update tween animations
     }
+    // If you update controls here, it screws up your animation.
     // controls.update();
     renderer.render(scene, camera);
   })();
