@@ -1,12 +1,14 @@
 ## Zoom into corner with Tween.js
 
-To enable zooming into a specific corner of a rendered image using tween.js and three.js:
+Enable zooming into a specific corner of a rendered image using tween.js and three.js.
 
-Include the tween.js library in your project. You can either download it and link it in your HTML file or use a CDN. For example, you can add the following script tag in your HTML file:
+### Script tag
 
 ```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.umd.js"></script>
 ```
+
+### Instance
 
 Create an instance of `TWEEN.Group` to manage your tween animations. This step is optional but can help organize and control multiple tweens simultaneously.
 
@@ -14,12 +16,16 @@ Create an instance of `TWEEN.Group` to manage your tween animations. This step i
 const tweenGroup = new TWEEN.Group();
 ```
 
+### Target
+
 Define the target position and zoom level that you want to animate to. Let's say you want to zoom into the top-right corner of the scene.
 
 ```javascript
 const targetPosition = new THREE.Vector3(10, 10, 10); // Adjust the values according to your scene
 const targetZoom = 2; // Adjust the desired zoom level
 ```
+
+### Update Function
 
 Create a function that will be called during the tween animation to update the camera's position and zoom level. This function will be used as a callback for the tween.
 
@@ -33,6 +39,8 @@ function updateCamera() {
   camera.updateProjectionMatrix();
 }
 ```
+
+### Create a tween
 
 Set up a tween animation to interpolate the camera's position and zoom level from their current values to the target values. You can use `TWEEN.Tween` to define the animation.
 
@@ -60,6 +68,8 @@ const tween = new TWEEN.Tween({ t: 0 })
   .start();
 ```
 
+### Animate loop
+
 In your animation/render loop, call `tweenGroup.update()` to update the ongoing tweens.
 
 ```javascript
@@ -73,6 +83,8 @@ function animate() {
   renderer.render(scene, camera);
 }
 ```
+
+### Trigger zoom
 
 Trigger the zoom animation when desired. For example, you can add an event listener to a button click or any other user interaction.
 
@@ -514,8 +526,6 @@ The `zoomToPosition` function updates the camera's position to zoom towards the 
 The `updateZoom` function is called when the image size changes, and it updates the plane geometry to match the aspect ratio of the image.
 
 With these modifications, you should be able to zoom into any corner of the image by moving the mouse over it and using the mouse wheel to zoom in and out.
-
-Please give it a try!
 
 ## Postprocessing plugin
 
