@@ -1,3 +1,96 @@
+## Zoom into corner with Tween.js
+
+To enable zooming into a specific corner of a rendered image using tween.js and three.js, you can follow these general steps:
+
+1. Set up your scene, camera, and renderer using three.js as usual.
+
+2. Include the tween.js library in your project. You can either download it and link it in your HTML file or use a CDN. For example, you can add the following script tag in your HTML file:
+
+```html
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.min.js"></script>
+```
+
+3. Create an instance of `TWEEN.Group` to manage your tween animations. This step is optional but can help organize and control multiple tweens simultaneously.
+
+```javascript
+const tweenGroup = new TWEEN.Group();
+```
+
+4. Define the target position and zoom level that you want to animate to. Let's say you want to zoom into the top-right corner of the scene.
+
+```javascript
+const targetPosition = new THREE.Vector3(10, 10, 10); // Adjust the values according to your scene
+const targetZoom = 2; // Adjust the desired zoom level
+```
+
+5. Create a function that will be called during the tween animation to update the camera's position and zoom level. This function will be used as a callback for the tween.
+
+```javascript
+function updateCamera() {
+  // Update camera position
+  camera.position.copy(targetPosition);
+
+  // Update camera zoom
+  camera.zoom = targetZoom;
+  camera.updateProjectionMatrix();
+}
+```
+
+6. Set up a tween animation to interpolate the camera's position and zoom level from their current values to the target values. You can use `TWEEN.Tween` to define the animation.
+
+```javascript
+const initialPosition = camera.position.clone();
+const initialZoom = camera.zoom;
+
+const tween = new TWEEN.Tween({ t: 0 })
+  .to({ t: 1 }, 1000) // Adjust the duration as desired
+  .easing(TWEEN.Easing.Quadratic.InOut)
+  .onUpdate((obj) => {
+    // Interpolate position
+    const position = initialPosition.clone().lerp(targetPosition, obj.t);
+    camera.position.copy(position);
+
+    // Interpolate zoom
+    const zoom = initialZoom + (targetZoom - initialZoom) * obj.t;
+    camera.zoom = zoom;
+    camera.updateProjectionMatrix();
+  })
+  .onComplete(() => {
+    // Animation complete
+    // Add any additional logic here
+  })
+  .start();
+```
+
+7. In your animation/render loop, call `tweenGroup.update()` to update the ongoing tweens.
+
+```javascript
+function animate() {
+  requestAnimationFrame(animate);
+
+  // Update tween animations
+  tweenGroup.update();
+
+  // Render your scene
+  renderer.render(scene, camera);
+}
+```
+
+8. Trigger the zoom animation when desired. For example, you can add an event listener to a button click or any other user interaction.
+
+```javascript
+button.addEventListener('click', () => {
+  tweenGroup.removeAll(); // Remove any previous tweens
+
+  // Start the zoom animation
+  tween.start();
+});
+```
+
+With these steps, you should be able to zoom into a specific corner of your rendered image using tween.js and three.js. Adjust the target position and zoom level according to your desired corner and zoom level.
+
+<hr class="rainbow2">
+
 ## Zooming in on a Corner
 
 I have a question about how three.js orbit controls zooms in and out.  It seems like the camera is fixed in the center.  But what if I wanted to zoom into a corner, into a region of interest?  Can I hover the mouse over the corner and zoom in and out?
@@ -430,4 +523,7 @@ Please give it a try!
 
 [postprocessing](https://github.com/pmndrs/postprocessing)
 
+<style>
+hr{margin: 5px;border: none;height: 8px;}hr.rainbow2{background: #ff0000;background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#ff0000), color-stop(25%,#ffff00), color-stop(50%,#00ff00), color-stop(75%,#00ffff), color-stop(100%,#0000ff));background: -webkit-linear-gradient(-45deg, #ff0000 0%,#ffff00 25%,#00ff00 50%,#00ffff 75%,#0000ff 100%);background: -moz-linear-gradient(-45deg, #ff0000 0%, #ffff00 25%, #00ff00 50%, #00ffff 75%, #0000ff 100%);background: -o-linear-gradient(-45deg, #ff0000 0%,#ffff00 25%,#00ff00 50%,#00ffff 75%,#0000ff 100%);background: -ms-linear-gradient(-45deg, #ff0000 0%,#ffff00 25%,#00ff00 50%,#00ffff 75%,#0000ff 100%);background: linear-gradient(-45deg, #ff0000 0%,#ffff00 25%,#00ff00 50%,#00ffff 75%,#0000ff 100%);}
+</style>
 <br>
