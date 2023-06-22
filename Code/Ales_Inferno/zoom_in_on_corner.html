@@ -71,7 +71,8 @@
   // Render the scene
   (function animate() {
     requestAnimationFrame(animate);
-    controls.update();
+    // If you leave it, it conflicts with the main purpose of the program:
+    // controls.update();
     renderer.render(scene, camera);
   })();
 
