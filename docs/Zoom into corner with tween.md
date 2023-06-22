@@ -44,7 +44,7 @@ To enable zooming into a specific corner of a rendered image using tween.js and 
     const initialPosition = camera.position.clone();
     const initialZoom = camera.zoom;
 
-    const tween = new TWEEN.Tween({ t: 0 })
+    const myTween = new TWEEN.Tween({ t: 0 })
       .to({ t: 1 }, 1000) // Adjust the duration as desired
       .easing(TWEEN.Easing.Quadratic.InOut)
       .onUpdate((obj) => {
@@ -85,7 +85,7 @@ To enable zooming into a specific corner of a rendered image using tween.js and 
       tweenGroup.removeAll(); // Remove any previous tweens
 
       // Start the zoom animation
-      tween.start();
+      myTween.start();
     });
     ```
 
@@ -115,7 +115,7 @@ Here's the corrected code snippet for the tween animation section:
 const initialPosition = camera.position.clone();
 const initialZoom = camera.zoom;
 
-const tween = new TWEEN.Tween({ t: 0 })
+const myTween = new TWEEN.Tween({ t: 0 })
   .to({ t: 1 }, 1000) // Adjust the duration as desired
   .easing(TWEEN.Easing.Quadratic.InOut)
   .onUpdate((obj) => {
@@ -254,7 +254,7 @@ Please adjust the `topRightCorner` coordinates as needed to match the top-right 
   let initialPosition = camera.position.clone();
   let initialZoom = camera.zoom;
 
-  let tween = new TWEEN.Tween({ t: 0 })
+  let myTween = new TWEEN.Tween({ t: 0 })
     .to({ t: 1 }, 1000) // Adjust the duration as desired
     .easing(TWEEN.Easing.Quadratic.InOut)
     .onUpdate(obj => {
@@ -336,7 +336,7 @@ function updateCamera() {
 let initialPosition = camera.position.clone();
 let initialZoom = camera.zoom;
 
-let tween = new TWEEN.Tween({ t: 0 })
+let myTween = new TWEEN.Tween({ t: 0 })
   .to({ t: 1 }, 1000) // Adjust the duration as desired
   .easing(TWEEN.Easing.Quadratic.InOut)
   .onUpdate(obj => {
