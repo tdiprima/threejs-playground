@@ -33,15 +33,6 @@
   let targetPosition = new THREE.Vector3(10, 10, 10);
   let targetZoom = 2; // Adjust the desired zoom level
 
-  function updateCamera() {
-    // Update camera position
-    camera.position.copy(targetPosition);
-
-    // Update camera zoom
-    camera.zoom = targetZoom;
-    camera.updateProjectionMatrix();
-  }
-
   let initialPosition = camera.position.clone();
   let initialZoom = camera.zoom;
 
@@ -63,7 +54,6 @@
       // Add any additional logic here
       console.log('%cHere!', 'color: #ff6a5a; font-size: larger;');
     })
-    //.start();
 
   let button = document.getElementById("myButton");
   button.addEventListener('click', () => {
