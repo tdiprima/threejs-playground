@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>gsap</title>
+  <!-- https://jsfiddle.net/a6qzkf4b/ -->
+  <style>
+    body {
+      background-color: #000;
+      margin: 0px;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+<script type="importmap">{
+  "imports": {
+    "three": "/build/three.module.js",
+    "three/addons/": "/jsm/"
+  }
+}
+</script>
+<script async src="/es-module-shims-1.3.6/dist/es-module-shims.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.0/gsap.min.js"></script>
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+let mesh, renderer, scene, camera, controls;
+
+init();
+animate();
+
+function init() {
+  // renderer
+  renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  document.body.appendChild(renderer.domElement);
+
+  // scene
+  scene = new THREE.Scene();
+
+  // camera
+  camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000);
+  camera.position.set(20, 20, 20);
+
+  // controls
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true; // Simon's Cat
+
+  // ambient
+  scene.add(new THREE.AmbientLight(0x222222));
+
+  // light
+  let light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.set(20, 20, 0);
+  scene.add(light);
+
+  // axes
+  scene.add(new THREE.AxesHelper(20));
+
+  // geometry
+  let geometry = new THREE.SphereGeometry(5, 12, 8);
+
+  // material
+  let material = new THREE.MeshPhongMaterial({
+    color: 0x00ffff,
+    flatShading: true,
+    transparent: true,
+    opacity: 0.7,
+  });
+
+  // mesh
+  mesh = new THREE.Mesh(geometry, material);
+  scene.add(mesh);
+
+  // animation
+  controls.target.set(0, 0, 0);
+
+  gsap.to(camera.position, {
+    duration: 2,
+    x: 0,
+    y: 10,
+    z: 20,
+    onUpdate: function () {
+      controls.update();
+    }
+  });
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+  renderer.render(scene, camera);
+}
+</script>
+</body>
+</html>
