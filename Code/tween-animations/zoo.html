@@ -30,8 +30,6 @@
   plane.position.set(0, 0, 0);
   scene.add(plane);
 
-  let tweenGroup = new TWEEN.Group();
-
   let targetPosition = new THREE.Vector3(10, 10, 10);
   let targetZoom = 2; // Adjust the desired zoom level
 
@@ -70,14 +68,13 @@
   let button = document.getElementById("myButton");
   button.addEventListener('click', () => {
     animationStarted = true;
-    tweenGroup.removeAll(); // Remove any previous tweens
     myTween.start(); // Start the zoom animation
   });
 
   (function animate() {
     requestAnimationFrame(animate);
     if (animationStarted) {
-      myTween.update();  // Update tween animations
+      myTween.update(); // Update tween animations
     }
     renderer.render(scene, camera);
   })();
