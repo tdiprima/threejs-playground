@@ -5,10 +5,7 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>Tween AF</title>
   <!-- https://tweenjs.github.io/tween.js/ -->
-  <style>
-    body { margin: 0; }
-    canvas { display: block; }
-  </style>
+  <link href="/css/main.css" rel="stylesheet">
 </head>
 <body>
 <script src="/build/three.min.js"></script>
@@ -22,13 +19,11 @@
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
-  // Create a cube
   let geometry = new THREE.BoxGeometry();
   let material = new THREE.MeshBasicMaterial({ color: "#ff8c00" });
   let cube = new THREE.Mesh(geometry, material);
   scene.add(cube);
 
-  // Set up the animation
   function animate() {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
