@@ -96,13 +96,15 @@
 
     function spinAnim() {
       let rotation = { y: 0 };
+      // target object is rotation
       gsap.to(rotation, {
-        y: Math.PI * 2,
+        y: Math.PI * 2, // rotate y by Math.PI * 2 over a duration of 2 seconds
         duration: 2,
         onUpdate: function () {
+          // update the cube's rotation during the animation
           mesh.rotation.y = rotation.y;
         },
-        ease: "power2.out",
+        ease: "power2.out", // "out" effect starts quickly, slows down towards the end
         onComplete: function () {
           console.log("Animation completed!");
         }
