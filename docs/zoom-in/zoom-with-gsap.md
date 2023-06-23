@@ -71,7 +71,7 @@ Make sure to place the gsap animations after the initialization code for the cam
 
 ## Camera z position and fov
 
-What do you mean I have to set the fov in order to zoom?  I thought setting the camera's z position to 0.5 would be sufficient.  (I want to zoom in; not out).
+<span style="color:#0000dd;">What do you mean I have to set the fov in order to zoom?  I thought setting the camera's z position to 0.5 would be sufficient.  (I want to zoom in; not out).</span>
 
 The field of view (fov) of the camera controls how wide or narrow the view is. A smaller fov value makes the view appear zoomed in, while a larger fov value makes the view appear zoomed out.
 
@@ -79,8 +79,36 @@ When you **set the camera's z position** to 0.5, it determines how close or far 
 
 By **modifying the fov value**, you can control the zoom level. A smaller fov value will make the scene appear more zoomed in, as if you are getting closer to the image. Conversely, a larger fov value will make the scene appear more zoomed out, as if you are moving away from the image.
 
-In the code example I provided earlier, the `gsap.to(camera, ...)` animation is used to gradually change the camera's fov value over time. This animation creates a zoom effect by smoothly adjusting the zoom level from its initial value to the target value specified in the animation. The `ease` property determines the animation's smoothness.
+<span style="color:red;">It did not, in fact, appear to do anything.  But whatever.</span>
+
+In the code example I provided earlier, the **`gsap.to(camera, ...)`** animation is used to **gradually change the camera's fov** value over time. This animation creates a zoom effect by smoothly adjusting the zoom level from its initial value to the target value specified in the animation. The `ease` property determines the animation's smoothness.
 
 So, to summarize, changing the camera's z position alone won't give you a zoom effect. You also need to adjust the camera's fov value to control the zoom level and achieve the desired zoom effect in three.js.
+
+## Quadratic Easing Effect
+
+```js
+let rotation = { y: 0 };
+
+gsap.to(rotation, {
+  y: Math.PI * 2,
+  duration: 2,
+  onUpdate: function () {
+    cube.rotation.y = rotation.y;
+  },
+  ease: "power2.out", // <-- This guy!
+  onComplete: function () {
+    console.log("Animation completed!");
+  }
+});
+```
+
+In the context of **easing functions**, the term "quadratic" refers to the mathematical function used to calculate the easing effect. Easing functions determine the rate of change of a value over time, allowing animations to start or end gradually, accelerate, decelerate, or follow various other patterns.
+
+In the case of **"power2.out"** easing in gsap.js, it represents a quadratic easing function with an "out" effect. The "out" effect means that the animation starts quickly and slows down towards the end, creating a smoother and more natural motion.
+
+The term "quadratic" specifically refers to the power of the function used. In this case, the easing function is based on a **quadratic equation,** which involves a **squared** term. The exact formula used for the easing function can be complex and may vary between libraries, but the quadratic aspect generally means that the rate of change is proportional to the square of the time.
+
+In summary, the "quadratic" part in "power2.out" indicates that the easing effect follows a quadratic equation, resulting in a smooth animation with an "out" effect, starting quickly and slowing down towards the end.
 
 <br>
