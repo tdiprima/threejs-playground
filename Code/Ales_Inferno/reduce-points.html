@@ -4,17 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Create 3D Line from Points</title>
-  <!-- Also: https://stackoverflow.com/questions/13756112/draw-a-circle-not-shaded-with-three-js -->
 </head>
 <body>
-
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r124/three.min.js"></script>
-<script src="foo.js"></script> -->
-
 <script src="/build/three.min.js"></script>
-<!-- <script src="bar.js"></script> -->
-<script src="baz.js"></script>
-
+<script src="../array-to-line/baz.js"></script>
+<script src="reduce-points.js"></script>
 <script>
   let scene = new THREE.Scene();
   let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -26,6 +20,20 @@
 
   let line = createLine(points);
   scene.add(line);
+
+  function good() {
+    let material = new THREE.LineBasicMaterial({ color: 0x0000ff });
+    let points = [];
+    points.push(new THREE.Vector3(-10, 0, 0));
+    points.push(new THREE.Vector3(0, 10, 0));
+    points.push(new THREE.Vector3(10, 0, 0));
+    let geometry = new THREE.BufferGeometry().setFromPoints(points);
+    let line = new THREE.Line(geometry, material);
+    console.log("%cPositions 1", "color: #ccff00;", geometry.attributes.position.array);
+    scene.add(line);
+  }
+
+  // good();
 
   camera.position.z = 10;
 
