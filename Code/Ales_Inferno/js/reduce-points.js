@@ -1,4 +1,72 @@
-let reducePoints = function(lineGeometry, thresholdDistance) {
+// TODO: NOTE! Original versions of reducePoints(1) and simp(1) below.
+let reducePoints = function(positions, thresholdDistance) {
+  let numPoints = positions.length / 3;
+  console.log("numPoints", numPoints);
+
+  let indicesToRemove = [];
+
+  for (let i = 0; i < numPoints - 1; i++) {
+    let currentPoint = new THREE.Vector3(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
+
+    let nextPoint = new THREE.Vector3(positions[(i + 1) * 3], positions[(i + 1) * 3 + 1], positions[(i + 1) * 3 + 2]);
+
+    let distance = currentPoint.distanceTo(nextPoint);
+
+    if (distance < thresholdDistance) {
+      indicesToRemove.push(i + 1);
+    }
+  }
+
+  for (let i = indicesToRemove.length - 1; i >= 0; i--) {
+    let indexToRemove = indicesToRemove[i];
+
+    positions.splice(indexToRemove * 3, 3);
+  }
+
+  console.log(positions);
+  // lineGeometry.setDrawRange(0, positions.length / 3);
+  // lineGeometry.attributes.position.needsUpdate = true;
+}
+
+function simp(points, scene) {
+  let geometry = new THREE.BufferGeometry();
+
+  // Convert the array of points to a Float32Array
+  // let positions = new Float32Array(points.length);
+  // for (let i = 0; i < points.length; i++) {
+  //   positions[i] = points[i];
+  // }
+
+  let simpArray = [];
+  for (let i = 0, j = 0; i < points.length; i++, j += 3) {
+    let simpObject = {};
+    simpObject.x = points[i];
+    simpObject.y = points[i + 1];
+    simpArray.push(simpObject);
+  }
+
+  // Decimate the points using Simplify.js
+  let tolerance = 5; // Adjust the tolerance to control the level of decimation
+  let simplifiedPoints = simplify(simpArray, tolerance, true);
+  console.log("simplifiedPoints", simplifiedPoints, typeof simplifiedPoints);
+
+  // Convert the simplified points to a Float32Array
+  let simplifiedPositions = new Float32Array(simplifiedPoints);
+
+  // Create a THREE.BufferAttribute with the simplified positions
+  // let positionAttribute = new THREE.BufferAttribute(simplifiedPoints, 3);
+  let positionAttribute = new THREE.BufferAttribute(simplifiedPositions, 3);
+  geometry.setAttribute('position', positionAttribute);
+
+  // Create a THREE.LineSegments object using the geometry and a material
+  let material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+  let line = new THREE.LineSegments(geometry, material);
+
+  // Add the line to your scene
+  scene.add(line);
+}
+
+let reducePoints1 = function(lineGeometry, thresholdDistance) {
   let positions = lineGeometry.attributes.position.array;
   let numPoints = positions.length / 3;
 
@@ -26,7 +94,7 @@ let reducePoints = function(lineGeometry, thresholdDistance) {
   lineGeometry.attributes.position.needsUpdate = true;
 }
 
-function simp(points, scene) {
+function simp1(points, scene) {
   let geometry = new THREE.BufferGeometry();
 
   // Convert the array of points to a Float32Array
@@ -36,7 +104,7 @@ function simp(points, scene) {
   }
 
   // Decimate the points using Simplify.js
-  let tolerance = 0.1; // Adjust the tolerance to control the level of decimation
+  let tolerance = 5; // 0.1; // Adjust the tolerance to control the level of decimation
   let simplifiedPoints = simplify(positions, tolerance, true);
   console.log("simplifiedPoints", simplifiedPoints, typeof simplifiedPoints);
 
