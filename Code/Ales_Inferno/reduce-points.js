@@ -25,3 +25,22 @@ let reducePoints = function(lineGeometry, thresholdDistance) {
   lineGeometry.setDrawRange(0, positions.length / 3);
   lineGeometry.attributes.position.needsUpdate = true;
 }
+
+let makeLine = function(points, scene) {
+  let geometry = new THREE.BufferGeometry();
+
+  let positions = new Float32Array(points.length);
+  for (let i = 0; i < points.length; i++) {
+    positions[i] = points[i];
+  }
+
+  console.log("positions", positions);
+
+  let positionAttribute = new THREE.BufferAttribute(positions, 3);
+  geometry.setAttribute('position', positionAttribute);
+
+  let material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+  scene.add(new THREE.LineSegments(geometry, material));
+
+  return geometry;
+}
