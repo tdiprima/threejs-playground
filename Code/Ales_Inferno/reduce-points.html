@@ -21,20 +21,6 @@
   let line = createLine(points);
   scene.add(line);
 
-  function good() {
-    let material = new THREE.LineBasicMaterial({ color: 0x0000ff });
-    let points = [];
-    points.push(new THREE.Vector3(-10, 0, 0));
-    points.push(new THREE.Vector3(0, 10, 0));
-    points.push(new THREE.Vector3(10, 0, 0));
-    let geometry = new THREE.BufferGeometry().setFromPoints(points);
-    let line = new THREE.Line(geometry, material);
-    console.log("%cPositions 1", "color: #ccff00;", geometry.attributes.position.array);
-    scene.add(line);
-  }
-
-  // good();
-
   camera.position.z = 10;
 
   window.addEventListener('resize', () => {
