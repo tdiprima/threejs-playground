@@ -240,4 +240,22 @@ Adjust the `tolerance` value according to your desired level of decimation. High
 
 By incorporating a library like `Simplify.js`, you can effectively reduce the number of points while retaining the shape of the line.
 
+## When you get this error
+
+THREE.BufferGeometry.computeBoundingSphere(): Computed radius is NaN. The "position" attribute is likely to have NaN values.
+
+It means:
+
+OK, I got it.  My array is just an array of points.  They don't have an x, y, and z.  I have to turn that array into something I can create the THREE.BufferGeometry object with.
+
+Transfer it directly:
+
+```javascript
+// Convert the array of points to a Float32Array
+var positions = new Float32Array(points.length);
+for (var i = 0; i < points.length; i++) {
+  positions[i] = points[i];
+}
+```
+
 <br>

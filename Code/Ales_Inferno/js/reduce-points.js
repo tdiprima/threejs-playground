@@ -27,26 +27,30 @@ let reducePoints = function(lineGeometry, thresholdDistance) {
 }
 
 function simp(points, scene) {
-  // Step 1: Create a THREE.BufferGeometry object
-  var geometry = new THREE.BufferGeometry();
+  let geometry = new THREE.BufferGeometry();
 
-  // Step 2: Convert the array of points to a Float32Array
-  var positions = new Float32Array(points.length);
-  for (var i = 0; i < points.length; i++) {
+  // Convert the array of points to a Float32Array
+  let positions = new Float32Array(points.length);
+  for (let i = 0; i < points.length; i++) {
     positions[i] = points[i];
   }
 
-  // Step 3: Decimate the points using Simplify.js
-  var tolerance = 0.1; // Adjust the tolerance to control the level of decimation
-  var simplifiedPoints = simplify(positions, tolerance, true);
+  // Decimate the points using Simplify.js
+  let tolerance = 0.1; // Adjust the tolerance to control the level of decimation
+  let simplifiedPoints = simplify(positions, tolerance, true);
+  console.log("simplifiedPoints", simplifiedPoints, typeof simplifiedPoints);
 
-  // Step 4: Create a THREE.BufferAttribute with the simplified positions
-  var positionAttribute = new THREE.BufferAttribute(simplifiedPoints, 3);
+  // Convert the simplified points to a Float32Array
+  let simplifiedPositions = new Float32Array(simplifiedPoints);
+
+  // Create a THREE.BufferAttribute with the simplified positions
+  // let positionAttribute = new THREE.BufferAttribute(simplifiedPoints, 3);
+  let positionAttribute = new THREE.BufferAttribute(simplifiedPositions, 3);
   geometry.setAttribute('position', positionAttribute);
 
-  // Step 5: Create a THREE.LineSegments object using the geometry and a material
-  var material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
-  var line = new THREE.LineSegments(geometry, material);
+  // Create a THREE.LineSegments object using the geometry and a material
+  let material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+  let line = new THREE.LineSegments(geometry, material);
 
   // Add the line to your scene
   scene.add(line);
