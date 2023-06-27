@@ -9,7 +9,7 @@
 <body>
 <script src="/build/three.min.js"></script>
 <script src="https://unpkg.com/simplify-js@1.2.4/simplify.js"></script>
-<!-- <script src="js/reduce-points.js"></script> -->
+<script src="js/reduce-points.js"></script>
 <script>
   let scene = new THREE.Scene();
   let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -21,55 +21,13 @@
   let len = points.length;
   console.log("points length", len);
 
-  // CONVERT THE STUPID ARRAY
-  let geometry = new THREE.BufferGeometry();
-
-  // Convert array of points to Float32Array
-  let positions = new Float32Array(points.length);
-  for (let i = 0; i < points.length; i++) {
-    positions[i] = points[i];
-  }
-  console.log("positions", positions);
-
-  // FINE.  CREATE LINE.
-  let positionAttribute = new THREE.BufferAttribute(positions, 3);
-  geometry.setAttribute('position', positionAttribute);
-
-  // Create THREE.LineSegments object using the geometry and a material
-  let material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
-  let line =  new THREE.LineSegments(geometry, material);
-  scene.add(line);
-
-  // CREATE ARRAYS IN CORRECT FORMAT FOR SIMPLIFICATION
-  // let posArray = [];
-  let simpArray = [];
-
-  for (let i = 0, j = 0; i < points.length; i++, j += 3) {
-    // Convert points to {x: Number, y: Number}
-    let simpObject = {};
-    simpObject.x = points[i];
-    simpObject.y = points[i + 1];
-    simpArray.push(simpObject);
-
-    // Convert points to {x: Number, y: Number, z: Number}
-    // let posObject = {};
-    // posObject.x = points[i];
-    // posObject.y = points[i + 1];
-    // posObject.z = points[i + 2];
-    // posArray.push(posObject);
-  }
-
-  // console.log("posArray", posArray);
-  console.log("simpArray", simpArray);
-
-  let tolerance = 5;
-  let simplifiedPoints = simplify(simpArray, tolerance, true);
-  console.log("simplifiedPoints", simplifiedPoints);
+  working(points, scene);
 
   // let geo = makeLine(points, scene); // The `makeLine` part works.
-  // reducePoints(geo, 5); // TODO: positions.splice is not a function
+  // reducePoints(geo, 5); // positions.splice is not a function, obviously
+  // reducePoints(points, 5); // Works but it's too much, and tolerance seems to have no effect
 
-  // simp(points, scene); // todo: THREE.BufferAttribute: array should be a Typed Array.
+  // simp(points, scene); // simplified, but now the BufferGeometry is complaining `position` attribute null values
 
   camera.position.z = 10;
 

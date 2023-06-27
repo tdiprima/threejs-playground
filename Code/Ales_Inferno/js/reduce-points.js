@@ -74,3 +74,50 @@ let makeLine = function(points, scene) {
 
   return geometry;
 }
+
+function working(points, scene) {
+  // CONVERT THE STUPID ARRAY
+  let geometry = new THREE.BufferGeometry();
+
+  // Convert array of points to Float32Array
+  let positions = new Float32Array(points.length);
+  for (let i = 0; i < points.length; i++) {
+    positions[i] = points[i];
+  }
+  console.log("positions", positions);
+
+  // FINE.  CREATE LINE.
+  let positionAttribute = new THREE.BufferAttribute(positions, 3);
+  geometry.setAttribute('position', positionAttribute);
+
+  // Create THREE.LineSegments object using the geometry and a material
+  let material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+  let line =  new THREE.LineSegments(geometry, material);
+  scene.add(line);
+
+  // CREATE ARRAYS IN CORRECT FORMAT FOR SIMPLIFICATION
+  // let posArray = [];
+  let simpArray = [];
+
+  for (let i = 0, j = 0; i < points.length; i++, j += 3) {
+    // Convert points to {x: Number, y: Number}
+    let simpObject = {};
+    simpObject.x = points[i];
+    simpObject.y = points[i + 1];
+    simpArray.push(simpObject);
+
+    // Convert points to {x: Number, y: Number, z: Number}
+    // let posObject = {};
+    // posObject.x = points[i];
+    // posObject.y = points[i + 1];
+    // posObject.z = points[i + 2];
+    // posArray.push(posObject);
+  }
+
+  // console.log("posArray", posArray);
+  console.log("simpArray", simpArray);
+
+  let tolerance = 5;
+  let simplifiedPoints = simplify(simpArray, tolerance, true);
+  console.log("simplifiedPoints", simplifiedPoints);
+}
