@@ -4,11 +4,8 @@
   <meta charset="UTF-8">
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>click & dirty</title>
-  <style>
-    body { margin: 0; }
-    canvas { display: block; }
-  </style>
+  <title>In Progress</title>
+  <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
 <button id="toggleButton">drawing toggle</button>
@@ -31,26 +28,22 @@
   let positions = []; // Set up arrays to hold line data
   let controls;
 
-  // Problem. If we click on canvas, and click button, another line is drawn.
-  // If we draw and don't click on canvas, and click button, works as expected.
   btnDraw.addEventListener('click', function () {
+    console.log("%cbutton clicked", "color: #ccff00;");
     positions = []; // okay, well try resetting it
     if (isDrawing) {
-      // Drawing off
       isDrawing = false;
       controls.enabled = true;
-      // Remove the mouse event listeners
-      document.removeEventListener("mousemove", onMouseMove);
-      document.removeEventListener("mouseup", onMouseUp);
     } else {
       // Drawing on
       isDrawing = true;
       controls.enabled = false;
+
       // Set up the mouse event listeners
       document.addEventListener("mousemove", onMouseMove);
       document.addEventListener("mouseup", onMouseUp);
     }
-    console.log("isDrawing?", isDrawing, "\ncontrols enabled?", controls.enabled);
+    // console.log("isDrawing?", isDrawing, "\ncontrols enabled?", controls.enabled);
   });
 
   let scene = new THREE.Scene();
@@ -80,6 +73,7 @@
   scene.add(line);
 
   function onMouseMove(event) {
+    // console.log("%cmousemove", "color: #997fff;");
     if (isDrawing) {
       // Calculate mouse position in normalized device coordinates
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -92,18 +86,31 @@
       if (intersects.length > 0) {
         let point = intersects[0].point;
         positions.push(point.x, point.y, point.z);
+
+        let bufferGeometry =  line.geometry;
         line.geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+
+        // Set needsUpdate to true for the position attribute
+        bufferGeometry.attributes.position.needsUpdate = true;
       }
     }
   }
 
   function onMouseUp() {
+    // console.log("%cmouseup", "color: #ff00cc;");
     if (isDrawing) {
       // todo: make fewer points
-      // console.log("positions", positions);
+
       // Draw the final line
       line.geometry.setDrawRange(0, positions.length / 3);
       line.geometry.computeBoundingSphere();
+
+      console.log(`%cNum vertices:`, 'color: #997fff', positions.length);
+      // console.log("positions", JSON.stringify(positions));
+
+      // Remove the mouse event listeners
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
     }
   }
 
