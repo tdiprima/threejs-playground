@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Free-draw in three.js</title>
+  <title>Scribble</title>
   <!-- https://stackoverflow.com/questions/73705786/how-to-free-draw-a-line-in-three-js-r144-on-mouse-move-and-using-buffergeometry#73713583 -->
   <link href="/css/main.css" rel="stylesheet">
   <style>
@@ -15,9 +15,7 @@
   </style>
 </head>
 <body>
-<div id="info">
-  Draw.  Either point & click, or just draw.
-</div>
+<div id="info">Draw!</div>
 
 <script src="/build/three.min.js"></script>
 <script>
@@ -95,17 +93,10 @@
           mouseDragged();
         }
       }
-
-      if (typeof mouseMoved !== 'undefined') {
-        mouseMoved();
-      }
     });
 
     renderer.domElement.addEventListener('pointerup', () => {
       mouseIsPressed = false;
-      if (typeof mouseReleased !== 'undefined') {
-        mouseReleased();
-      }
     });
 
     // If a setup function is defined, call it
@@ -137,20 +128,6 @@
     selected = line;
   }
 
-  // function mouseDragged() {
-  //   let line = selected;
-  //   let point = new THREE.Vector3(mouseX, mouseY, 0);
-  //
-  //   let oldGeometry = line.geometry;
-  //   console.log("oldGeometry", oldGeometry.attributes.position.array);
-  //   let newGeometry = new THREE.BufferGeometry().setFromPoints(oldGeometry.attributes.position.array);
-  //   let newPositions = newGeometry.attributes.position.array;
-  //   console.log("newGeometry", newGeometry.attributes.position.array);
-  //   newPositions.push(point.x, point.y, point.z);
-  //   newGeometry.attributes.position.needsUpdate = true;
-  //   line.geometry = newGeometry;
-  // }
-
   function mouseDragged() {
     let line = selected;
     let point = new THREE.Vector3(mouseX, mouseY, 0);
@@ -159,6 +136,7 @@
     let oldPositionArray = oldGeometry.attributes.position.array;
     let numVertices = oldPositionArray.length / 3;
 
+    // Create a new array with the updated vertices
     let newPositionArray = new Float32Array(numVertices * 3 + 3);
     newPositionArray.set(oldPositionArray);
 
@@ -166,16 +144,17 @@
     newPositionArray[numVertices * 3 + 1] = point.y;
     newPositionArray[numVertices * 3 + 2] = point.z;
 
+    // Assign new array back to the position attribute of the geometry
     let newGeometry = new THREE.BufferGeometry();
     newGeometry.setAttribute('position', new THREE.BufferAttribute(newPositionArray, 3));
+
+    // Set needsUpdate to true for the position attribute
+    newGeometry.attributes.position.needsUpdate = true;
 
     line.geometry = newGeometry;
   }
 
-  function mouseReleased() {}
-
   init();
 </script>
-
 </body>
 </html>
