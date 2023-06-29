@@ -5,6 +5,7 @@
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>heroína</title>
+  <!-- TODO: It's still broken, though. -->
   <!-- Better - the zoom out works; mouse positioning... needs a little work. -->
   <link href="/css/main.css" rel="stylesheet" type="text/css">
 </head>
@@ -40,7 +41,7 @@
 
   // The aspect ratio is 1
   const geometry = new THREE.PlaneGeometry(1, 1);
-  const material = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide});
+  const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
   const mesh = new THREE.Mesh(geometry, material);
   scene.add(mesh);
 
@@ -49,7 +50,7 @@
 
   // Add an event listener to detect mouse hover on the region of interest
   // and update the controls' target accordingly
-  document.addEventListener('mousemove', (event) => {
+  renderer.domElement.addEventListener('mousemove', (event) => {
     // Convert the mouse coordinates to normalized device coordinates (NDC)
     const mouse = new THREE.Vector2();
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;

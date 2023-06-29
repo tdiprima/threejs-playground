@@ -34,7 +34,7 @@
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
-  // todo: can't add event listener to a mesh
+  // todo: Note! Can't add event listener to a mesh; it needs to be raycasted.
   // Click event listener function
   // function onImageClick() {
   //   console.log('onImageClick');
@@ -73,7 +73,7 @@
     // Add the mesh to the list of clickable objects
     clickableObjects.push(mesh);
 
-    // todo: can't add event listener to a mesh
+    // todo: again, can't add event listener to a mesh
     // Add the 'mousedown' event listener after the image has loaded
     // mesh.addEventListener('mousedown', onImageMouseDown);
     // Add the 'click' event listener after the image has loaded
@@ -87,7 +87,7 @@
     }
 
     // Event listener for mouse clicks
-    function onDocumentMouseDown(event) {
+    function onMouseDown(event) {
       // Calculate the mouse position in normalized device coordinates (-1 to +1)
       const mouse = new THREE.Vector2();
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -105,8 +105,8 @@
       }
     }
 
-    // Attach the mouse down event listener to the document
-    document.addEventListener('mousedown', onDocumentMouseDown);
+    // Attach the mouse down event listener to the canvas
+    renderer.domElement.addEventListener('mousedown', onMouseDown);
   });
 
   window.addEventListener('resize', function () {
