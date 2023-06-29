@@ -7,6 +7,7 @@
   <title>El Bugueo</title>
   <!-- Event listener vs Raycaster -->
   <!-- I fixed it; everything that relies on the mesh array needs to go inside the closure. -->
+  <!-- https://discourse.threejs.org/t/how-do-i-add-click-event-to-a-mesh/43837/3 -->
   <link href="/favicon.ico" rel="icon" type="image/x-icon">
   <script src="/build/three.min.js"></script>
   <style>
@@ -59,7 +60,7 @@
     const geometry = new THREE.PlaneGeometry(1, 1);
 
     // Create a MeshBasicMaterial with the loaded texture
-    const material = new THREE.MeshBasicMaterial({map: texture});
+    const material = new THREE.MeshBasicMaterial({ map: texture });
 
     // Create a mesh using the geometry and material
     const mesh = new THREE.Mesh(geometry, material);

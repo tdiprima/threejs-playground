@@ -1,10 +1,8 @@
-## Raycasting
+## Add Event to Image
 
 ### TL;DR
 
 <mark>**Either use or make a freaking control like DragControls.**</mark>
-
-### Add Event to Image
 
 OK.  How about using a raycaster instead of a click event?
 
@@ -17,7 +15,7 @@ Here's how to use a raycaster to handle mouse clicks on the image.
 <span style="color:#0000dd;">There is a closure.  Either keep the closure and put everything that relies on "clickableObjects" inside the closure (including the clickableObjects array), or forget the closure and just fudge the mesh's aspect ratio.</span>
 
 ```js
-// el_bugueo.html
+// click_image.html
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = 2;
@@ -55,7 +53,7 @@ textureLoader.load('image1.jpg', function (texture) {
 });
 
 // Event listener for mouse clicks
-function onDocumentMouseDown(event) {
+function onMouseDown(event) {
   // Calculate the mouse position in normalized device coordinates (-1 to +1)
   const mouse = new THREE.Vector2();
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -73,8 +71,8 @@ function onDocumentMouseDown(event) {
   }
 }
 
-// Attach the mouse down event listener to the document
-document.addEventListener('mousedown', onDocumentMouseDown);
+// Attach the mouse down event listener to the canvas
+renderer.domElement.addEventListener('mousedown', onMouseDown);
 
 function animate() {
   requestAnimationFrame(animate);
@@ -85,28 +83,23 @@ animate();
 
 ### userData
 
-`userData` needs to be set by you. 😘 But we're also not checking it, so idk.
+`userData` needs to be set by you.  But we're also not checking it here. <span style="font-size:30px;">🛸</span>  
 
-In this example, we create a `raycaster` object that will be used to perform raycasting against the **clickable objects** in the scene. We also define a `clickableObjects` array to store the objects that should respond to mouse clicks.
+What you might do is this:
 
-The `onDocumentMouseDown` function is called when a mouse click occurs. It calculates the **mouse position** in **normalized device coordinates,** updates the `raycaster` with the mouse position and camera, and then performs the raycast against the `clickableObjects` array. If any objects are intersected by the raycast, it logs a message to the console.
+```js
+// annotations-house.html
+annotationSprite.userData.id = a; // set id
 
-If you have multiple clickable objects, add them to the `clickableObjects` array using `clickableObjects.push(object)`.
+let intersected = intersects[0].object;
 
-With these modifications, the **raycaster will handle the mouse click event** and trigger the desired behavior when the image or any other clickable object is clicked in the scene.
+// Get id (check parent object first)
+if (intersected.userData && intersected.userData.id) {
+    gotoAnnotation(annotations[intersected.userData.id]);
+```
 
 ## Conclusion
 
 You can't add an event listener to a mesh.  But you can add it to (I think) a camera, or definitely an orbit control.
-
-## Resources
-
-[working example](https://codesandbox.io/s/basic-threejs-example-with-re-use-dsrvn)
-
-[straight outta three.js](https://threejs.org/docs/index.html?q=ray#api/en/core/Raycaster)
-
-[How do i add click event to a mesh?](https://discourse.threejs.org/t/how-do-i-add-click-event-to-a-mesh/43837/2)
-
-[THREE.Interactive](https://github.com/markuslerner/THREE.Interactive)
 
 <br>
