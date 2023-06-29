@@ -1,5 +1,8 @@
-// r123
-// Uncaught TypeError: can't access property "x", line.geometry.vertices[1] is undefined
+// Like uno.js ++
+import * as THREE from "three";
+import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+
 let line;
 let isDown;
 let startx = [];
@@ -53,18 +56,28 @@ function onMouseMove(event) {
   scene.remove(text);
   renderer.render(scene, camera);
   let pointer = getPointer(event);
-  line.geometry.vertices[1].x = pointer.x;
-  line.geometry.vertices[1].y = pointer.y;
+  line.geometry.vertices.push({"x": pointer.x, "y": pointer.y, "z": 0});
   endx[temp] = pointer.x;
   endy[temp] = pointer.y;
 
   if (trigger === '1') {
     let px = Calculate.lineLength(startx[temp], starty[temp], endx[temp], endy[temp]).toFixed(2);
-    const textGeometry = new THREE.TextGeometry(`Length ${px}`, { size: 0.2 });
-    const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
-    text = new THREE.Mesh(textGeometry, textMaterial);
-    text.position.set(endx[temp], endy[temp], 0);
-    group.add(text);
+
+    const loader = new FontLoader();
+
+    loader.load('/fonts/helvetiker_bold.typeface.json', function (font) {
+
+      const textGeometry = new TextGeometry(`Length ${px}`, {
+        size: 0.2,
+        font: font
+      });
+      const textMaterial = new THREE.MeshBasicMaterial({ color: 0x00ffff });
+      text = new THREE.Mesh(textGeometry, textMaterial);
+      text.position.set(endx[temp], endy[temp], 0);
+      group.add(text);
+      // scene.add(text); ?
+
+    });
   }
 
   line.geometry.verticesNeedUpdate = true;
@@ -110,4 +123,6 @@ function animate() {
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
 }
+
 animate();
+

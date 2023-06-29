@@ -54,19 +54,22 @@ function onMouseMove(event) {
   scene.remove(text);
   renderer.render(scene, camera);
   let pointer = getPointer(event);
-  geometry.vertices[1] = new THREE.Vector3(pointer.x, pointer.y, 0);
+  // line.geometry.vertices[1] = new THREE.Vector3(pointer.x, pointer.y, 0);
+  line.geometry.vertices.push({"x": pointer.x, "y": pointer.y, "z": 0});
+
   endx[temp] = pointer.x;
   endy[temp] = pointer.y;
 
   if (trigger === '1') {
     let px = Calculate.lineLength(startx[temp], starty[temp], endx[temp], endy[temp]).toFixed(2);
     const textGeometry = new THREE.TextGeometry(`Length ${px}`, { size: 0.2 });
-    const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    const textMaterial = new THREE.MeshBasicMaterial({ color: 0x00ffff });
     text = new THREE.Mesh(textGeometry, textMaterial);
     text.position.set(endx[temp], endy[temp], 0);
     group.add(text);
   }
 
+  line.geometry.verticesNeedUpdate = true;
   renderer.render(scene, camera);
 }
 
