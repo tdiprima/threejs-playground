@@ -37,17 +37,20 @@
     wireframe: true
   });
 
+  // I turned a box into a line
   function QuadGeometry(w, h) {
     let pts = [
-      [0.5, 0.5],
-      [-0.5, 0.5],
-      [-0.5, -0.5],
-      [0.5, -0.5]
+      // [0.5, 0.5],
+      // [-0.5, 0.5],
+      // [-0.5, -0.5],
+      // [0.5, -0.5]
+      [-2, 0],
+      [2, 0]
     ].map(p => {
       return new THREE.Vector2(p[0], p[1]);
     });
     let g = new THREE.BufferGeometry().setFromPoints(pts);
-    g.setIndex([0, 1, 2, 3, 0]);
+    // g.setIndex([0, 1, 2, 3, 0]);
     g.scale(w, h, 1);
 
     let unindexed = g.toNonIndexed();
