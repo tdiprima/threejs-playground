@@ -27,7 +27,7 @@ Make sure that you are creating instances of the Object3D class and adding them 
 
 ## Object3D Error on Mousedown
 
-The error message you're encountering in your three.js script indicates that you're trying to add an object that is not an instance of `THREE.Object3D` to another `THREE.Object3D` container.
+The error message in your three.js script indicates that you're trying to add an object that is not an instance of `THREE.Object3D` to another `THREE.Object3D` container.
 
 Although you mentioned that you're not directly using the `add` method on mousedown, it's possible that you have an event listener or a function being triggered by the mousedown event that attempts to perform this operation indirectly.
 
@@ -37,7 +37,7 @@ function onDocumentMouseDown() { ... }
 
 Thank you for providing the code. Based on the provided code, the error message you mentioned does **not seem to be related to the mousedown event.**
 
-The error you're encountering is likely happening elsewhere in your code where you are performing operations related to adding objects to `THREE.Object3D` containers.
+The error is likely happening elsewhere in your code where you are performing operations related to adding objects to `THREE.Object3D` containers.
 
 In the code snippet you provided, the mousedown event listener assigns a camera object (`camera1`, `camera2`, `camera3`, or `camera4`) to the **`selectedCamera`** variable based on the position of the mouse. However, there are no operations related to adding objects to `THREE.Object3D` containers in this code.
 
@@ -49,7 +49,7 @@ Investigate code that **interacts** with the **`parentScene`** or **`target`** o
 // I provided all code...
 ```
 
-Thank you for providing the complete code. Upon reviewing it, I noticed a potential issue that could cause the error you're encountering. The issue lies in the `onDocumentMouseMove` function.
+Thank you for providing the complete code. Upon reviewing it, I noticed a potential issue that could cause the error. The issue lies in the `onDocumentMouseMove` function.
 
 In the `onDocumentMouseMove` function, you rotate the `selectedCamera` based on mouse movement. However, at the end of the function, you set `selectedCamera` to `null`, which prevents the rotation from being applied continuously. This might lead to unexpected behavior and potentially trigger the error you mentioned.
 

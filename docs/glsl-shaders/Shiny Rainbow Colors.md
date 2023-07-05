@@ -94,7 +94,7 @@ The iridescent effect is achieved by adding an iridescent color based on the cur
 
 # ERR0R
 
-The error you're encountering indicates that the `vNormal` varying variable used in the fragment shader is **not declared** in the vertex shader.
+The error indicates that the `vNormal` varying variable used in the fragment shader is **not declared** in the vertex shader.
 
 To fix this error, you need to **pass the normal attribute** from the vertex shader to the fragment shader.
 
