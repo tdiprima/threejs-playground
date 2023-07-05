@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>In Progress</title>
+  <title>Free-draw on Image</title>
+  <!-- https://stackoverflow.com/questions/11638883/thickness-of-lines-using-three-linebasicmaterial -->
+  <!-- https://discourse.threejs.org/t/line-drawing-three-line2-anyone-got-anything-simple-working/11498 -->
   <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
@@ -20,11 +22,15 @@
 <script type="module">
   import * as THREE from "three";
   import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+  import { Line2 } from 'three/addons/lines/Line2.js';
+  import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
+  import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
 
   console.log(`%cREVISION: ${THREE.REVISION}`, "color: #ccff00;");
   let btnDraw = document.getElementById("toggleButton");
   let imageSource = "/images/image1.jpg";
   let isDrawing = false;
+  let mouseIsPressed = false;
   let positions = []; // Set up arrays to hold line data
   let controls;
 
@@ -40,11 +46,14 @@
   controls = new OrbitControls(camera, renderer.domElement);
 
   btnDraw.addEventListener('click', function () {
-    console.log("%cbutton clicked", "color: #ccff00;");
-    positions = []; // okay, well try resetting it
+    positions = [];
     if (isDrawing) {
       isDrawing = false;
       controls.enabled = true;
+
+      // Remove the mouse event listeners
+      renderer.domElement.removeEventListener("mousemove", onMouseMove);
+      renderer.domElement.removeEventListener("mouseup", onMouseUp);
     } else {
       // Drawing on
       isDrawing = true;
@@ -54,7 +63,6 @@
       renderer.domElement.addEventListener("mousemove", onMouseMove);
       renderer.domElement.addEventListener("mouseup", onMouseUp);
     }
-    // console.log("isDrawing?", isDrawing, "\ncontrols enabled?", controls.enabled);
   });
 
   const loader = new THREE.TextureLoader();
@@ -67,14 +75,29 @@
   let raycaster = new THREE.Raycaster();
   let mouse = new THREE.Vector2();
 
-  let lineMaterial = new THREE.LineBasicMaterial({ color: "#0000ff" });
-  let bufferGeometry = new THREE.BufferGeometry();
-  let line = new THREE.Line(bufferGeometry, lineMaterial);
-  scene.add(line);
+  // NOTE: Due to limitations of the OpenGL Core Profile with the WebGL renderer on most platforms,
+  // 'linewidth' will always be 1 regardless of the set value.
+  // See: https://threejs.org/docs/#api/en/materials/LineBasicMaterial.linewidth
+  // let lineMaterial = new THREE.LineBasicMaterial({ color: "#0000ff", linewidth: 5 });
+  let lineMaterial = new LineMaterial({ color: "#0000ff", linewidth: 5 });
+
+  let line;
+
+  renderer.domElement.addEventListener('pointerdown', event => {
+    if (isDrawing) {
+      mouseIsPressed = true;
+
+      // Create a new BufferAttribute for each line
+      // let bufferGeometry = new THREE.BufferGeometry();
+      // line = new THREE.Line(bufferGeometry, lineMaterial);
+      let bufferGeometry = new LineGeometry();
+      line = new Line2(bufferGeometry, lineMaterial);
+      scene.add(line);
+    }
+  });
 
   function onMouseMove(event) {
-    // console.log("%cmousemove", "color: #997fff;");
-    if (isDrawing) {
+    if (isDrawing && mouseIsPressed) {
       // Calculate mouse position in normalized device coordinates
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -97,8 +120,8 @@
   }
 
   function onMouseUp() {
-    // console.log("%cmouseup", "color: #ff00cc;");
     if (isDrawing) {
+      mouseIsPressed = false;
       // todo: make fewer points
 
       // Draw the final line
@@ -106,11 +129,8 @@
       line.geometry.computeBoundingSphere();
 
       console.log(`%cNum vertices:`, 'color: #997fff', positions.length);
-      // console.log("positions", JSON.stringify(positions));
-
-      // Remove the mouse event listeners
-      renderer.domElement.removeEventListener("mousemove", onMouseMove);
-      renderer.domElement.removeEventListener("mouseup", onMouseUp);
+      console.log("positions", line.geometry.getAttribute("position").array);
+      positions = [];
     }
   }
 
