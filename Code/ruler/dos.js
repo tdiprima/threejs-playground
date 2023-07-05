@@ -3,6 +3,8 @@ import * as THREE from "three";
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 
+console.log(`%cREVISION ${THREE.REVISION}`, "color: #ff00cc;");
+
 let line;
 let isDown;
 let startx = [];
@@ -25,7 +27,7 @@ document.body.appendChild(renderer.domElement);
 const material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
 
 // Create an empty geometry for the line
-const geometry = new THREE.Geometry();
+const geometry = new THREE.Geometry(); // todo: BufferGeometry
 
 // Create a group to hold the line and text
 const group = new THREE.Group();
