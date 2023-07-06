@@ -118,7 +118,11 @@ In this modified code, the key changes include:
 
 When we do `tubeGeometry.setFromPoints(positions);`, I get an error: "can't access property "setFromPoints", tubeGeometry is undefined".
 
-It seems that the `setFromPoints` method is not available directly on `TubeBufferGeometry`. To update the path of the tube geometry, you can manually update the position attribute using `tubeGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))`.
+It seems that the `setFromPoints` method is not available directly on `TubeBufferGeometry`.
+
+<span style="color:red;">How does that logic make sense?</span>
+
+To update the path of the tube geometry, you can manually update the position attribute using `tubeGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))`.
 
 ```javascript
 let imageSource = "/images/image1.jpg";
@@ -218,12 +222,13 @@ I apologize for the confusion...
 Apologies for the confusion...
 Here's the updated code with the correction...
 I apologize for the oversight in the previous response, and I appreciate your understanding.
+Please give it a try, and let me know if you have any further issues.
 -->
 
-## No.
+## Wait a sec...
 
-My apologies.  It seems that the error actually lies in trying to create the THREE.TubeBufferGeometry.  As soon as we try to do
- 
+It seems that the error actually lies in trying to create the THREE.TubeBufferGeometry.  As soon as we try to do
+
 ```js
 tubeGeometry = new THREE.TubeBufferGeometry(new THREE.CatmullRomCurve3(), 100, 0.1, 8, false);
 ```
@@ -233,6 +238,10 @@ this error occurs: "Uncaught TypeError: can't access property "x", t is undefine
 The error you encountered indicates that the `THREE.CatmullRomCurve3()` **requires points** to be passed as an argument.
 
 To create a tube geometry based on the user-drawn line, you can use `THREE.CatmullRomCurve3` with the `positions` array as the path points.
+
+Wait...
+
+The error you encountered might be due to the empty `positions` array when trying to create the `THREE.CatmullRomCurve3`. To resolve this issue, you can create the `THREE.CatmullRomCurve3` object separately and update it as the user draws the line.
 
 ```javascript
 let imageSource = "/images/image1.jpg";
@@ -265,13 +274,15 @@ let mouse = new THREE.Vector2();
 let tubeMaterial = new THREE.MeshBasicMaterial({ color: "#0000ff" });
 let tubeGeometry;
 let tubeMesh;
+let tubePath;
 
 renderer.domElement.addEventListener('pointerdown', event => {
   if (isDrawing) {
     mouseIsPressed = true;
 
     // Create a new TubeBufferGeometry for each line
-    tubeGeometry = new THREE.TubeBufferGeometry(new THREE.CatmullRomCurve3(positions), 100, 0.1, 8, false);
+    tubePath = new THREE.CatmullRomCurve3(positions);
+    tubeGeometry = new THREE.TubeBufferGeometry(tubePath, 100, 0.1, 8, false);
     tubeMesh = new THREE.Mesh(tubeGeometry, tubeMaterial);
     scene.add(tubeMesh);
   }
@@ -323,7 +334,9 @@ renderer.domElement.addEventListener('mousemove', onMouseMove);
 renderer.domElement.addEventListener('mouseup', onMouseUp);
 ```
 
-In this updated code, I've passed the `positions` array as the argument to `THREE.CatmullRomCurve3` when creating the tube geometry: `tubeGeometry = new THREE.TubeBufferGeometry(new THREE.CatmullRomCurve3(positions), 100, 0.1, 8, false);`.
+xxx In this updated code, I've passed the `positions` array as the argument to `THREE.CatmullRomCurve3` when creating the tube geometry: `tubeGeometry = new THREE.TubeBufferGeometry(new THREE.CatmullRomCurve3(positions), 100, 0.1, 8, false);`.
+
+In this updated code, the `tubePath` variable is introduced to hold the `THREE.CatmullRomCurve3` object. When the user starts drawing, the `positions` array is populated with the drawn points. Then, a `THREE.TubeBufferGeometry` is created with `tubePath` as the path, and it is updated with the current positions as the user draws.
 
 <br>
 
