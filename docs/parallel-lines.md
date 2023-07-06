@@ -1,5 +1,13 @@
 A `Line` only comes with a thickness of 1.  The property `linewidth` does not work with `Line`.  On the other hand, the `linewidth` property works with `Line2`, but I can't raycast against it.  Any suggestions?
 
+## TL;DR
+
+### Line2 and Tubular work; LineSegments does not work.
+
+"Work" meaning &ndash; You get your line thickness.  The raycasting thing has yet to be seen.
+
+## LineSegments
+
 You can achieve a thicker line and still perform raycasting by using the `LineSegments` geometry instead of the `Line` geometry.
 
 <span style="color:red;">False. No thicker line.</span>
@@ -26,7 +34,7 @@ console.log(positions);
 // Create a material for the line
 let material = new LineMaterial({
   linewidth: 5, // Set the desired line thickness
-  color: 0xff0000, // Set the line color
+  color: 0xffff00, // Set the line color
 });
 
 // Create the LineSegments object
@@ -38,14 +46,13 @@ scene.add(line);
 
 By using `LineSegments`, you can set a custom `linewidth` in the material and still be able to perform raycasting against it.
 
-
 ## Error: Computed radius is NaN
 
 Got an error using:
 
 ```js
 // Create an array of Vector3 points for your line
-const points = [
+let points = [
   new THREE.Vector3(0, 0, 0),
   new THREE.Vector3(1, 1, 1),
   // Add more points as needed
@@ -56,7 +63,7 @@ Fixed in above code. (Well, I still get the error, but at least the line draws.)
 
 Error was:
 
-"LineSegmentsGeometry.computeBoundingSphere(): Computed radius is NaN. The instanced position data is likely to have NaN values."  
+"LineSegmentsGeometry.computeBoundingSphere(): Computed radius is NaN. The instanced position data is likely to have NaN values."
 
 I then changed the points to `THREE.Vector3(-2, 0, 0), THREE.Vector3(2, 0, 0)` but that did not fix it.
 
@@ -64,7 +71,9 @@ I then changed the points to `THREE.Vector3(-2, 0, 0), THREE.Vector3(2, 0, 0)` b
 
 **Buddy said:** The `LineSegmentsGeometry` is not meant to be used directly with custom positions for each line segment. Instead, it is typically used with a BufferAttribute that contains a list of vertices representing the line segments.
 
-To create a thicker line and still be able to perform raycasting, you can use a different approach by creating a tube-like geometry using `TubeBufferGeometry`. (I've heard that too.)
+## TubeBufferGeometry
+
+To create a thicker line and still be able to perform raycasting, you can use a different approach by creating a **tube-like geometry** using `TubeBufferGeometry`. (I've heard that too.)
 
 ```javascript
 // Create a custom curve for the line
@@ -81,7 +90,7 @@ let tubeGeometry = new THREE.TubeBufferGeometry(curve, segments, thickness, radi
 
 // Create a material for the tube
 let material = new THREE.MeshBasicMaterial({
-  color: 0xff0000
+  color: 0xffff00
 });
 
 // Create the mesh using the tube geometry and material
@@ -101,8 +110,7 @@ scene.add(tubeMesh);
 
 Using this approach, you can create a thicker line-like object that can be raycasted against in three.js.
 
-<span style="color:red;">TODO! Look at the fat lines examples and stuff.  There was a guy on stack overflow that used tubes too.  My line is too thick.</span>
-
+<span style="color:red;">TODO! Look at the fat lines examples and stuff.  There was a guy on stack overflow that used tubes too.</span>
 
 ## Can we go back to LineSegmentsGeometry? 🤦🏻‍♀️
 
@@ -113,7 +121,6 @@ Certainly! Here's an example of how you can use `LineSegmentsGeometry` with a `B
 ```javascript
 import * as THREE from 'three';
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
-import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
 import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js';
 
 // Define your custom line segments as an array of vertices
@@ -135,23 +142,27 @@ let positionAttribute = new THREE.BufferAttribute(positions, 3);
 let geometry = new LineSegmentsGeometry();
 geometry.setAttribute('position', positionAttribute);
 
+// Create a LineSegments geometry
+// let geometry = new LineSegmentsGeometry().setPositions(vertices);
+// OR -
+// let geometry = new LineSegmentsGeometry().setPositions([-2, 0, 0, 2, 0, 0]);
+
 // Create a material for the line
 let material = new LineMaterial({
-  linewidth: 5, // Set the desired line thickness
-  color: 0xffff00, // Set the line color
+  linewidth: 5, // EH! WRONG.
+  color: 0xff0000 // Set the line color
 });
 
 // Create the LineSegments object
-// let line = new THREE.LineSegments(geometry, material);
-let line = new LineSegments2(geometry, material);
+let line = new THREE.LineSegments(geometry, material);
 
 // Add the line to the scene
 scene.add(line);
 ```
 
 <br>
-<span style="color:red;">No. Couldn't get it to work.</span> 🤦🏻‍♀️
-<br><span style="color:red;">I did the points like before; that didn't work either.</span>
+<span style="color:red;">Weird. Couldn't get it to work before.</span>
+<br><span style="color:red;">Not using the buffer thing, but see line-thickness.html parallel().</span>
 
 In this example, you define the line segments by specifying the start and end points as vertices in the vertices array. Each point is represented by three consecutive values (x, y, z). You can add more vertices to define additional line segments.
 
