@@ -1,4 +1,8 @@
-A `Line` only comes with a thickness of 1.  The property `linewidth` does not work with `Line`.  On the other hand, the `linewidth` property works with `Line2`, but I can't raycast against it.  Any suggestions?
+<!-- #barracuda -->
+
+### Problem:
+
+A `Line` only comes with a thickness of 1.  The property `linewidth` does not work with `Line`.  On the other hand, the `linewidth` property works with `Line2`, but I can't raycast against it.
 
 ## TL;DR
 
@@ -10,7 +14,7 @@ A `Line` only comes with a thickness of 1.  The property `linewidth` does not wo
 
 You can achieve a thicker line and still perform raycasting by using the `LineSegments` geometry instead of the `Line` geometry.
 
-<span style="color:red;">False. No thicker line.</span>
+<span style="color:red;">False! No thicker line.</span>
 
 The `LineSegments` geometry allows you to define individual line segments with different endpoints, which can be used to create a line with a custom thickness:
 
@@ -72,6 +76,8 @@ I then changed the points to `THREE.Vector3(-2, 0, 0), THREE.Vector3(2, 0, 0)` b
 **Buddy said:** The `LineSegmentsGeometry` is not meant to be used directly with custom positions for each line segment. Instead, it is typically used with a BufferAttribute that contains a list of vertices representing the line segments.
 
 ## TubeBufferGeometry
+
+[I use TubeGeometry to create a Thick line between two points](https://stackoverflow.com/questions/11638883/thickness-of-lines-using-three-linebasicmaterial)
 
 To create a thicker line and still be able to perform raycasting, you can use a different approach by creating a **tube-like geometry** using `TubeBufferGeometry`. (I've heard that too.)
 
