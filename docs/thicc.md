@@ -24,28 +24,7 @@ I would recommend trying option 1 first, as it is the simplest solution. If `Lin
 
 <span style="color:#0000dd;">I couldn't change the line width thickness using Line, so I switched to Line2.  If there's an easy way to still use Line and LineBasicMaterial and be able to have a thicker line, that would be ideal.</span>
 
-If you want to achieve thicker lines using `THREE.Line` and `LineBasicMaterial`, you can utilize the `linewidth` property of the material. However, note that the `linewidth` property only works on certain platforms, such as non-WebGL 1.0 contexts or systems that support the `OES_standard_derivatives` extension. It may not work universally across all devices.
-
-```javascript
-// Create a LineGeometry with your line points
-const geometry = new THREE.LineGeometry();
-geometry.setPositions([...]); // Set your line vertices
-
-// Create a LineBasicMaterial
-const material = new THREE.LineBasicMaterial({ color: 0xff0000, linewidth: 5 });
-
-// Create a Line using the geometry and material
-const line = new THREE.Line(geometry, material);
-
-// Add the line to your scene
-scene.add(line);
-```
-
-In this example, `linewidth: 5` sets the line thickness to 5 units. Adjust the value as needed to achieve your desired thickness.
-
-Keep in mind that the effectiveness of `linewidth` may vary depending on the platform and graphics capabilities of the user's device. If thick lines are crucial for your application, you might need to consider alternative approaches, such as using custom shaders or using a different library specifically designed for thick lines in WebGL.
-
-## Yes, that's what I'm saying.  Actually linewidth is known not to work.
+Buddy, of course, replies with "THREE.Line", so I tell him `linewidth` is known not to work.
 
 You are correct that the <mark>**`linewidth` property does not work reliably**</mark> in Three.js, particularly in modern WebGL contexts.
 
@@ -53,26 +32,52 @@ If you need to achieve thicker lines in Three.js, there are a couple of alternat
 
 1. **Shader-based thick lines**: You can create custom shaders to render thick lines in Three.js. This approach involves using `BufferGeometry` to define the line segments and creating a custom shader to render the line with the desired thickness. Here's an example of how you can achieve thick lines using shaders: [Shader-based Thick Lines in Three.js](https://threejsfundamentals.org/threejs/lessons/threejs-lines.html)
 
-2. **LineSegments**: Instead of using `Line` or `Line2`, you can use `LineSegments` in combination with `LineBasicMaterial`. `LineSegments` allows you to define individual line segments instead of a continuous line. Each segment can have its own color and thickness. Here's an example:
+2. **LineSegments**: Instead of using `Line` or `Line2`, you can use `LineSegments` in combination with `LineBasicMaterial`. `LineSegments` allows you to define individual line segments instead of a continuous line. Each segment can have its own color...
 
 ```javascript
 // Create a LineSegmentsGeometry with your line segments
-const geometry = new THREE.LineSegmentsGeometry();
+let geometry = new THREE.LineSegmentsGeometry();
 geometry.setPositions([...]); // Set your line segment vertices
 
 // Create a LineBasicMaterial
-const material = new THREE.LineBasicMaterial({ color: 0xff0000, linewidth: 1 });
+let material = new THREE.LineBasicMaterial({ color: 0xff0000, linewidth: 5 });
 
 // Create a LineSegments using the geometry and material
-const line = new THREE.LineSegments(geometry, material);
+let line = new THREE.LineSegments(geometry, material);
 
 // Add the line to your scene
 scene.add(line);
 ```
 
-In this approach, you define each line segment separately, allowing you to have varying thickness and color for different segments.
+<br>
+In this approach, you define each line segment separately, allowing you to have varying thickness <span style="color:#ff0000;">(wrong!)</span> and color for different segments.
 
-Keep in mind that both of these approaches have their own complexities and considerations. Shader-based thick lines provide more flexibility but require more advanced knowledge of shaders. LineSegments offer a simpler solution but are limited to defining separate line segments. Choose the approach that best suits your requirements and level of expertise.
+**Shader-based** thick lines provide more flexibility but require more advanced knowledge of shaders.
 
+**LineSegments** offer a simpler solution, but are limited to defining separate line segments. Choose the approach that best suits your requirements and level of expertise.
+
+## Three JS LineBasicMaterial how to draw simple fat line in 3D axis
+
+[How About Simple?](https://stackoverflow.com/questions/57509888/three-js-linebasicmaterial-how-to-draw-simple-fat-line-in-3d-axis)
+
+```js
+new THREE.LineBasicMaterial({ color, linewidth: 5 });
+```
+
+doesn't work.
+
+I need a simple method for 3D (rotating scene): `drawLine(measurement1, measurement2, color)` with `linewidth` more then 1px.
+
+<span style="color:#0000dd;font-size:larger;">It does not work since WebGL line primitives are always rendered as 1px wide lines.</span>
+
+**However,** three.js provides the possibility to render so called wide or fat lines based on triangles. So using the classes `LineGeometry`, `LineMaterial` and `Line2` should solve your issue.
+
+[Fat Lines](https://threejs.org/examples/webgl_lines_fat)
+
+<span style="color:#ff6a5a;font-size:larger;">And we're back to square 1.  I can't use Line2.</span>
+
+[Adding thickness to lines](https://stackoverflow.com/questions/70531225/adding-thickness-to-lines-in-threejs)
+
+And you can't use `BufferGeometry` to create the instance of `Line2`. You have to use `LineGeometry` instead.
 <br>
 
