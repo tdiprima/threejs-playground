@@ -235,11 +235,13 @@ tubeGeometry = new THREE.TubeBufferGeometry(new THREE.CatmullRomCurve3(), 100, 0
 
 this error occurs: "Uncaught TypeError: can't access property "x", t is undefined".
 
+<mark>Any time you get some stupid error like that, it means you're doing it wrong.  So try to figure it out.</mark>
+
 The error you encountered indicates that the `THREE.CatmullRomCurve3()` **requires points** to be passed as an argument.
 
 To create a tube geometry based on the user-drawn line, you can use `THREE.CatmullRomCurve3` with the `positions` array as the path points.
 
-Wait...
+Then...
 
 The error you encountered might be due to the empty `positions` array when trying to create the `THREE.CatmullRomCurve3`. To resolve this issue, you can create the `THREE.CatmullRomCurve3` object separately and update it as the user draws the line.
 
@@ -334,7 +336,7 @@ renderer.domElement.addEventListener('mousemove', onMouseMove);
 renderer.domElement.addEventListener('mouseup', onMouseUp);
 ```
 
-xxx In this updated code, I've passed the `positions` array as the argument to `THREE.CatmullRomCurve3` when creating the tube geometry: `tubeGeometry = new THREE.TubeBufferGeometry(new THREE.CatmullRomCurve3(positions), 100, 0.1, 8, false);`.
+~~In this updated code, I've passed the `positions` array as the argument to `THREE.CatmullRomCurve3` when creating the tube geometry: `tubeGeometry = new THREE.TubeBufferGeometry(new THREE.CatmullRomCurve3(positions), 100, 0.1, 8, false);`.~~
 
 In this updated code, the `tubePath` variable is introduced to hold the `THREE.CatmullRomCurve3` object. When the user starts drawing, the `positions` array is populated with the drawn points. Then, a `THREE.TubeBufferGeometry` is created with `tubePath` as the path, and it is updated with the current positions as the user draws.
 
