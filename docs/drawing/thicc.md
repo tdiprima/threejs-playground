@@ -1,4 +1,8 @@
-## Raycasting Issue with Line2
+## Line Thickness
+
+**NOTE!** The non-native Line objects don't work in **Chrome.**  It thinks it can't find those files.  Even if we try changing the paths in the code.
+
+### Raycasting Issue with Line2
 
 ```js
 let intersects = raycaster.intersectObjects(scene.children, true)
@@ -20,7 +24,7 @@ The error suggests that there might be an issue with the objects you're trying t
 
 I would recommend trying option 1 first, as it is the simplest solution. If `Line2` is a requirement for your project, you can explore option 2 or check for updated versions of the library that are compatible with your Three.js version.
 
-## Line Thickness
+## LineSegmentsGeometry
 
 <span style="color:#0000dd;">I couldn't change the line width thickness using Line, so I switched to Line2.  If there's an easy way to still use Line and LineBasicMaterial and be able to have a thicker line, that would be ideal.</span>
 
@@ -50,7 +54,7 @@ scene.add(line);
 ```
 
 <br>
-In this approach, you define each line segment separately, allowing you to have varying thickness <span style="color:#ff0000;">(wrong!)</span> and color for different segments.
+In this approach, you define each line segment separately, allowing you to have varying thickness <span style="color:#ff0000;">(wrong! unless we're setting it up incorrectly. what a pain.)</span> and color for different segments.
 
 **Shader-based** thick lines provide more flexibility but require more advanced knowledge of shaders.
 
@@ -58,7 +62,7 @@ In this approach, you define each line segment separately, allowing you to have 
 
 ## Three JS LineBasicMaterial how to draw simple fat line in 3D axis
 
-[How About Simple?](https://stackoverflow.com/questions/57509888/three-js-linebasicmaterial-how-to-draw-simple-fat-line-in-3d-axis)
+[Simple?](https://stackoverflow.com/questions/57509888/three-js-linebasicmaterial-how-to-draw-simple-fat-line-in-3d-axis)
 
 ```js
 new THREE.LineBasicMaterial({ color, linewidth: 5 });
@@ -72,7 +76,7 @@ I need a simple method for 3D (rotating scene): `drawLine(measurement1, measurem
 
 **However,** three.js provides the possibility to render so called wide or fat lines based on triangles. So using the classes `LineGeometry`, `LineMaterial` and `Line2` should solve your issue.
 
-[Fat Lines](https://threejs.org/examples/webgl_lines_fat)
+[Fat Lines Demo](https://threejs.org/examples/webgl_lines_fat)
 
 <span style="color:#ff6a5a;font-size:larger;">And we're back to square 1.  I can't use Line2.</span>
 
