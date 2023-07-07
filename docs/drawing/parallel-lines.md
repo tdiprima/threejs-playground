@@ -80,7 +80,7 @@ I then changed the points to `THREE.Vector3(-2, 0, 0), THREE.Vector3(2, 0, 0)` b
 
 [I use TubeGeometry to create a Thick line between two points](https://stackoverflow.com/questions/11638883/thickness-of-lines-using-three-linebasicmaterial)
 
-To create a thicker line and still be able to perform raycasting, you can use a different approach by creating a **tube-like geometry** using `TubeBufferGeometry`. (I've heard that too.)
+To create a thicker line and still be able to perform raycasting, you can use a different approach by creating a **tube-like geometry** using `TubeBufferGeometry`.
 
 ```javascript
 // line-thickness.html, tubular()
@@ -139,7 +139,7 @@ let vertices = [
   // Add more vertices for additional segments
 ];
 
-/* NOPE!
+/* NOPE! Ya don't do it like this.
 // Create a Float32Array with the vertices
 let positions = new Float32Array(vertices);
 
@@ -153,7 +153,7 @@ geometry.setAttribute('position', positionAttribute);
 
 // YEP!
 let geometry = new LineSegmentsGeometry().setPositions(vertices);
-// OR -
+// OR - 1st and last
 // let geometry = new LineSegmentsGeometry().setPositions([-2, 0, 0, 2, 0, 0]);
 
 // Create a material for the line
