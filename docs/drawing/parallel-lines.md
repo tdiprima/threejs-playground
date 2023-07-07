@@ -132,10 +132,10 @@ import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js
 
 // Define your custom line segments as an array of vertices
 let vertices = [
-  -2, 0, 0, // Start point of first segment
-  2, 0, 0, // End point of first segment
-  0, 0, -2, // Start point of second segment
-  0, 0, 2, // End point of second segment
+  -2, 0, 0, // Start point of 1st segment
+  2, 0, 0, // End point of 1st segment
+  0, 0, -2, // Start point of 2nd segment
+  0, 0, 2, // End point of 2nd segment
   // Add more vertices for additional segments
 ];
 
@@ -178,9 +178,22 @@ The positions array is then used to create a `BufferAttribute`, which is set as 
 
 Finally, you create a `LineMaterial` with the desired `linewidth` and color, and apply it to the `LineSegments` object.
 
-## Array Conversion
+Yeah, about that...
 
-I have an array with 12 elements: `let vertices = [2, 0, 0, 2, 0, 0, 0, 0, -2, 0, 0, 2];`, and I pass it to `setPositions` function like this: `let geometry = new LineSegmentsGeometry().setPositions(vertices);`.  When I print the value of `geometry.attributes.position.array`, the length of the array is 24.  Apparently three.js is doing something to the array I pass it in order to make it work.
+## Array Conversion?
+
+```javascript
+// I have an array with 12 elements:
+let vertices = [2, 0, 0, 2, 0, 0, 0, 0, -2, 0, 0, 2];
+
+// I pass it to `setPositions`:
+let geometry = new LineSegmentsGeometry().setPositions(vertices);
+
+// I expect to get the same (or similar) array back:
+console.log(geometry.attributes.position.array);
+```
+
+The length of the array is 24.  Apparently three.js is converting the array in order to make it work.
 
 Yes, in Three.js, the `setPositions` method of `LineSegmentsGeometry` expects the vertices array to be in a specific format. Instead of providing a flat array of coordinates, it expects the vertices to be represented as pairs of consecutive elements in the array.
 
@@ -190,11 +203,41 @@ The `setPositions` method takes this into account and converts the flat array re
 
 ### Here's how the conversion works:
 
-- Original `vertices` array: `[2, 0, 0, 2, 0, 0, 0, 0, -2, 0, 0, 2]`
+- Original `vertices` array : `[2, 0, 0, 2, 0, 0, 0, 0, -2, 0, 0, 2]`
+- Converted `position.array`: `[-1, 2, 0, 1, 2, 0, -1, 1, 0, 1, 1, 0, -1, 0, 0, 1, 0, 0, -1, -1, 0, 1, -1, 0]`
+
+Buddy thinks it's:
 - Converted `position.array`: `[2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, -2, 0, 0, -2, 0, 0, -2, 0, 0, 2]`
+
+<span style="color:red;">How is that "duplicated"?  Let's see...</span>
+
+The 1st 2 sets of `2, 0, 0` are duplicated, so you have `2, 0, 0` x 4.
+
+Then you have `0, 0` &ndash; why? (Even if you look at it in pairs, it doesn't work.)
+
+Next you have the `-2, 0, 0` duplicated, so that's `-2, 0, 0` x 2.  No, wait &ndash; it's 3 times.
+
+<span style="color:red;">And then the final 2.  What the hell kind of science is that??  Well, we know Buddy can't count.</span>
 
 As you can see, each vertex's coordinates are duplicated four times in the resulting array.
 
 This conversion is necessary because `LineSegmentsGeometry` treats each pair of consecutive elements as the coordinates of a single vertex. The extra duplication is required to create the necessary buffers for efficient rendering and manipulation of the geometry within Three.js.
+
+### Well... not exactly.
+
+So he says he misunderstood, and the behavior is not related to Three.js converting the array or adding additional values.
+
+"The `setPositions` method does not introduce additional values or modify the original array you pass to it. It simply uses the provided values to populate the position attribute of the geometry."
+
+Bullsh*t.
+
+Actually, I'm not surprised that the 2's were converted; they *shouldn't* work.
+
+And besides &ndash; whatever happened to "start and end point of 1st and 2nd segment"?
+Are they x,y,z, or *pairs*, or what?
+
+So what's up with the new array?  Don't know, don't care.
+I changed my 2's to 1's and still ended up with the same converted array.
+And the line is still drawn the same, so there's that.
 
 <br>
