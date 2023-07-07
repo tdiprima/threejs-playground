@@ -178,4 +178,23 @@ The positions array is then used to create a `BufferAttribute`, which is set as 
 
 Finally, you create a `LineMaterial` with the desired `linewidth` and color, and apply it to the `LineSegments` object.
 
+## Array Conversion
+
+I have an array with 12 elements: `let vertices = [2, 0, 0, 2, 0, 0, 0, 0, -2, 0, 0, 2];`, and I pass it to `setPositions` function like this: `let geometry = new LineSegmentsGeometry().setPositions(vertices);`.  When I print the value of `geometry.attributes.position.array`, the length of the array is 24.  Apparently three.js is doing something to the array I pass it in order to make it work.
+
+Yes, in Three.js, the `setPositions` method of `LineSegmentsGeometry` expects the vertices array to be in a specific format. Instead of providing a flat array of coordinates, it expects the vertices to be represented as pairs of consecutive elements in the array.
+
+In your case, the `vertices` array has 12 elements, but each pair of elements represents a single vertex. So, in total, you have 6 vertices (12 / 2 = 6).
+
+The `setPositions` method takes this into account and converts the flat array representation into the appropriate format for the internal position attribute. It duplicates the values for each vertex, resulting in a longer array. In your case, since you have 6 vertices, the resulting array has a length of 24 (6 vertices * 4 coordinates per vertex = 24).
+
+### Here's how the conversion works:
+
+- Original `vertices` array: `[2, 0, 0, 2, 0, 0, 0, 0, -2, 0, 0, 2]`
+- Converted `position.array`: `[2, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, -2, 0, 0, -2, 0, 0, -2, 0, 0, 2]`
+
+As you can see, each vertex's coordinates are duplicated four times in the resulting array.
+
+This conversion is necessary because `LineSegmentsGeometry` treats each pair of consecutive elements as the coordinates of a single vertex. The extra duplication is required to create the necessary buffers for efficient rendering and manipulation of the geometry within Three.js.
+
 <br>
