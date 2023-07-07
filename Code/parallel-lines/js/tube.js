@@ -6,8 +6,9 @@ let renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// line material
+// https://stackoverflow.com/questions/11638883/thickness-of-lines-using-three-linebasicmaterial#56060897
 let lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+let linePoints = [];
 
 // Make sure these values are appropriate for your scene and camera setup.
 // Adjust them to ensure that the tube geometry is visible within the camera's frustum.
@@ -15,22 +16,28 @@ let RADI = 1;
 // let RADI = 0.1;
 let t = 0;
 
-let linePoints = [];
-// The CatmullRomCurve3 constructor requires an array of points to define the curve, so:
-for (let i = 0; i < 20; i++) {
-  let vector = new THREE.Vector3(
-    RADI * Math.cos(t + i),
-    RADI * Math.sin(t + i),
-    3 * (t + i)
-  );
-  linePoints.push(vector);
+function makePoints() {
+  // The CatmullRomCurve3 constructor requires an array of points to define the curve, so:
+  for (let i = 0; i < 20; i++) {
+    let vector = new THREE.Vector3(
+      RADI * Math.cos(t + i),
+      RADI * Math.sin(t + i),
+      3 * (t + i)
+    );
+    linePoints.push(vector);
+  }
 }
 
-// Supposing you only had these 2 points:
-// let startVector = new THREE.Vector3(RADI * Math.cos(t), RADI * Math.sin(t), 3 * t);
-// let endVector = new THREE.Vector3(RADI * Math.cos(t + 10), RADI * Math.sin(t + 10), 3 * t);
-// let linePoints = [];
-// linePoints.push(startVector, endVector);
+function makePoints1() {
+  // Supposing you only had these 2 points:
+  let startVector = new THREE.Vector3(RADI * Math.cos(t), RADI * Math.sin(t), 3 * t);
+  let endVector = new THREE.Vector3(RADI * Math.cos(t + 10), RADI * Math.sin(t + 10), 3 * t);
+  linePoints.push(startVector, endVector);
+}
+
+// todo: switch
+makePoints();
+// makePoints1();
 
 // Create Tube Geometry
 let tubeGeometry = new THREE.TubeGeometry(
