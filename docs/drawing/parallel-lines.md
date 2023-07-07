@@ -118,8 +118,6 @@ scene.add(tubeMesh);
 
 Using this approach, you can create a thicker line-like object that can be raycasted against in three.js.
 
-<span style="color:red;">TODO! Look at the fat lines examples and stuff.  There was a guy on stack overflow that used tubes too.</span>
-
 ## Can we go back to LineSegmentsGeometry? 🤦🏻‍♀️
 
 Show me an example of `LineSegmentsGeometry` used with a `BufferAttribute` containing a list of vertices representing the line segments.
