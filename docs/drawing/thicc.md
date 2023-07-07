@@ -1,6 +1,7 @@
 ## Line Thickness
 
-~~**NOTE!** The non-native Line objects don't work in **Chrome.**  It thinks it can't find those files.  Even if we try changing the paths in the code.~~ (No, it's just my code. Gweat.)
+**NOTE!** The non-native Line objects don't work in **Chrome.**  It thinks it can't find those files.
+(Just *my* repo. Gweat.)  Chrome and regular Firefox don't work.  Firefox Dev and Safari both work.
 
 ### Raycasting Issue with Line2
 
