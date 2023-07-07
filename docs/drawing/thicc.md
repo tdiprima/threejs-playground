@@ -1,6 +1,6 @@
 ## Line Thickness
 
-**NOTE!** The non-native Line objects don't work in **Chrome.**  It thinks it can't find those files.  Even if we try changing the paths in the code.
+~~**NOTE!** The non-native Line objects don't work in **Chrome.**  It thinks it can't find those files.  Even if we try changing the paths in the code.~~ (No, it's just my code. Gweat.)
 
 ### Raycasting Issue with Line2
 
