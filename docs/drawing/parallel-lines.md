@@ -19,6 +19,7 @@ You can achieve a thicker line and still perform raycasting by using the `LineSe
 The `LineSegments` geometry allows you to define individual line segments with different endpoints, which can be used to create a line with a custom thickness:
 
 ```javascript
+// line-thickness.html, parallel()
 import * as THREE from 'three';
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js';
@@ -82,6 +83,7 @@ I then changed the points to `THREE.Vector3(-2, 0, 0), THREE.Vector3(2, 0, 0)` b
 To create a thicker line and still be able to perform raycasting, you can use a different approach by creating a **tube-like geometry** using `TubeBufferGeometry`. (I've heard that too.)
 
 ```javascript
+// line-thickness.html, tubular()
 // Create a custom curve for the line
 let curve = new THREE.LineCurve3(
   new THREE.Vector3(-2, 0, 0), // Start point
@@ -125,6 +127,7 @@ Show me an example of `LineSegmentsGeometry` used with a `BufferAttribute` conta
 Certainly! Here's an example of how you can use `LineSegmentsGeometry` with a `BufferAttribute` to define custom line segments:
 
 ```javascript
+// line-thickness.html, lineSegments()
 import * as THREE from 'three';
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js';
@@ -138,6 +141,7 @@ let vertices = [
   // Add more vertices for additional segments
 ];
 
+/* NOPE!
 // Create a Float32Array with the vertices
 let positions = new Float32Array(vertices);
 
@@ -147,16 +151,17 @@ let positionAttribute = new THREE.BufferAttribute(positions, 3);
 // Create a LineSegmentsGeometry and set the positions attribute
 let geometry = new LineSegmentsGeometry();
 geometry.setAttribute('position', positionAttribute);
+*/
 
-// Create a LineSegments geometry
-// let geometry = new LineSegmentsGeometry().setPositions(vertices);
+// YEP!
+let geometry = new LineSegmentsGeometry().setPositions(vertices);
 // OR -
 // let geometry = new LineSegmentsGeometry().setPositions([-2, 0, 0, 2, 0, 0]);
 
 // Create a material for the line
 let material = new LineMaterial({
-  linewidth: 5, // EH! WRONG.
-  color: 0xff0000 // Set the line color
+  linewidth: 5, // <- did not work
+  color: 0xffff00 // Set the line color
 });
 
 // Create the LineSegments object
@@ -167,10 +172,9 @@ scene.add(line);
 ```
 
 <br>
-<span style="color:red;">Weird. Couldn't get it to work before.</span>
-<br><span style="color:red;">Not using the buffer thing, but see line-thickness.html parallel().</span>
+In this example, you define the line segments by specifying the start and end points as vertices in the vertices array.
 
-In this example, you define the line segments by specifying the start and end points as vertices in the vertices array. Each point is represented by three consecutive values (x, y, z). You can add more vertices to define additional line segments.
+Each point is represented by three consecutive values (x, y, z). You can add more vertices to define additional line segments.
 
 The positions array is then used to create a `BufferAttribute`, which is set as the position attribute of the `LineSegmentsGeometry`.
 
