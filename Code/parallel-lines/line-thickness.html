@@ -67,28 +67,33 @@
   function lineSegments() {
     // Define your custom line segments as an array of vertices
     let vertices = [
-      -2, 0, 0, // Start point of first segment
-      2, 0, 0, // End point of first segment
-      0, 0, -2, // Start point of second segment
-      0, 0, 2, // End point of second segment
+      2, 0, 0, // Start point of 1st segment
+      2, 0, 0, // End point of 1st segment
+      0, 0, -2, // Start point of 2nd segment
+      0, 0, 2, // End point of 2nd segment
       // Add more vertices for additional segments
     ];
 
-    // Create a LineSegments geometry
-    let geometry = new LineSegmentsGeometry().setPositions(vertices);
-    // OR -
-    // let geometry = new LineSegmentsGeometry().setPositions([-2, 0, 0, 2, 0, 0]);
+    // For testing:
+    let positions = new Float32Array(vertices);
+    let positionAttribute = new THREE.BufferAttribute(positions, 3);
+    let geometry = new LineSegmentsGeometry();
+    geometry.setAttribute('position', positionAttribute);
+    // Wrong, 12.
+    console.log("%cFloat32Array", "color: #ff00cc;", geometry.attributes.position.array);
 
-    // Create a material for the line
+    // For real:
+    geometry = new LineSegmentsGeometry().setPositions(vertices);
+    // Correct, 24.
+    console.log("%cArray", "color: #ccff00;", geometry.attributes.position.array);
+
     let material = new LineMaterial({
-      linewidth: 5, // EH! WRONG.
-      color: 0xff0000 // Set the line color
+      linewidth: 5, // doesn't work!
+      color: 0xff0000
     });
 
-    // Create the LineSegments object
     let line = new THREE.LineSegments(geometry, material);
 
-    // Add the line to the scene
     scene.add(line);
   }
 
