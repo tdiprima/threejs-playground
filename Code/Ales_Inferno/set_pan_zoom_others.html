@@ -11,7 +11,7 @@
 <script type="importmap">{
   "imports": {
     "three": "/build/three.module.js",
-    "three/addons/": "/jsm/"
+    "three/examples/": "/jsm/"
   }
 }
 </script>
@@ -20,7 +20,7 @@
 <!-- The control event listener is listening, but the orbit controls are not working. -->
 <script type="module">
   import * as THREE from "three";
-  import {OrbitControls} from "three/addons/controls/OrbitControls.js";
+  import {OrbitControls} from "three/examples/controls/OrbitControls.js";
 
   const numScenes = 4;
   const loader = new THREE.TextureLoader();

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Ale</title>
+</head>
+<body>
+<script async src="/es-module-shims-1.3.6/dist/es-module-shims.js"></script>
+<script type="importmap">
+{
+    "imports": {
+      "three": "/build/three.module.js",
+      "three/examples/": "/jsm/"
+    }
+  }
+</script>
+<script type="module">
+  // TODO: When using Line2, the vertex positions need to be specified
+  //  as a flat array of coordinates, rather than an array of arrays.
+  import * as THREE from 'three';
+  import { Line2 } from 'three/examples/lines/Line2.js';
+  import { LineMaterial } from 'three/examples/lines/LineMaterial.js';
+
+  let scene = new THREE.Scene();
+  let camera = new THREE.PerspectiveCamera(45, 4 / 3, 0.5, 100);
+  camera.position.set(10, 10, 10);
+  camera.lookAt(0, 0, 0);
+
+  let renderer = new THREE.WebGLRenderer();
+  renderer.setSize(640, 480, false);
+  (document.getElementById("demo") || document.body).appendChild(renderer.domElement);
+
+  let createPoints = function (len, rotationCount = 8, height = 5, maxRadius = 5) {
+    let yDelta = height / len;
+    let points = [];
+    let i = 0;
+    let v;
+    let radian;
+    let radius;
+    let per;
+
+    while (i < len) {
+      // Calculate the position of a point based on the current iteration index (i)
+      per = i / (len - 1);
+      radian = Math.PI * 2 * rotationCount * per;
+      radius = maxRadius * per;
+
+      v = new THREE.Vector3();
+      v.x = Math.cos(radian) * radius;
+      v.z = Math.sin(radian) * radius;
+      v.y = i * yDelta;
+
+      // Add the position to the points array
+      points.push(v);
+      i += 1;
+    }
+    return points;
+  };
+
+  // update lines group
+  let updateLinesGroup = function (lines, rs, rDelta, height, radius) {
+    lines.children.forEach((line, i, arr) => {
+      let per = (i + 1) / arr.length;
+      // setPositions, versus setFromPoints
+      line.geometry.setPositions(createPoints(150, rs + rDelta * per, height, radius).flatMap((point) => [point.x, point.y, point.z]));
+    });
+  };
+
+  let lines = new THREE.Group();
+  let lineCount = 12;
+  let colors = [0x00ff00, 0xff0000, 0x0000ff, 0xff00ff, 0x00ffff, 0xffff00];
+  let i = 0;
+
+  while (i < lineCount) {
+    let per = i / lineCount;
+    let points = createPoints(100, 1 + 0.2 * per, 0, 5);
+
+    // BufferGeometry to LineGeometry - nope!
+    // let geometry = new LineGeometry();
+    // geometry.setPositions(points.map((point) => [point.x, point.y, point.z]).flat());
+
+    // Create LineMaterial
+    let material = new LineMaterial({
+      color: colors[i % colors.length],
+      linewidth: 6,
+      resolution: new THREE.Vector2(renderer.domElement.width, renderer.domElement.height),
+      dashed: false
+    });
+
+    let line = new Line2(); // not passing geometry, material
+    line.geometry.setPositions(points.flatMap((point) => [point.x, point.y, point.z]));
+    line.material = material;
+
+    lines.add(line);
+    i += 1;
+  }
+
+  scene.add(lines);
+  updateLinesGroup(lines, 0.5, 1.4, 10, 4);
+  lines.position.y = -8;
+
+  renderer.render(scene, camera);
+</script>
+</body>
+</html>

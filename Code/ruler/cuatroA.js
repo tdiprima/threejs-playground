@@ -1,6 +1,6 @@
 // cuatro.js
 import * as THREE from "three";
-import { TextGeometry } from "three/addons/geometries/TextGeometry.js";
+import { TextGeometry } from "three/examples/geometries/TextGeometry.js";
 
 let line;
 let isDrawing = false;

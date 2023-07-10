@@ -1,6 +1,6 @@
 // This one seems to be even worse than zoom1
 import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { OrbitControls } from "three/examples/controls/OrbitControls.js";
 
 const imgSrc = "/images/happy.JPG";
 const scene = new THREE.Scene();

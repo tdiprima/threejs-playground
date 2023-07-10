@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>01100110 01110010 01100101 01100101</title>
+  <title>Which of these things does linewidth?</title>
   <!-- https://stackoverflow.com/questions/70531225/adding-thickness-to-lines-in-threejs -->
 </head>
 <body>
@@ -11,21 +11,20 @@
 <script type="importmap">{
     "imports": {
       "three": "/build/three.module.js",
-      "three/addons/": "/jsm/"
+      "three/examples/": "/jsm/"
     }
   }
 </script>
 <script type="module">
-  // Originally https://threejs.org/manual/examples/scenegraph-sun-earth-moon.html
   import * as THREE from 'three';
 
-  // Line2
-  import { Line2 } from 'three/addons/lines/Line2.js';
-  import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
-  import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
+  import { LineMaterial } from 'three/examples/lines/LineMaterial.js';
+  import { LineSegments2 } from 'three/examples/lines/LineSegments2.js';
+  import { LineSegmentsGeometry } from 'three/examples/lines/LineSegmentsGeometry.js';
+  import { Line2 } from 'three/examples/lines/Line2.js';
+  import { LineGeometry } from 'three/examples/lines/LineGeometry.js';
 
-  // Segments
-  import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js';
+  console.log(`%cREVISION ${THREE.REVISION}`, "color: #ff6a5a; font-size: larger;");
 
   let scene = new THREE.Scene();
   let camera = new THREE.PerspectiveCamera(50, 500 / 400, 0.1, 1000);
@@ -35,6 +34,7 @@
   document.body.appendChild(renderer.domElement);
 
   function myLine2() {
+    // Originally https://threejs.org/manual/examples/scenegraph-sun-earth-moon.html
     // https://codesandbox.io/s/static-forked-68lif?file=/index.html:0-3768
     function QuadGeometry(w, h) {
       let pts = [
@@ -65,29 +65,31 @@
   }
 
   function lineSegments() {
-    // Define your custom line segments as an array of vertices
     // let vertices = [2, 0, 0, 2, 0, 0, 0, 0, -2, 0, 0, 2];
-    let vertices = [1, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 1];
+    // let vertices = [1, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 1];
+
+    // The positions should be in the format of [x1, y1, z1, x2, y2, z2, ...]
+    let vertices = [-1, 0, 0, 1, 0, 0];
 
     // For testing:
-    let positions = new Float32Array(vertices);
-    let positionAttribute = new THREE.BufferAttribute(positions, 3);
-    let geometry = new LineSegmentsGeometry();
-    geometry.setAttribute('position', positionAttribute);
-    // Wrong, 12.
-    console.log("%cFloat32Array", "color: #ff00cc;", geometry.attributes.position.array);
+    let geometry;
+    // let positions = new Float32Array(vertices);
+    // let positionAttribute = new THREE.BufferAttribute(positions, 3);
+    // geometry = new LineSegmentsGeometry();
+    // geometry.setAttribute('position', positionAttribute);
+    // // Wrong, 12.
+    // console.log("%cFloat32Array", "color: #ff00cc;", geometry.attributes.position.array);
 
     // For real:
     geometry = new LineSegmentsGeometry().setPositions(vertices);
     // Correct, 24.
     console.log("%cArray", "color: #ccff00;", geometry.attributes.position.array);
 
-    let material = new LineMaterial({
-      linewidth: 5, // doesn't work!
-      color: 0xff0000
-    });
+    let material = new LineMaterial({ linewidth: 5, color: 0xff0000 });
+    // The LineMaterial expects the resolution of the material to be set explicitly, which affects how the lines are rendered.
+    material.resolution.set(window.innerWidth, window.innerHeight);
 
-    let line = new THREE.LineSegments(geometry, material);
+    let line = new LineSegments2(geometry, material);
 
     scene.add(line);
   }
@@ -107,62 +109,35 @@
 
       return optionalTarget.set(tx, ty, tz).multiplyScalar(this.scale);
     }
-  }
 
-  function tubular() {
-    // Create a custom curve for the line
     // let curve = new THREE.LineCurve3(
     //   new THREE.Vector3(-2, 0, 0), // Start point
     //   new THREE.Vector3(2, 0, 0) // End point
     // );
+  }
 
+  function tubular() {
+    // https://stackoverflow.com/questions/11638883/thickness-of-lines-using-three-linebasicmaterial
     let curve = new CustomSinCurve(10);
 
-    // Create a tube geometry with the custom curve (curve, segments, thickness, radiusSegments)
     let segments = 20;
     let thickness = 0.5;
     let radiusSegments = 8;
     let tubeGeometry = new THREE.TubeBufferGeometry(curve, segments, thickness, radiusSegments);
 
-    // Create a material for the tube
     let material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 
-    // Create the mesh using the tube geometry and material
     let tubeMesh = new THREE.Mesh(tubeGeometry, material);
 
-    // Add the tube mesh to the scene
     scene.add(tubeMesh);
   }
 
-  function parallel() {
-    // todo: understand when to use Vector3, and when to use flat array
-    let positions = new Float32Array([-1, 0, 0, 0, 1, 0, 1, 0, 0, 0, -1, 0, -1, 0, 0]);
-
-    // Create a LineSegments geometry
-    let geometry = new LineSegmentsGeometry().setPositions(positions);
-    console.log(positions);
-
-    // Create a material for the line
-    let material = new LineMaterial({
-      linewidth: 5, // Set the desired line thickness
-      color: 0x00ffff, // Set the line color
-    });
-
-    // Create the LineSegments object
-    let line = new THREE.LineSegments(geometry, material);
-
-    // Add the line to the scene
-    scene.add(line);
-  }
-
-  // todo: play
-  myLine2();
+  // myLine2();
   lineSegments();
-  tubular();
-  parallel();
+  // tubular();
 
-  // default camera pos
-  camera.position.z = 100;
+  // TODO:
+  camera.position.z = 5;
 
   // renders the scene
   let render = function () {

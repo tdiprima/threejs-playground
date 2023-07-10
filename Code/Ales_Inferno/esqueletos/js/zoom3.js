@@ -1,6 +1,6 @@
 // Use plugin
 // import * as THREE from "three";
-// import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+// import { OrbitControls } from "three/examples/controls/OrbitControls.js";
 // import { FocusPoint } from "three.js-focus-point";
 
 const imgSrc = "/images/happy.JPG";

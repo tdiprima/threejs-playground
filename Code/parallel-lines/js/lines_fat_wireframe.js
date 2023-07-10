@@ -1,10 +1,10 @@
 // Wireframe, LineMaterial, plus an osd-like "navigator"
 import * as THREE from 'three';
 
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
-import { Wireframe } from 'three/addons/lines/Wireframe.js';
-import { WireframeGeometry2 } from 'three/addons/lines/WireframeGeometry2.js';
+import { OrbitControls } from 'three/examples/controls/OrbitControls.js';
+import { LineMaterial } from 'three/examples/lines/LineMaterial.js';
+import { Wireframe } from 'three/examples/lines/Wireframe.js';
+import { WireframeGeometry2 } from 'three/examples/lines/WireframeGeometry2.js';
 
 let wireframe, renderer, scene, camera, camera2, controls;
 let wireframe1;

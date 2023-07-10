@@ -2,7 +2,7 @@
 // A reimagined version of the fabric.js program using three.js
 // TODO: three.min.js, TextGeometry.js, <div> id "canvas" to append the renderer's DOM element to.
 import * as THREE from "three";
-import { TextGeometry } from "three/addons/geometries/TextGeometry.js";
+import { TextGeometry } from "three/examples/geometries/TextGeometry.js";
 
 let scene, camera, renderer;
 let line, lineGeometry, lineMaterial;

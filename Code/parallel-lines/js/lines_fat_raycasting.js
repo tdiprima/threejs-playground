@@ -1,16 +1,16 @@
 // Line2, LineSegments2
 import * as THREE from 'three';
 
-import Stats from 'three/addons/libs/stats.module.js';
-import { GPUStatsPanel } from 'three/addons/utils/GPUStatsPanel.js';
+import Stats from 'three/examples/libs/stats.module.js';
+import { GPUStatsPanel } from 'three/examples/utils/GPUStatsPanel.js';
 
-import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
-import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
-import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js';
-import { Line2 } from 'three/addons/lines/Line2.js';
-import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
+import { GUI } from 'three/examples/libs/lil-gui.module.min.js';
+import { OrbitControls } from 'three/examples/controls/OrbitControls.js';
+import { LineMaterial } from 'three/examples/lines/LineMaterial.js';
+import { LineSegments2 } from 'three/examples/lines/LineSegments2.js';
+import { LineSegmentsGeometry } from 'three/examples/lines/LineSegmentsGeometry.js';
+import { Line2 } from 'three/examples/lines/Line2.js';
+import { LineGeometry } from 'three/examples/lines/LineGeometry.js';
 
 let line, thresholdLine, segments, thresholdSegments;
 let renderer, scene, camera, camera2, controls;

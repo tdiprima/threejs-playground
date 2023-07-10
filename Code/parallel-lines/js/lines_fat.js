@@ -1,11 +1,11 @@
 // Line2, LineMaterial, LineGeometry
 import * as THREE from 'three';
 
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { Line2 } from 'three/addons/lines/Line2.js';
-import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
-import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
-import * as GeometryUtils from 'three/addons/utils/GeometryUtils.js';
+import { OrbitControls } from 'three/examples/controls/OrbitControls.js';
+import { Line2 } from 'three/examples/lines/Line2.js';
+import { LineMaterial } from 'three/examples/lines/LineMaterial.js';
+import { LineGeometry } from 'three/examples/lines/LineGeometry.js';
+import * as GeometryUtils from 'three/examples/utils/GeometryUtils.js';
 
 let line, renderer, scene, camera, camera2, controls;
 let line1;

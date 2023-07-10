@@ -1,4 +1,4 @@
-// Create Points helper function
+// Swirl
 // -------- ----------
 // SCENE, CAMERA, RENDERER
 // -------- ----------
@@ -6,20 +6,16 @@ let scene = new THREE.Scene();
 let camera = new THREE.PerspectiveCamera(45, 4 / 3, 0.5, 100);
 camera.position.set(10, 10, 10);
 camera.lookAt(0, 0, 0);
-// let renderer = new THREE.WebGL1Renderer();
+
 let renderer = new THREE.WebGLRenderer();
 renderer.setSize(640, 480, false);
-(document.getElementById('demo') || document.body).appendChild(renderer.domElement);
+(document.getElementById("demo") || document.body).appendChild(renderer.domElement);
 
 // -------- ----------
 // HELPERS
 // -------- ----------
 // create points helper
-let createPoints = function(len, rotationCount, height, maxRadius) {
-  rotationCount = rotationCount === undefined ? 8 : rotationCount; // number of rotations
-  height = height === undefined ? 5 : height;
-  maxRadius = maxRadius === undefined ? 5 : maxRadius;
-
+let createPoints = function(len, rotationCount = 8, height = 5, maxRadius = 5) {
   let yDelta = height / len;
   let points = [];
   let i = 0;
@@ -29,13 +25,17 @@ let createPoints = function(len, rotationCount, height, maxRadius) {
   let per;
 
   while (i < len) {
+    // Calculate the position of a point based on the current iteration index (i)
     per = i / (len - 1);
     radian = Math.PI * 2 * rotationCount * per;
     radius = maxRadius * per;
+
     v = new THREE.Vector3();
     v.x = Math.cos(radian) * radius;
     v.z = Math.sin(radian) * radius;
     v.y = i * yDelta;
+
+    // Add the position to the points array
     points.push(v);
     i += 1;
   }
@@ -58,6 +58,7 @@ let lines = new THREE.Group();
 let lineCount = 12;
 let colors = [0x00ff00, 0xff0000, 0x0000ff, 0xff00ff, 0x00ffff, 0xffff00];
 let i = 0;
+
 while (i < lineCount) {
   let per = i / lineCount;
   let points = createPoints(100, 1 + 0.2 * per, 0, 5);
@@ -72,6 +73,7 @@ while (i < lineCount) {
   lines.add(line);
   i += 1;
 }
+
 scene.add(lines);
 updateLinesGroup(lines, 0.5, 1.4, 10, 4);
 lines.position.y = -8;
