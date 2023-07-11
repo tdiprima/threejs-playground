@@ -36,9 +36,9 @@ function convertToFloat32A() {
   // Assuming we have an array of point objects
   let b = new Float32Array(points.length * 3);
   for (let i = 0, j = 0; i < points.length; i++, j += 3) {
-    b[j] = points[i]; // points[i].x;
-    b[j + 1] = points[i + 1]; // points[i].y;
-    b[j + 2] = points[i + 2]; // points[i].z;
+    b[j] = points[i].x;
+    b[j + 1] = points[i].y;
+    b[j + 2] = points[i].z;
   }
   return b;
 }
