@@ -67,6 +67,26 @@
     });
   };
 
+  let dimensions = function (a) {
+    return  [a.length, a.reduce((x, y) => Math.max(x, y.length), 0)];
+  }
+
+  function arraysEqual(a, b) {
+    if (a === b) return true;
+    if (a == null || b == null) return false;
+    if (a.length !== b.length) return false;
+
+    // If you don't care about the order of the elements inside
+    // the array, you should sort both arrays here.
+    // Please note that calling sort on an array will modify that array.
+    // you might want to clone your array first.
+
+    for (let i = 0; i < a.length; ++i) {
+      if (a[i] !== b[i]) return false;
+    }
+    return true;
+  }
+
   let lines = new THREE.Group();
   let lineCount = 12;
   let colors = [0x00ff00, 0xff0000, 0x0000ff, 0xff00ff, 0x00ffff, 0xffff00];
@@ -76,9 +96,8 @@
     let per = i / lineCount;
     let points = createPoints(100, 1 + 0.2 * per, 0, 5);
 
-    // BufferGeometry to LineGeometry - nope!
-    // let geometry = new LineGeometry();
-    // geometry.setPositions(points.map((point) => [point.x, point.y, point.z]).flat());
+    // 1D array, { x: 0, y: 0, z: 0 } objects, length 100
+    // console.log("%cpoints", "color: #ccff00;", points);
 
     // Create LineMaterial
     let material = new LineMaterial({
@@ -89,7 +108,18 @@
     });
 
     let line = new Line2(); // not passing geometry, material
-    line.geometry.setPositions(points.flatMap((point) => [point.x, point.y, point.z]));
+    let a = points.flatMap((point) => [point.x, point.y, point.z]);
+
+    // 1D array, length 300
+    // let dim = dimensions(a);
+    // console.log("%cArray:", "color: #ccff00;", a, Array.isArray(a), a.length, dim);
+
+    // let b = points.map((point) => [point.x, point.y, point.z]).flat();
+    // console.log("b", dimensions(b), b);
+    // SEE? We get the same results with both flatMap and flat.
+    // console.log(arraysEqual(a, b));
+
+    line.geometry.setPositions(a);
     line.material = material;
 
     lines.add(line);

@@ -18,7 +18,7 @@ return points;
 
 <br>
 
-This creates a spiral.
+<mark>**Returns a 1D array of `{ x: 0, y: 0, z: 0 }` objects.**</mark>
 
 The while loop iterates as long as the value of `i` is less than the length specified by the `len` parameter. Inside the loop, the function calculates the position of a point based on the current iteration index (`i`) and adds it to the `points` array. The loop increments `i` by 1 in each iteration.
 

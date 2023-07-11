@@ -62,6 +62,11 @@ let i = 0;
 while (i < lineCount) {
   let per = i / lineCount;
   let points = createPoints(100, 1 + 0.2 * per, 0, 5);
+
+  // 1D array, { x: 0, y: 0, z: 0 } objects, length 100
+  // const dimensions = [points.length, points.reduce((x, y) => Math.max(x, y.length), 0)];
+  // console.log("%cArray:", "color: #ccff00;", points, Array.isArray(points), points.length, dimensions);
+
   let geometry = new THREE.BufferGeometry().setFromPoints(points);
   let line = (scene.userData.line = new THREE.Line(
     geometry,
