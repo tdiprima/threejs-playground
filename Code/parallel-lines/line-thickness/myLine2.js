@@ -1,8 +1,8 @@
 // from https://threejs.org/manual/examples/scenegraph-sun-earth-moon.html
 import * as THREE from "three";
 import { Line2 } from "three/addons/lines/Line2.js";
-import { LineMaterial } from "three/addons/lines/LineMaterial.js";
 import { LineGeometry } from "three/addons/lines/LineGeometry.js";
+import { LineMaterial } from "three/addons/lines/LineMaterial.js";
 
 let scene = new THREE.Scene();
 let camera = new THREE.PerspectiveCamera(50, 500 / 400, 0.1, 1000);
