@@ -1,18 +1,20 @@
 // The points array is a flat array containing the coordinates in the order [x1, y1, z1, x2, y2, z2, ...].
 // Each consecutive triplet represents a point in 3D space.
 let createLine = function (points) {
-  // Ensure the array of points does not contain NaN values
+  // Step 1: Ensure the array of points does not contain NaN values
   // points = filterNan(points);
 
+  // Step 2: Create a BufferGeometry object
   let geometry = new THREE.BufferGeometry();
 
+  // Step 3: Convert the points array into a Float32Array
   let positions = convertToFloat32(points);
 
-  // Create THREE.BufferAttribute with the positions
+  // Step 4: Create a BufferAttribute with the positions
   let positionAttribute = new THREE.BufferAttribute(positions, 3);
   geometry.setAttribute('position', positionAttribute);
 
-  // Can use Line or Segments
+  // Step 5: Create a Line* object using the geometry and a material
   let material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
   // return new THREE.LineSegments(geometry, material);
   return new THREE.Line(geometry, material);
