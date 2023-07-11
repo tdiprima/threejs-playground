@@ -171,4 +171,43 @@ function onMouseMove(event) {
 
 By checking if `intersectedObject.geometry` exists before proceeding, you can ensure that the error won't occur when attempting to access properties like `count` or `instanceStart`. This modification should resolve the error you encountered.
 
+## Again.
+
+Uncaught TypeError: can't access property "count", instanceStart is undefined
+
+Maybe if we knew what "count" or "instanceStart" they were talking about, we might be able to fix it.
+
+I apologize for the confusion. The error message you mentioned regarding "count" and "instanceStart" is related to the internals of the `Line2` implementation. To provide a more accurate solution, we need to analyze the issue further.
+
+Upon reviewing the code, I noticed that there is a potential problem with the usage of the `LineGeometry` instance. Instead of directly initializing it with `lineGeometry = new LineGeometry()`, we should use `lineGeometry = new LineGeometry().setPositions([])` to explicitly set the positions array to an empty array. This will ensure that the `LineGeometry` instance has the necessary properties initialized correctly.
+
+Here's the updated portion of the code:
+
+```javascript
+renderer.domElement.addEventListener("pointerdown", (event) => {
+  if (isDrawing) {
+    mouseIsPressed = true;
+
+    // Create a new LineGeometry for each line
+    let lineGeometry = new LineGeometry().setPositions([]);
+
+    mesh = new Line2(lineGeometry, material);
+
+    console.log("%cmesh.geometry", "color: #ccff00;", mesh.geometry);
+
+    scene.add(mesh);
+  }
+});
+```
+
+By explicitly setting the positions array to an empty array, it should resolve the issue with the "count" and "instanceStart" error. Please give this modification a try and let me know if it resolves the problem for you.
+
+## Grr!
+
+Uncaught RangeError: invalid array length
+Line 64
+
+Uncaught TypeError: can't access property "geometry", mesh is undefined
+Lines 89, 103
+
 <br>

@@ -61,7 +61,7 @@ renderer.domElement.addEventListener("pointerdown", (event) => {
     mouseIsPressed = true;
 
     // Create a new LineGeometry for each line
-    let lineGeometry = new LineGeometry();
+    let lineGeometry = new LineGeometry().setPositions([]);
 
     mesh = new Line2(lineGeometry, material);
 
@@ -80,14 +80,18 @@ function onMouseMove(event) {
     let intersects = raycaster.intersectObjects(scene.children, true);
 
     if (intersects.length > 0) {
-      let point = intersects[0].point;
-      positions.push(point.x, point.y, point.z);
+      // Ensure that the intersected object has a valid geometry before attempting to access it.
+      let intersectedObject = intersects[0].object;
+      if (intersectedObject.geometry) {
+        let point = intersects[0].point;
+        positions.push(point.x, point.y, point.z);
 
-      let lineGeometry = mesh.geometry;
-      lineGeometry.setPositions(positions);
+        let lineGeometry = mesh.geometry;
+        lineGeometry.setPositions(positions);
 
-      // Set needsUpdate to true for the position attribute
-      lineGeometry.attributes.position.needsUpdate = true;
+        // Set needsUpdate to true for the position attribute
+        lineGeometry.attributes.position.needsUpdate = true;
+      }
     }
   }
 }
