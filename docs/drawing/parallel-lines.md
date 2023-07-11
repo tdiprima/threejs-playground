@@ -115,7 +115,7 @@ Buddy said: The `LineSegmentsGeometry` is not meant to be used directly with cus
 
 ## Vertices
 
-Then we had a whole big discussion about array conversion and why if I pass in
+Then we had a whole big discussion (commit #6195fdf) about array conversion and why if I pass in
 
 ```js
 let vertices = [2, 0, 0, 2, 0, 0, 0, 0, -2, 0, 0, 2];
