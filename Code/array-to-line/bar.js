@@ -20,6 +20,9 @@ let createLine = function (points) {
   return new THREE.Line(geometry, material);
 }
 
+// -------- ----------
+// HELPERS
+// -------- ----------
 function convertToFloat32(points) {
   // Use this if you wanna keep the original array
   let a = new Float32Array(points.length);
