@@ -4,7 +4,7 @@ That's all you do.  Set it in the PlaneGeometry.  How hard is it to just tell me
 
 ```javascript
 var planeGeometry = new THREE.PlaneGeometry(10, 5);
-var planeGeometry = new THREE.PlaneGeometry( 5, 2.5);
+var planeGeometry = new THREE.PlaneGeometry(5, 2.5);
 ```
 
 ## Grr.
@@ -70,6 +70,7 @@ textureLoader.load('/images/Victoriosa.jpg', texture => {
 });
 ```
 
+<br>
 First, define the dimensions of your image (1024x512) and the canvas (512x256).
 
 Next, you use the `TextureLoader` to load the image texture.
@@ -145,7 +146,9 @@ textureLoader.load('/images/Victoriosa.jpg', function(texture) {
 });
 ```
 
-In this example, we first define the desired size for the plane using `planeWidth` and `planeHeight`. Then, we create a `PlaneGeometry` instance with the specified size.
+<br>
+
+We first define the desired size for the plane using `planeWidth` and `planeHeight`. Then, we create a `PlaneGeometry` instance with the specified size.
 
 Next, we create a `TextureLoader` instance and load the image texture using the `load` method. Inside the callback function, we can manipulate the loaded texture. In this case, we set the texture wrapping, filtering, and scaling properties to ensure it fits the desired plane size.
 
@@ -157,7 +160,7 @@ By scaling the texture to fit the plane size, the image will be displayed at the
 
 <span style="color:#0000dd;font-weight:bold;">¿Me puedes ayudar?</span>
 
-To display the image at the desired size of 512x256 pixels instead of cropping it, you need to adjust the scale of the plane geometry. 
+To display the image at the desired size of 512x256 pixels instead of cropping it, you need to adjust the scale of the plane geometry.
 
 Currently, the plane is being created with a width-to-height ratio equal to the image aspect ratio, which causes the cropping effect.
 
@@ -224,6 +227,8 @@ let scaleY = 1;
 scaleX = scaleX / 2;
 scaleY = scaleY / 2;
 ```
+
+<br>
 
 In this updated code, the scale factors `scaleX` and `scaleY` are calculated based on the image's aspect ratio and the canvas's aspect ratio. These scale factors are then used to adjust the plane's geometry accordingly. By doing this, the image will be scaled to fit the canvas while maintaining its original aspect ratio.
 
