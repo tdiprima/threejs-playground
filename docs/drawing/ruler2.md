@@ -94,6 +94,10 @@ To convert the provided fabric.js code to three.js, you'll need to use the WebGL
 
 <mark>**Go run this in three.js/examples, rev 124.**</mark>
 
+```html
+<button id="selec">Selection Mode</button>
+```
+
 ```javascript
 import * as THREE from '../build/three.module.js';
 let line;
@@ -212,7 +216,8 @@ function animate() {
 animate();
 ```
 
-Please note that the above code is just a basic conversion, and you might need to adjust it further based on your specific requirements. Additionally, <mark>you'll need to include the necessary three.js library in your HTML file for the code to work.</mark>
+<br>
+Please note that the above code is just a basic conversion, and you might need to adjust it further based on your specific requirements.
 
 ## Geometry requires position attribute
 
@@ -341,8 +346,6 @@ renderer.domElement.addEventListener('mouseup', onMouseUp, false);
 
 // Function to calculate line length
 const Calculate = {
-
-
   lineLength(x1, y1, x2, y2) {
     return Math.sqrt(Math.pow(x2 * 1 - x1 * 1, 2) + Math.pow(y2 * 1 - y1 * 1, 2));
   },
@@ -365,11 +368,12 @@ function animate() {
 animate();
 ```
 
+<br>
 This updated code should allow you to draw a continuous line on the canvas as you drag the mouse, instead of creating separate line segments.
 
 ## Start over?
 
-So in 124, you still get THREE.TextGeometry: font parameter is not an instance of THREE.Font, and THREE.Geometry.fromBufferGeometry(): Position attribute required for conversion.  <mark>**Like I said!**Maybe the issue is occurring in 2 spots,</mark> and we just gotta fix the 2nd one.
+So in 124, you still get THREE.TextGeometry: font parameter is not an instance of THREE.Font, and THREE.Geometry.fromBufferGeometry(): Position attribute required for conversion.  <mark>**Like I said!** Maybe the issue is occurring in 2 spots,</mark> and we just gotta fix the 2nd one.
 
 <span style="color:#0000dd;">I still get the square, plus a new error.  I'm wondering if we should just go back to your original answer, and simply try to fix the error on mousemove - "Geometry.fromBufferGeometry(): Position attribute required for conversion."?</span>
 
@@ -392,6 +396,7 @@ line.geometry.vertices[1].x = pointer.x;
 line.geometry.vertices[1].y = pointer.y;
 ```
 
+<br>
 OK, no problem.  But the IDE is saying again: "Argument type Geometry is not assignable to parameter type BufferGeometry".
 
 ```js

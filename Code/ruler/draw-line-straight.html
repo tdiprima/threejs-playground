@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Line Drawing</title>
+  <style>
+    body { margin: 0; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <!-- <script src="https://threejs.org/build/three.js"></script> -->
+  <script src="/build/three.js"></script>
+  <script>
+    let scene, camera, renderer, raycaster;
+    let line;
+    let isDown;
+    let mode = 'draw';
+    let mouse = new THREE.Vector2();
+
+    init();
+    animate();
+
+    function init() {
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      raycaster = new THREE.Raycaster();
+
+      document.addEventListener('mousedown', onMouseDown, false);
+      document.addEventListener('mousemove', onMouseMove, false);
+      document.addEventListener('mouseup', onMouseUp, false);
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    }
+
+    // Handle the mouse events
+    function onMouseDown(event) {
+      isDown = true;
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+      // The line is created using THREE.Line with a basic material.
+      if (mode === 'draw') {
+        let geometry = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(mouse.x, mouse.y, 0), new THREE.Vector3(mouse.x, mouse.y, 0)]);
+        let material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+        line = new THREE.Line(geometry, material);
+        scene.add(line);
+      }
+    }
+
+    // The line's geometry is updated based on the mouse movement.
+    function onMouseMove(event) {
+      if (!isDown) return;
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+      if (mode === 'draw') {
+        // Meh, fix this
+        line.geometry.attributes.position.array[2] = mouse.x;
+        line.geometry.attributes.position.array[3] = mouse.y;
+        line.geometry.attributes.position.needsUpdate = true;
+      }
+    }
+
+    function onMouseUp() {
+      isDown = false;
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>
