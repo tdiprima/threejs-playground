@@ -1,7 +1,7 @@
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/controls/OrbitControls.js";
-
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 console.log(`%cREVISION: ${THREE.REVISION}`, "color: #ccff00;");
+
 let btnDraw = document.getElementById("toggleButton");
 let imageSource = "/images/image1.jpg";
 let isDrawing = false;
@@ -21,7 +21,7 @@ document.body.appendChild(renderer.domElement);
 
 controls = new OrbitControls(camera, renderer.domElement);
 
-btnDraw.addEventListener('click', function () {
+btnDraw.addEventListener("click", function () {
   positions = [];
   if (isDrawing) {
     isDrawing = false;
@@ -53,7 +53,7 @@ let material = new THREE.LineBasicMaterial({ color });
 
 let mesh;
 
-renderer.domElement.addEventListener('pointerdown', event => {
+renderer.domElement.addEventListener("pointerdown", event => {
   if (isDrawing) {
     mouseIsPressed = true;
 
@@ -61,7 +61,7 @@ renderer.domElement.addEventListener('pointerdown', event => {
     let bufferGeometry = new THREE.BufferGeometry();
     mesh = new THREE.Line(bufferGeometry, material);
 
-    console.log("%cmesh.geometry", "color: #ccff00;", mesh.geometry);
+    console.log("%cpositions", "color: #ccff00;", mesh.geometry.attributes.position.array);
 
     scene.add( mesh );
   }

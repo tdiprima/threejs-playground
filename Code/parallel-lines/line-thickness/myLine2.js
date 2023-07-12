@@ -1,4 +1,5 @@
-// from https://threejs.org/manual/examples/scenegraph-sun-earth-moon.html
+// Originally https://threejs.org/manual/examples/scenegraph-sun-earth-moon.html
+// https://codesandbox.io/s/static-forked-68lif?file=/index.html:0-3768
 import * as THREE from "three";
 import { Line2 } from "three/addons/lines/Line2.js";
 import { LineGeometry } from "three/addons/lines/LineGeometry.js";
@@ -11,25 +12,30 @@ renderer.setClearColor(new THREE.Color(0x041122));
 renderer.setSize(825, 600);
 document.body.appendChild(renderer.domElement);
 
-// Originally https://threejs.org/manual/examples/scenegraph-sun-earth-moon.html
-// https://codesandbox.io/s/static-forked-68lif?file=/index.html:0-3768
 function QuadGeometry(w, h) {
+  // 4 vertices
   let pts = [
     [0.5, 0.5],
     [-0.5, 0.5],
     [-0.5, -0.5],
     [0.5, -0.5]
-  ].map(p => {
+  ];
+  console.log("%cbefore", "color: deeppink", pts);
+
+  let points = pts.map(p => {
+    // For each one of them, create a vector2, out of a and b.
     return new THREE.Vector2(p[0], p[1]);
   });
-  let g = new THREE.BufferGeometry().setFromPoints(pts);
+  console.log("%cafter", "color: #ccff00;", points);
+
+  let g = new THREE.BufferGeometry().setFromPoints(points);
   g.setIndex([0, 1, 2, 3, 0]);
   g.scale(w, h, 1);
 
   let unindexed = g.toNonIndexed();
-  let geo = new LineGeometry().setPositions(unindexed.getAttribute('position').array);
 
-  return geo;
+  // RETURN LINE GEOMETRY
+  return new LineGeometry().setPositions(unindexed.getAttribute('position').array);
 }
 
 let g = QuadGeometry(11, 11);
