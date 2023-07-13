@@ -32,7 +32,7 @@
   let fontUrl = "/fonts/helvetiker_regular.typeface.json";
 
   // Create a new text object
-  function createTextObject(text, x, y) {
+  function createTextObject(text, x, y, point) {
     let loader = new FontLoader();
 
     loader.load(fontUrl, function(font) {
@@ -46,7 +46,8 @@
       let textMesh = new THREE.Mesh(geometry, material);
 
       // Set the position based on the click coordinates
-      textMesh.position.set(x, y, 0);
+      // textMesh.position.set(x, y, 0);
+      textMesh.position.copy(point);
       scene.add(textMesh);
 
       console.log("%cposition", "color: #ccff00;", textMesh.position);
@@ -72,18 +73,19 @@
     // Clear canvas before drawing
     clean();
 
-    // let canvas = renderer.domElement;
-    // let rect = canvas.getBoundingClientRect();
-    // let x = event.clientX - rect.left;
-    // let y = event.clientY - rect.top;
-    // let mouse = new THREE.Vector2(
-    //   (x / canvas.clientWidth) * 2 - 1,
-    //   -(y / canvas.clientHeight) * 2 + 1
-    // );
+    let canvas = renderer.domElement;
+    let rect = canvas.getBoundingClientRect();
+    let x = event.clientX - rect.left;
+    let y = event.clientY - rect.top;
 
-    let mouse = new THREE.Vector2();
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    let mouse = new THREE.Vector2(
+      (x / canvas.clientWidth) * 2 - 1,
+      -(y / canvas.clientHeight) * 2 + 1
+    );
+
+    // let mouse = new THREE.Vector2();
+    // mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    // mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
     let raycaster = new THREE.Raycaster();
     raycaster.setFromCamera(mouse, camera);
@@ -97,7 +99,8 @@
       let text = textInput.value.trim();
 
       if (text.length > 0) {
-        createTextObject(text, mouse.x, mouse.y);
+        // createTextObject(text, mouse.x, mouse.y);
+        createTextObject(text, mouse.x, mouse.y, intersects[0].point);
         textInput.value = "";
       }
     }
