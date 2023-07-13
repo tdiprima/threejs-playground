@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>Draw line with real-time measurement</title>
-  <!-- TODO: use labels instead - CSS2DRenderer -->
+  <!-- Perhaps use labels instead - CSS2DRenderer -->
+  <!-- TODO: Draw from center of screen, "using" the box when it appears. -->
 </head>
 <body>
 <script type="importmap">{
@@ -19,10 +20,9 @@
   // Draw & Measure Lines
   // A reimagined version of the fabric.js program using three.js
   import * as THREE from "three";
-
-  // TODO:
   import { TextGeometry } from "three/examples/geometries/TextGeometry.js";
-  let useSprite = true;
+  let useSprite = false;
+  // let useSprite = true;
 
   let scene, camera, renderer;
   let line, lineGeometry, lineMaterial;
@@ -30,6 +30,9 @@
   let startPoint, endPoint;
   let startVector, endVector;
   let text;
+  let message = "";
+
+  init();
 
   function init() {
     scene = new THREE.Scene();
@@ -60,9 +63,11 @@
     scene.add(line);
   }
 
-  function thingA() {
+  function createSprite() {
+    // console.log("Sprite");
     let length = Calculate.lineLength(startPoint.x, startPoint.y, endPoint.x, endPoint.y).toFixed(2);
-    let textTexture = createTextTexture(`Length ${length}`);
+    message = `Length ${length}`;
+    let textTexture = createTextTexture(message);
     let spriteMaterial = new THREE.SpriteMaterial({ map: textTexture });
     text = new THREE.Sprite(spriteMaterial);
     text.scale.set(0.4, 0.2, 1);
@@ -70,11 +75,15 @@
     scene.add(text);
   }
 
-  function thingB() {
-    const length = Calculate.lineLength(startPoint.x, startPoint.y, endPoint.x, endPoint.y).toFixed(2);
-    // const textGeometry = new THREE.TextGeometry(`Length ${length}`, { size: 0.1 });
-    const textGeometry = new TextGeometry(`Length ${length}`, { size: 1 });
-    const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+  /**
+   * This one actually works better, sort of.
+   */
+  function createTextGeo() {
+    // console.log("textGeometry");
+    let length = Calculate.lineLength(startPoint.x, startPoint.y, endPoint.x, endPoint.y).toFixed(2);
+    message = `Length ${length}`;
+    let textGeometry = new TextGeometry(message, { size: 5 }); // createTextTexture
+    let textMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
     text = new THREE.Mesh(textGeometry, textMaterial);
     text.position.copy(endVector);
     scene.add(text);
@@ -88,12 +97,13 @@
 
     line.geometry.setFromPoints([startVector, endVector]);
 
+    // todo: "text" is the stupid box.
     if (text) scene.remove(text);
 
     if (useSprite) {
-      thingA();
+      createSprite();
     } else {
-      thingB();
+      createTextGeo();
     }
 
     renderer.render(scene, camera);
@@ -101,6 +111,7 @@
 
   function onMouseUp() {
     isDrawing = false;
+    console.log(`%c${message}`, "color: #ccff00;");
   }
 
   function getMouseCoordinates(event) {
@@ -122,9 +133,9 @@
 
   /**
    * Create Text Texture (using sprite)
-   * TODO: Comment out TextGeometry import
    */
   function createTextTexture(text) {
+    // console.log("createTextTexture");
     let canvas = document.createElement('canvas');
     let context = canvas.getContext('2d');
     context.font = 'Bold 20px Arial';
@@ -152,7 +163,17 @@
     },
   };
 
-  init();
+  window.addEventListener("resize", function () {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.render(scene, camera);
+  });
+
+  (function render() {
+    requestAnimationFrame(render);
+    renderer.render(scene, camera);
+  })();
 </script>
 </body>
 </html>
