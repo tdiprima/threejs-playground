@@ -51,7 +51,7 @@ function onMouseMove(event) {
   if (text) scene.remove(text);
 
   const length = Calculate.lineLength(startPoint.x, startPoint.y, endPoint.x, endPoint.y).toFixed(2);
-  // const textGeometry = new TextGeometry(`Length ${length}`, { size: 0.1 });
+  // const textGeometry = new THREE.TextGeometry(`Length ${length}`, { size: 0.1 });
   const textGeometry = new TextGeometry(`Length ${length}`, { size: 1 });
   const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
   text = new THREE.Mesh(textGeometry, textMaterial);
