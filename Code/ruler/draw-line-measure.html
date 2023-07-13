@@ -21,6 +21,7 @@
   // A reimagined version of the fabric.js program using three.js
   import * as THREE from "three";
   import { TextGeometry } from "three/examples/geometries/TextGeometry.js";
+  // TODO: switch
   let useSprite = false;
   // let useSprite = true;
 
@@ -83,7 +84,9 @@
     let length = Calculate.lineLength(startPoint.x, startPoint.y, endPoint.x, endPoint.y).toFixed(2);
     message = `Length ${length}`;
     let textGeometry = new TextGeometry(message, { size: 5 }); // createTextTexture
+    // todo: "text" is the stupid box.
     let textMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+    // let textMaterial = new THREE.MeshBasicMaterial();
     text = new THREE.Mesh(textGeometry, textMaterial);
     text.position.copy(endVector);
     scene.add(text);
@@ -97,7 +100,6 @@
 
     line.geometry.setFromPoints([startVector, endVector]);
 
-    // todo: "text" is the stupid box.
     if (text) scene.remove(text);
 
     if (useSprite) {
@@ -135,10 +137,9 @@
    * Create Text Texture (using sprite)
    */
   function createTextTexture(text) {
-    // console.log("createTextTexture");
+    console.log("createTextTexture");
     let canvas = document.createElement('canvas');
     let context = canvas.getContext('2d');
-    context.font = 'Bold 20px Arial';
 
     let textMetrics = context.measureText(text);
     let width = textMetrics.width;
@@ -148,7 +149,7 @@
     canvas.height = height;
 
     context.font = 'Bold 20px Arial';
-    context.fillStyle = 'white';
+    context.fillStyle = 'white'; // ???
     context.fillText(text, 0, height / 2 + 5);
 
     let texture = new THREE.Texture(canvas);
