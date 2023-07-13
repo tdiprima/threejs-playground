@@ -8,8 +8,20 @@
   <!-- Currently draws a blob that covers the entire screen no matter how small I make the font. -->
   <!-- This should be using raycasting. -->
   <!-- Basically, it's crap. But it's using FontLoader. -->
+  <style>
+    #info {
+      font-size: x-large;
+      position: absolute;
+      z-index: 1;
+      top: 0;
+      width: 100%;
+      text-align: center;
+      color: #ff0;
+    }
+  </style>
 </head>
 <body>
+<div id="info">Run from three.js repo REV 124</div>
 <script type="module">
   import * as THREE from '../build/three.module.js';
 
