@@ -15,7 +15,144 @@
 }
 </script>
 <script async src="/es-module-shims-1.3.6/dist/es-module-shims.js"></script>
-<script type="module" src="js/draw-line-measure.js"></script>
-<!-- <script type="module" src="js/tengo-miedo.js"></script> -->
+<script type="module">
+  // Draw & Measure Lines
+  // A reimagined version of the fabric.js program using three.js
+  import * as THREE from "three";
+
+  // TODO:
+  import { TextGeometry } from "three/examples/geometries/TextGeometry.js";
+  let useSprite = true;
+
+  let scene, camera, renderer;
+  let line, lineGeometry, lineMaterial;
+  let isDrawing = false;
+  let startPoint, endPoint;
+  let startVector, endVector;
+  let text;
+
+  function init() {
+    scene = new THREE.Scene();
+
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 5;
+
+    renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    lineGeometry = new THREE.BufferGeometry();
+    lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+
+    document.addEventListener('mousedown', onMouseDown, false);
+    document.addEventListener('mousemove', onMouseMove, false);
+    document.addEventListener('mouseup', onMouseUp, false);
+  }
+
+  function onMouseDown(event) {
+    isDrawing = true;
+
+    startPoint = getMouseCoordinates(event);
+    startVector = new THREE.Vector3(startPoint.x, startPoint.y, 0);
+
+    lineGeometry.setFromPoints([startVector, startVector]);
+    line = new THREE.Line(lineGeometry, lineMaterial);
+    scene.add(line);
+  }
+
+  function thingA() {
+    let length = Calculate.lineLength(startPoint.x, startPoint.y, endPoint.x, endPoint.y).toFixed(2);
+    let textTexture = createTextTexture(`Length ${length}`);
+    let spriteMaterial = new THREE.SpriteMaterial({ map: textTexture });
+    text = new THREE.Sprite(spriteMaterial);
+    text.scale.set(0.4, 0.2, 1);
+    text.position.copy(endVector);
+    scene.add(text);
+  }
+
+  function thingB() {
+    const length = Calculate.lineLength(startPoint.x, startPoint.y, endPoint.x, endPoint.y).toFixed(2);
+    // const textGeometry = new THREE.TextGeometry(`Length ${length}`, { size: 0.1 });
+    const textGeometry = new TextGeometry(`Length ${length}`, { size: 1 });
+    const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    text = new THREE.Mesh(textGeometry, textMaterial);
+    text.position.copy(endVector);
+    scene.add(text);
+  }
+
+  function onMouseMove(event) {
+    if (!isDrawing) return;
+
+    endPoint = getMouseCoordinates(event);
+    endVector = new THREE.Vector3(endPoint.x, endPoint.y, 0);
+
+    line.geometry.setFromPoints([startVector, endVector]);
+
+    if (text) scene.remove(text);
+
+    if (useSprite) {
+      thingA();
+    } else {
+      thingB();
+    }
+
+    renderer.render(scene, camera);
+  }
+
+  function onMouseUp() {
+    isDrawing = false;
+  }
+
+  function getMouseCoordinates(event) {
+    let mouse = new THREE.Vector2();
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    let raycaster = new THREE.Raycaster();
+    raycaster.setFromCamera(mouse, camera);
+
+    let intersects = raycaster.intersectObjects(scene.children);
+    if (intersects.length > 0) {
+      let point = intersects[0].point;
+      return { x: point.x, y: point.y };
+    }
+
+    return { x: 0, y: 0 };
+  }
+
+  /**
+   * Create Text Texture (using sprite)
+   * TODO: Comment out TextGeometry import
+   */
+  function createTextTexture(text) {
+    let canvas = document.createElement('canvas');
+    let context = canvas.getContext('2d');
+    context.font = 'Bold 20px Arial';
+
+    let textMetrics = context.measureText(text);
+    let width = textMetrics.width;
+    let height = 24;
+
+    canvas.width = width;
+    canvas.height = height;
+
+    context.font = 'Bold 20px Arial';
+    context.fillStyle = 'white';
+    context.fillText(text, 0, height / 2 + 5);
+
+    let texture = new THREE.Texture(canvas);
+    texture.needsUpdate = true;
+
+    return texture;
+  }
+
+  const Calculate = {
+    lineLength(x1, y1, x2, y2) {
+      return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    },
+  };
+
+  init();
+</script>
 </body>
 </html>
