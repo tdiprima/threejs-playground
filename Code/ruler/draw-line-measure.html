@@ -46,7 +46,10 @@
     document.body.appendChild(renderer.domElement);
 
     lineGeometry = new THREE.BufferGeometry();
-    lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+    lineMaterial = new THREE.LineBasicMaterial({
+      color: 0x00ff00,
+      depthWrite: false
+    });
 
     document.addEventListener('mousedown', onMouseDown, false);
     document.addEventListener('mousemove', onMouseMove, false);
@@ -85,7 +88,10 @@
     message = `Length ${length}`;
     let textGeometry = new TextGeometry(message, { size: 5 }); // createTextTexture
     // todo: "text" is the stupid box.
-    let textMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+    let textMaterial = new THREE.MeshBasicMaterial({
+      color: 0x0000ff,
+      // depthWrite: false
+    });
     // let textMaterial = new THREE.MeshBasicMaterial();
     text = new THREE.Mesh(textGeometry, textMaterial);
     text.position.copy(endVector);
