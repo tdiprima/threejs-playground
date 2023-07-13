@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Label</title>
+</head>
+<body>
+<script src="/build/three.min.js"></script>
+<script>
+  // Create a scene
+  let scene = new THREE.Scene();
+
+  // Create a label
+  // let label = createLabel("Hello World", 18, "bold", "sans-serif");
+  let label = createLabel("Hello World", 50, "bold", "sans-serif");
+  scene.add(label);
+
+  // Create a renderer
+  let renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  // Create a camera
+  let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  // camera.position.z = 5;
+  camera.position.z = 2;
+
+  // Render the scene
+  function render() {
+    requestAnimationFrame(render);
+    renderer.render(scene, camera);
+  }
+  render();
+
+  // Function to create a label
+  function createLabel(text, fontSize, fontWeight, fontFamily) {
+    let canvas = document.createElement("canvas");
+    let context = canvas.getContext("2d");
+    let metrics = null;
+    context.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
+    // context.font = `${fontWeight} ${fontSize}pt ${fontFamily}`;
+    metrics = context.measureText(text);
+    let textWidth = metrics.width;
+
+    // Background
+    context.fillStyle = "rgba(255, 255, 255, 0.8)";
+    context.fillRect(0, 0, textWidth, fontSize);
+
+    // Text
+    context.fillStyle = "black";
+    context.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
+    context.fillText(text, 0, fontSize);
+
+    // Create texture
+    let texture = new THREE.Texture(canvas);
+    texture.needsUpdate = true;
+
+    // Create material
+    let material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
+
+    // Create geometry
+    let geometry = new THREE.PlaneGeometry(textWidth / 100, fontSize / 100);
+
+    // Create mesh
+    let mesh = new THREE.Mesh(geometry, material);
+
+    return mesh;
+  }
+</script>
+</body>
+</html>
