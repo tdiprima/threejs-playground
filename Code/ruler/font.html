@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Set TextGeometry Font</title>
+  <style>
+    body { margin: 0; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+<script async src="/es-module-shims-1.3.6/dist/es-module-shims.js"></script>
+<script type="importmap">{
+  "imports": {
+    "three": "/build/three.module.js",
+    "three/examples/": "/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+  import * as THREE from "three";
+  import {FontLoader} from "three/examples/loaders/FontLoader.js";
+  import {TextGeometry} from "three/examples/geometries/TextGeometry.js";
+
+  let line;
+  let isDrawing = false;
+  let startPoint, endPoint;
+  let startVector, endVector;
+  let textMesh;
+  let message = "";
+
+  let scene = new THREE.Scene();
+  let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+  let renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  let lineGeometry = new THREE.BufferGeometry();
+  let lineMaterial = new THREE.LineBasicMaterial({
+    color: 0x00ff00,
+    // depthWrite: false
+  });
+
+  function onMouseDown(event) {
+    isDrawing = true;
+
+    startPoint = getMouseCoordinates(event);
+    startVector = new THREE.Vector3(startPoint.x, startPoint.y, 0);
+
+    lineGeometry.setFromPoints([startVector, startVector]);
+    line = new THREE.Line(lineGeometry, lineMaterial);
+    scene.add(line);
+  }
+
+  function onMouseUp() {
+    isDrawing = false;
+    console.log(`%c${message}`, "color: #ccff00;");
+  }
+
+  function getMouseCoordinates(event) {
+    let mouse = new THREE.Vector2();
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    let raycaster = new THREE.Raycaster();
+    raycaster.setFromCamera(mouse, camera);
+
+    let intersects = raycaster.intersectObjects(scene.children);
+    if (intersects.length > 0) {
+      let point = intersects[0].point;
+      return {x: point.x, y: point.y};
+    }
+
+    return {x: 0, y: 0};
+  }
+
+  // Create a FontLoader instance
+  let fontLoader = new FontLoader();
+
+  // Load the font file
+  fontLoader.load("/fonts/helvetiker_regular.typeface.json", function (font) {
+    function onMouseMove(event) {
+      if (!isDrawing) return;
+
+      endPoint = getMouseCoordinates(event);
+      endVector = new THREE.Vector3(endPoint.x, endPoint.y, 0);
+
+      line.geometry.setFromPoints([startVector, endVector]);
+
+      if (textMesh) scene.remove(textMesh);
+
+      let length = Calculate.lineLength(startPoint.x, startPoint.y, endPoint.x, endPoint.y).toFixed(2);
+      message = `Length ${length}`;
+
+      // Create the text geometry
+      let textGeometry = new TextGeometry(message, {
+        font: font,
+        size: 0.2,
+        height: 0.05
+      });
+
+      // Center the text geometry
+      textGeometry.computeBoundingBox();
+      textGeometry.center();
+
+      // Create a material for the text
+      let textMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
+
+      // Create a mesh using the text geometry and material
+      textMesh = new THREE.Mesh(textGeometry, textMaterial);
+      textMesh.position.copy(endVector);
+
+      // Add the mesh to the scene
+      scene.add(textMesh);
+
+      renderer.render(scene, camera);
+    }
+
+    renderer.domElement.addEventListener('mousedown', onMouseDown, false);
+    renderer.domElement.addEventListener('mousemove', onMouseMove, false);
+    renderer.domElement.addEventListener('mouseup', onMouseUp, false);
+  });
+
+  // Set camera position
+  camera.position.z = 5;
+
+  const Calculate = {
+    lineLength(x1, y1, x2, y2) {
+      return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    },
+  };
+
+  window.addEventListener("resize", function () {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.render(scene, camera);
+  });
+
+  (function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+  })();
+</script>
+</body>
+</html>
