@@ -6,6 +6,8 @@ That it might be interfering with the raycasting.
 
 Also &ndash; do we have a *thing* to raycast *against?*
 
+<mark>**That's all it was.  All I had to do was add a PlaneGeometry.**</mark>
+
 <span style="color:#0000dd;">I need help.  I have a program that is supposed to allow the user to draw a line, and as the line is drawn, it measures how long it is in pixels, and displays the text as we draw the line.  The text was a blob (like the problem in the previous example).  So <span style="color:#0000dd;font-weight:bold;">I added a FontLoader</span>, like you said.  But now, the line isn't drawing, the text isn't moving with the line, and the line measurement is zero.  What am I doing wrong?</span>
 
 <span style="color:red;font-weight:bold">01.js</span>
@@ -30,7 +32,7 @@ Update the `onMouseMove` function.
 
 Second, the **line is not drawing** because the `lineGeometry.attributes.position.array` is not being updated correctly.
 
-You need to **update the `startPoint` and `startVector`** values each time you start a new line in the `onMouseDown` function. 
+You need to **update the `startPoint` and `startVector`** values each time you start a new line in the `onMouseDown` function.
 
 Modify the `onMouseDown` function.
 

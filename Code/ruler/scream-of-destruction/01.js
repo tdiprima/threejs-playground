@@ -17,9 +17,15 @@ fontLoader.load("/fonts/helvetiker_regular.typeface.json", function (font) {
   let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.z = 5;
 
-  let renderer = new THREE.WebGLRenderer();
+  // to anti-alias or not
+  let renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
+
+  let planeGeometry = new THREE.PlaneGeometry(14.5, 7.5);
+  let planeMaterial = new THREE.MeshBasicMaterial({ color: "#5A5A5A" });
+  let plane = new THREE.Mesh(planeGeometry, planeMaterial);
+  scene.add(plane);
 
   let lineGeometry = new THREE.BufferGeometry();
   let lineMaterial = new THREE.LineBasicMaterial({
@@ -64,7 +70,7 @@ fontLoader.load("/fonts/helvetiker_regular.typeface.json", function (font) {
 
     let textGeometry = new TextGeometry(message, {
       font: font,
-      size: 0.1,
+      size: 0.2,
       height: 0.1
     });
 
