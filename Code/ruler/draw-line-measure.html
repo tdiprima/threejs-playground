@@ -22,8 +22,8 @@
   import * as THREE from "three";
   import { TextGeometry } from "three/examples/geometries/TextGeometry.js";
   // TODO: switch
-  let useSprite = false;
-  // let useSprite = true;
+  // let useSprite = false;
+  let useSprite = true;
 
   let scene, camera, renderer;
   let line, lineGeometry, lineMaterial;
@@ -44,6 +44,11 @@
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
+
+    let planeGeometry = new THREE.PlaneGeometry(14.5, 7.5);
+    let planeMaterial = new THREE.MeshBasicMaterial({ color: "#5A5A5A" });
+    let plane = new THREE.Mesh(planeGeometry, planeMaterial);
+    scene.add(plane);
 
     lineGeometry = new THREE.BufferGeometry();
     lineMaterial = new THREE.LineBasicMaterial({
@@ -143,21 +148,24 @@
    * Create Text Texture (using sprite)
    */
   function createTextTexture(text) {
-    console.log("createTextTexture");
-    let canvas = document.createElement('canvas');
-    let context = canvas.getContext('2d');
+    let canvas = document.createElement("canvas");
+    let context = canvas.getContext("2d");
 
-    let textMetrics = context.measureText(text);
-    let width = textMetrics.width;
-    let height = 24;
+    let metrics = null;
+    let fontSize = 100;
+    context.font = `Bold ${fontSize}px Arial`;
+    metrics = context.measureText(text);
+    let textWidth = metrics.width;
 
-    canvas.width = width;
-    canvas.height = height;
+    // Background
+    context.fillStyle = "rgba(255, 255, 255, 0.8)";
+    context.fillRect(0, 0, textWidth, fontSize);
 
-    context.font = 'Bold 20px Arial';
-    context.fillStyle = 'white'; // ???
-    context.fillText(text, 0, height / 2 + 5);
+    // Text
+    context.fillStyle = "black";
+    context.fillText(text, 0, fontSize);
 
+    // Create texture
     let texture = new THREE.Texture(canvas);
     texture.needsUpdate = true;
 
