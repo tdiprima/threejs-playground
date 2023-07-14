@@ -13,12 +13,13 @@ let fontLoader = new FontLoader();
 // Load the font file
 fontLoader.load("/fonts/helvetiker_regular.typeface.json", function(font) {
   // Create the text geometry
-  let textGeometry = new TextGeometry("Hello, World!", {
-    font: font, // Set the loaded font
-    size: 1, // Set the size of the text
-    height: 1, // Set the thickness of the text
-    curveSegments: 12, // Set the number of segments used for curve approximation
-    bevelEnabled: false // Disable bevel
+  let textGeometry = new TextGeometry("Hewwo, Bear!", {
+    font: font,
+    size: 1,
+    // height: 1, <- HERE'S WHY IT LOOKS LIKE CRAP
+    height: 0.1,
+    curveSegments: 12,
+    bevelEnabled: false
   });
 
   // Center the text geometry
