@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>Draw line with real-time measurement</title>
-  <!-- Perhaps use labels instead - CSS2DRenderer -->
-  <!-- TODO: Draw from center of screen, "using" the box when it appears. -->
 </head>
 <body>
 <script type="importmap">{
@@ -18,12 +16,12 @@
 <script async src="/es-module-shims-1.3.6/dist/es-module-shims.js"></script>
 <script type="module">
   // Draw & Measure Lines
-  // A reimagined version of the fabric.js program using three.js
   import * as THREE from "three";
-  import { TextGeometry } from "three/examples/geometries/TextGeometry.js";
-  // TODO: switch
-  // let useSprite = false;
   let useSprite = true;
+
+  import { TextGeometry } from "three/examples/geometries/TextGeometry.js";
+  // FontLoader
+  // let useSprite = false;
 
   let scene, camera, renderer;
   let line, lineGeometry, lineMaterial;
@@ -51,10 +49,7 @@
     scene.add(plane);
 
     lineGeometry = new THREE.BufferGeometry();
-    lineMaterial = new THREE.LineBasicMaterial({
-      color: 0x00ff00,
-      depthWrite: false
-    });
+    lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
 
     renderer.domElement.addEventListener('mousedown', onMouseDown, false);
     renderer.domElement.addEventListener('mousemove', onMouseMove, false);
@@ -73,9 +68,9 @@
   }
 
   function createSprite() {
-    // console.log("Sprite");
     let length = Calculate.lineLength(startPoint.x, startPoint.y, endPoint.x, endPoint.y).toFixed(2);
-    message = `Length ${length}`;
+    // message = `Length: ${length}`;
+    message = `${length}`;
     let textTexture = createTextTexture(message);
     let spriteMaterial = new THREE.SpriteMaterial({ map: textTexture });
     text = new THREE.Sprite(spriteMaterial);
@@ -84,20 +79,12 @@
     scene.add(text);
   }
 
-  /**
-   * This one actually works better, sort of.
-   */
   function createTextGeo() {
-    // console.log("textGeometry");
     let length = Calculate.lineLength(startPoint.x, startPoint.y, endPoint.x, endPoint.y).toFixed(2);
     message = `Length ${length}`;
-    let textGeometry = new TextGeometry(message, { size: 5 }); // createTextTexture
-    // todo: "text" is the stupid box.
-    let textMaterial = new THREE.MeshBasicMaterial({
-      color: 0x0000ff,
-      // depthWrite: false
-    });
-    // let textMaterial = new THREE.MeshBasicMaterial();
+    let textGeometry = new TextGeometry(message, { size: 5 });
+    // "text" is the stupid box.
+    let textMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
     text = new THREE.Mesh(textGeometry, textMaterial);
     text.position.copy(endVector);
     scene.add(text);
@@ -151,21 +138,19 @@
     let canvas = document.createElement("canvas");
     let context = canvas.getContext("2d");
 
-    let metrics = null;
-    let fontSize = 100;
-    context.font = `Bold ${fontSize}px Arial`;
-    metrics = context.measureText(text);
-    let textWidth = metrics.width;
+    let textMetrics = context.measureText(text);
+    let width = textMetrics.width;
+    // Guess what?  Manually changing "width" makes it worse.
+    // console.log("text width:", width);
+    let height = 24;
 
-    // Background
-    context.fillStyle = "rgba(255, 255, 255, 0.8)";
-    context.fillRect(0, 0, textWidth, fontSize);
+    canvas.width = width;
+    canvas.height = height;
 
-    // Text
-    context.fillStyle = "black";
-    context.fillText(text, 0, fontSize);
+    context.font = 'Bold 20px Arial';
+    context.fillStyle = 'white';
+    context.fillText(text, 0, height / 2 + 5);
 
-    // Create texture
     let texture = new THREE.Texture(canvas);
     texture.needsUpdate = true;
 
