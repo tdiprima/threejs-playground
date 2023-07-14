@@ -4,13 +4,12 @@ import { TextGeometry } from "/jsm/geometries/TextGeometry.js";
 
 let message = "";
 
-// todo: wtf is this?
-const scene = new THREE.Scene();
+let scene = new THREE.Scene();
 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = 5;
 
-const renderer = new THREE.WebGLRenderer();
+let renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
@@ -19,8 +18,8 @@ let isDrawing = false;
 let startPoint, endPoint;
 let line, textMesh;
 
-// Create a font loader
-const fontLoader = new FontLoader();
+// todo: FONT LOADER HERE
+let fontLoader = new FontLoader();
 fontLoader.load("/fonts/helvetiker_regular.typeface.json", function (font) {
   // Event listeners for mouse interactions
   renderer.domElement.addEventListener('mousedown', onMouseDown, false);
@@ -32,8 +31,8 @@ fontLoader.load("/fonts/helvetiker_regular.typeface.json", function (font) {
     startPoint = getMouseCoordinates(event);
 
     // Create the line geometry
-    const lineGeometry = new THREE.BufferGeometry();
-    const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+    let lineGeometry = new THREE.BufferGeometry();
+    let lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
 
     // Set initial position as start point
     lineGeometry.setFromPoints([startPoint, startPoint]);
@@ -52,18 +51,20 @@ fontLoader.load("/fonts/helvetiker_regular.typeface.json", function (font) {
     line.geometry.setFromPoints([startPoint, endPoint]);
 
     // Calculate the line length
-    const length = Calculate.lineLength(startPoint.x, startPoint.y, endPoint.x, endPoint.y).toFixed(2);
+    let length = Calculate.lineLength(startPoint.x, startPoint.y, endPoint.x, endPoint.y).toFixed(2);
 
     // Create the text geometry
     message = `Length: ${length}`;
-    const textGeometry = new TextGeometry(message, {
+    console.log(`%c${message}`, "color: #ccff00;");
+
+    let textGeometry = new TextGeometry(message, {
       font: font,
       size: 0.2,
       height: 0.1
     });
 
     // Create the text material
-    const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    let textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
 
     // Remove the previous text mesh if it exists
     if (textMesh) {
@@ -88,14 +89,14 @@ fontLoader.load("/fonts/helvetiker_regular.typeface.json", function (font) {
 
   // Function to convert mouse coordinates to normalized device coordinates
   function getMouseCoordinates(event) {
-    const mouse = new THREE.Vector2();
+    let mouse = new THREE.Vector2();
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-    const raycaster = new THREE.Raycaster();
+    let raycaster = new THREE.Raycaster();
     raycaster.setFromCamera(mouse, camera);
 
-    const intersects = raycaster.intersectObjects(scene.children);
+    let intersects = raycaster.intersectObjects(scene.children);
     if (intersects.length > 0) {
       return intersects[0].point;
     }

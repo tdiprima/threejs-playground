@@ -1,12 +1,13 @@
 // This is my modified draw-line-measure, wrapping everything inside the font loader
-// And of course!  It didn't work.  God only knows why.
 import * as THREE from "three";
 import { FontLoader } from "/jsm/loaders/FontLoader.js";
 import { TextGeometry } from "/jsm/geometries/TextGeometry.js";
 
+let message = "";
+
 let fontLoader = new FontLoader();
 fontLoader.load("/fonts/helvetiker_regular.typeface.json", function (font) {
-  let line, text, message;
+  let line, text;
   let isDrawing = false;
   let startPoint, endPoint;
   let startVector, endVector;
@@ -59,6 +60,7 @@ fontLoader.load("/fonts/helvetiker_regular.typeface.json", function (font) {
     ).toFixed(2);
 
     message = `Length: ${length}`;
+    console.log(`%c${message}`, "color: #ccff00;");
 
     let textGeometry = new TextGeometry(message, {
       font: font,
@@ -66,9 +68,7 @@ fontLoader.load("/fonts/helvetiker_regular.typeface.json", function (font) {
       height: 0.1
     });
 
-    let textMaterial = new THREE.MeshBasicMaterial({
-      color: 0xffffff,
-    });
+    let textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
     text = new THREE.Mesh(textGeometry, textMaterial);
     text.position.copy(endVector);
     scene.add(text);

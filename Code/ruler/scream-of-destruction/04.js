@@ -2,14 +2,17 @@ import * as THREE from "three";
 import { FontLoader } from "/jsm/loaders/FontLoader.js";
 import { TextGeometry } from "/jsm/geometries/TextGeometry.js";
 
+let message = "";
+
 let fontLoader = new FontLoader();
 fontLoader.load("/fonts/helvetiker_regular.typeface.json", function (font) {
-  let line, text, message;
+  let line, text;
   let isDrawing = false;
 
   let startPoint, endPoint; // Declare startPoint and endPoint variables
 
   let scene = new THREE.Scene();
+
   let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.z = 5;
 
@@ -57,7 +60,7 @@ fontLoader.load("/fonts/helvetiker_regular.typeface.json", function (font) {
     ).toFixed(2);
 
     message = `Length: ${length}`;
-    // ... rest of the code
+    console.log(`%c${message}`, "color: #ccff00;");
 
     let textGeometry = new TextGeometry(message, {
       font: font,
@@ -78,7 +81,6 @@ fontLoader.load("/fonts/helvetiker_regular.typeface.json", function (font) {
     console.log(`%c${message}`, "color: #ccff00;");
   }
 
-  // Rest of the code remains unchanged
   function getMouseCoordinates(event) {
     let mouse = new THREE.Vector2();
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
