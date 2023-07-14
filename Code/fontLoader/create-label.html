@@ -50,7 +50,6 @@
     let context = canvas.getContext("2d");
 
     let metrics = null;
-    // why is font twice? (see below)
     context.font = `${fontWeight} ${fontSize}px ${fontFamily}`; // pt / px
     metrics = context.measureText(text);
     let textWidth = metrics.width;
@@ -61,7 +60,6 @@
 
     // Text
     context.fillStyle = "black";
-    context.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
     context.fillText(text, 0, fontSize);
 
     // Create texture
