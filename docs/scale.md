@@ -3,8 +3,8 @@
 That's all you do.  Set it in the PlaneGeometry.  How hard is it to just tell me that?
 
 ```javascript
-var planeGeometry = new THREE.PlaneGeometry(10, 5);
-var planeGeometry = new THREE.PlaneGeometry(5, 2.5);
+let planeGeometry = new THREE.PlaneGeometry(10, 5);
+let planeGeometry = new THREE.PlaneGeometry(5, 2.5);
 ```
 
 ## Grr.
