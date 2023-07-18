@@ -1,3 +1,4 @@
+// todo: raycaster (coordinates off)
 let scene = new THREE.Scene();
 let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = 5;
@@ -12,7 +13,7 @@ let material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
 let segments = 64; // Number of line segments used to approximate the ellipse
 let geometry = new THREE.BufferGeometry();
 let vertices = new Float32Array((segments + 1) * 3); // (segments + 1) vertices * 3 coordinates (x, y, z)
-geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
 ellipse = new THREE.LineLoop(geometry, material);
 scene.add(ellipse);
 
@@ -20,9 +21,9 @@ scene.add(ellipse);
 let isDrawing = false;
 let startPoint;
 let endPoint;
-renderer.domElement.addEventListener('mousedown', onMouseDown, false);
-renderer.domElement.addEventListener('mousemove', onMouseMove, false);
-renderer.domElement.addEventListener('mouseup', onMouseUp, false);
+renderer.domElement.addEventListener("mousedown", onMouseDown, false);
+renderer.domElement.addEventListener("mousemove", onMouseMove, false);
+renderer.domElement.addEventListener("mouseup", onMouseUp, false);
 
 function onMouseDown(event) {
   event.preventDefault();
@@ -77,3 +78,9 @@ function animate() {
   renderer.render(scene, camera);
 }
 animate();
+
+window.addEventListener("resize", () => {
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+});

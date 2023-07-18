@@ -1,3 +1,4 @@
+// todo: bulldozer
 let scene = new THREE.Scene();
 
 let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -18,11 +19,11 @@ let brushMesh = new THREE.Mesh(brushGeometry, brushMaterial);
 scene.add(brushMesh);
 
 // Create a canvas texture for painting
-let canvas = document.createElement('canvas');
+let canvas = document.createElement("canvas");
 canvas.width = canvas.height = 512; // Size of the canvas texture
 
-let context = canvas.getContext('2d');
-context.fillStyle = 'rgba(0, 0, 0, 0)'; // Set initial fill color to transparent
+let context = canvas.getContext("2d");
+context.fillStyle = "rgba(0, 0, 0, 0)"; // Set initial fill color to transparent
 context.fillRect(0, 0, canvas.width, canvas.height);
 
 let texture = new THREE.CanvasTexture(canvas);
@@ -35,9 +36,9 @@ scene.add(planeMesh);
 
 // Handle mouse events
 let isPainting = false;
-renderer.domElement.addEventListener('mousedown', onMouseDown, false);
-renderer.domElement.addEventListener('mousemove', onMouseMove, false);
-renderer.domElement.addEventListener('mouseup', onMouseUp, false);
+renderer.domElement.addEventListener("mousedown", onMouseDown, false);
+renderer.domElement.addEventListener("mousemove", onMouseMove, false);
+renderer.domElement.addEventListener("mouseup", onMouseUp, false);
 
 function onMouseDown(event) {
   event.preventDefault();
