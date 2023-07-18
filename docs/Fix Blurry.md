@@ -49,5 +49,42 @@ Experiment with different pixel ratios to achieve the desired result.
 
 By addressing these potential causes and adjusting the relevant settings, you should be able to **improve the image quality** and **reduce blurriness** in your application.
 
+## Fix blurry text
+
+<span style="color:#0000dd;">Text geometry.  Depending on where it is on the screen, it could look blurry... like the font is intentionally doubled.
+It's called something in css &ndash; check "colors" somewhere...</span>
+
+```js
+textGeometry = new TextGeometry(message, {
+  font: font,
+  size: 0.2, // <-
+  height: 0.1 // <-
+});
+```
+
+<br>
+
+<span style="color:#0000dd;">One of the options <- fixed it, not this.  But just in case I need it for something else &ndash;</span>
+
+The issue you're referring to is known as **"subpixel rendering"** or **"font antialiasing."** In certain cases, when the text is positioned at non-integer pixel coordinates, the browser's rendering engine may attempt to antialias the edges of the text by blending the font color with the background color. This can result in a blurry or doubled appearance.
+
+<span style="color:#0000dd;">This issue not to be confused with the "dashed line issue."  Even tho they're similar.</span>
+
+To ensure that the text appears sharp and clear, regardless of its position on the screen, you can apply the following CSS rule to the container element that holds your three.js canvas:
+
+```css
+.container-element {
+  transform: translateZ(0);
+}
+```
+
+<br>
+
+By using the `translateZ(0)` transform, you trigger a hardware acceleration feature in most modern web browsers that forces the element to be rendered using the GPU. This helps eliminate subpixel rendering and produces crisper text.
+
+Keep in mind that the `.container-element` should be replaced with the actual class or ID of the element containing your three.js canvas.
+
+Applying this CSS rule should improve the rendering quality of your text geometry.
+
 <br>
 
