@@ -52,11 +52,18 @@ function onMouseUp(event) {
 
 function getMousePosition(clientX, clientY) {
   let rect = renderer.domElement.getBoundingClientRect();
-  return new THREE.Vector3(
-    ((clientX - rect.left) / rect.width) * 2 - 1,
-    -((clientY - rect.top) / rect.height) * 2 + 1,
-    0
-  );
+
+  let mouse = new THREE.Vector2();
+  mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+
+  let raycaster = new THREE.Raycaster();
+  raycaster.setFromCamera(mouse, camera);
+
+  let intersectionPoint = new THREE.Vector3();
+  raycaster.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 0, 1)), intersectionPoint);
+
+  return intersectionPoint;
 }
 
 // function updateRectangle() {
