@@ -1,10 +1,10 @@
 let scene = new THREE.Scene();
-scene.background = new THREE.Color("#d3d3d3");
 
 let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = 5;
 
 let renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setClearColor(0x333333, 1);
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
@@ -20,9 +20,11 @@ scene.add(brushMesh);
 // Create a canvas texture for painting
 let canvas = document.createElement('canvas');
 canvas.width = canvas.height = 512; // Size of the canvas texture
+
 let context = canvas.getContext('2d');
 context.fillStyle = 'rgba(0, 0, 0, 0)'; // Set initial fill color to transparent
 context.fillRect(0, 0, canvas.width, canvas.height);
+
 let texture = new THREE.CanvasTexture(canvas);
 
 // Create a plane to display the painted texture
@@ -74,4 +76,3 @@ function animate() {
   renderer.render(scene, camera);
 }
 animate();
-
