@@ -1,4 +1,4 @@
-// todo: raycaster (coordinates off)
+// Ellipse Drawing with Raycasting
 let scene = new THREE.Scene();
 let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = 5;
@@ -48,11 +48,26 @@ function onMouseUp(event) {
 
 function getMousePosition(clientX, clientY) {
   let rect = renderer.domElement.getBoundingClientRect();
-  return new THREE.Vector3(
-    ((clientX - rect.left) / rect.width) * 2 - 1,
-    -((clientY - rect.top) / rect.height) * 2 + 1,
-    0
-  );
+
+  // Before raycasting
+  // return new THREE.Vector3(
+  //   ((clientX - rect.left) / rect.width) * 2 - 1,
+  //   -((clientY - rect.top) / rect.height) * 2 + 1,
+  //   0
+  // );
+
+  // Using raycasting
+  let mouse = new THREE.Vector2();
+  mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+
+  let raycaster = new THREE.Raycaster();
+  raycaster.setFromCamera(mouse, camera);
+
+  let intersectionPoint = new THREE.Vector3();
+  raycaster.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 0, 1)), intersectionPoint);
+
+  return intersectionPoint;
 }
 
 function updateEllipse() {
