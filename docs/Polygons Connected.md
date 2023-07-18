@@ -167,7 +167,9 @@ to:
 currentPolygonPositions.push(point.x, point.y, point.z);
 ```
 
-Here's the corrected version of your code:
+<br>
+
+You are correct. In order to maintain the initial positions array for raycasting, you should modify the line `positions.push(point.x, point.y, point.z);` inside the `onMouseMove` function to `currentPolygonPositions.push(point.x, point.y, point.z);`.
 
 ```javascript
 let currentPolygonPositions = []; // Store positions for current polygon
@@ -198,6 +200,9 @@ function onMouseMove(event) {
     if (intersects.length > 0) {
       let point = intersects[0].point;
 
+      // Store the position in the current polygon's array
+      currentPolygonPositions.push(point.x, point.y, point.z);
+
       let bufferGeometry = line.geometry;
 
       // DISTANCE CHECK
@@ -207,8 +212,6 @@ function onMouseMove(event) {
 
       if (distance > distanceThreshold) {
         console.log("here");
-        // Store the position in the current polygon's array
-        currentPolygonPositions.push(point.x, point.y, point.z);
         // Use the current polygon's array for the line's position attribute
         line.geometry.setAttribute("position", new THREE.Float32BufferAttribute(currentPolygonPositions, 3));
 
@@ -237,5 +240,92 @@ function onMouseUp() {
 <br>
 
 Now, the positions will be correctly stored in the `currentPolygonPositions` array, and the distance check should work as expected.
+
+<span style="color:green;font-weight:bold;font-size:larger;">Yeah, no.</span>
+
+It still doesn't account for the first one.  Distance is zero.  So I did that, and... it still connects sometimes anyway.  Even if I set the threshold back to like 0.1 or something.
+
+## I love it.
+
+Even if you don't understand the issue, show confidence anyway.  It's what any guy would automatically do.  And that's how they run the world, even while being incompetent!
+
+Apologies for the confusion. I understand the issue now. To handle the first drawn polygon and prevent connections between polygons, you can add an additional check in the `onMouseMove` function to determine if it's the first vertex being added to the current polygon.
+
+```javascript
+let currentPolygonPositions = []; // Store positions for current polygon
+let polygonPositions = []; // Store positions for each polygon
+const distanceThreshold = 0.1;
+
+renderer.domElement.addEventListener('pointerdown', event => {
+  if (isDrawing) {
+    mouseIsPressed = true;
+
+    // Create a new BufferAttribute for each line
+    let bufferGeometry = new THREE.BufferGeometry();
+    line = new THREE.Line(bufferGeometry, lineMaterial);
+    scene.add(line);
+
+    currentPolygonPositions = []; // Start a new array
+  }
+});
+
+function onMouseMove(event) {
+  if (isDrawing && mouseIsPressed) {
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+    let intersects = raycaster.intersectObjects(scene.children, true);
+
+    if (intersects.length > 0) {
+      let point = intersects[0].point;
+
+      // Check if it's the first vertex of the current polygon
+      const isFirstVertex = currentPolygonPositions.length === 0;
+
+      if (isFirstVertex) {
+        currentPolygonPositions.push(point.x, point.y, point.z);
+      } else {
+        // DISTANCE CHECK
+        const lastVertex = new THREE.Vector3().fromArray(currentPolygonPositions.slice(-3));
+        const currentVertex = new THREE.Vector3(point.x, point.y, point.z);
+        const distance = lastVertex.distanceTo(currentVertex);
+
+        if (distance > distanceThreshold) {
+          console.log("here");
+          // Store the position in the current polygon's array
+          currentPolygonPositions.push(point.x, point.y, point.z);
+          // Use the current polygon's array for the line's position attribute
+          line.geometry.setAttribute("position", new THREE.Float32BufferAttribute(currentPolygonPositions, 3));
+        }
+      }
+
+      let bufferGeometry = line.geometry;
+      bufferGeometry.attributes.position.needsUpdate = true;
+    }
+  }
+}
+
+function onMouseUp() {
+  if (isDrawing) {
+    mouseIsPressed = false;
+
+    // Draw the final line
+    line.geometry.setDrawRange(0, currentPolygonPositions.length / 3);
+    line.geometry.computeBoundingSphere();
+
+    // Store the current polygon's positions in the polygonPositions array
+    polygonPositions.push(currentPolygonPositions);
+    // Clear the current polygon's array
+    currentPolygonPositions = [];
+  }
+}
+```
+
+<br>
+
+The code checks if it's the first vertex of the current polygon by comparing the length of `currentPolygonPositions` with zero. If it's the first vertex, it is directly added to the positions array without the distance check. For subsequent vertices, the distance check is performed as before.
+
+Please give it a try, and let me know if the issue persists or if you have any further questions.
 
 <br>
