@@ -16,7 +16,7 @@ let material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
 
 let geometry = new THREE.BufferGeometry();
 let vertices = new Float32Array(12); // 4 vertices * 3 coordinates (x, y, z)
-geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
 
 rect = new THREE.LineLoop(geometry, material);
 scene.add(rect);
@@ -25,9 +25,9 @@ scene.add(rect);
 let isDrawing = false;
 let startPoint;
 let endPoint;
-renderer.domElement.addEventListener('mousedown', onMouseDown, false);
-renderer.domElement.addEventListener('mousemove', onMouseMove, false);
-renderer.domElement.addEventListener('mouseup', onMouseUp, false);
+renderer.domElement.addEventListener("mousedown", onMouseDown, false);
+renderer.domElement.addEventListener("mousemove", onMouseMove, false);
+renderer.domElement.addEventListener("mouseup", onMouseUp, false);
 
 function onMouseDown(event) {
   event.preventDefault();

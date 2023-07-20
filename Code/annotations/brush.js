@@ -1,4 +1,4 @@
-// todo: bulldozer
+// todo: this is NOT what we want, so simply fixing it isn't really ideal.
 let scene = new THREE.Scene();
 
 let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -9,7 +9,7 @@ renderer.setClearColor(0x333333, 1);
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Create a brush
+// Create a brush (It's actually a green dot that doesn't move.)
 let brushSize = 0.2; // Size of the brush
 let brushColor = new THREE.Color(0x00ff00); // Brush color
 let brushOpacity = 0.4; // Brush opacity
@@ -29,7 +29,7 @@ context.fillRect(0, 0, canvas.width, canvas.height);
 let texture = new THREE.CanvasTexture(canvas);
 
 // Create a plane to display the painted texture
-let planeGeometry = new THREE.PlaneGeometry(2, 2);
+let planeGeometry = new THREE.PlaneGeometry(7, 7);
 let planeMaterial = new THREE.MeshBasicMaterial({ map: texture });
 let planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
 scene.add(planeMesh);
