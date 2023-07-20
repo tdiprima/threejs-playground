@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>whatever, man.</title>
+  <!-- https://img.ly/blog/how-to-draw-on-an-image-with-javascript/ -->
+</head>
+<body>
+<div>
+  <canvas
+    height="200"
+    id="myCanvas"
+    style="border: 1px solid black;"
+    width="500"
+  ></canvas>
+</div>
+<div style="margin-top: 5px;">
+  <span>Size: </span>
+  <input
+    class="size"
+    id="sizeRange"
+    max="50"
+    min="1"
+    type="range"
+    value="25"
+  />
+</div>
+<div style="margin-top: 5px;">
+  <span>Color: </span>
+  <input checked name="colorRadio" type="radio" value="black"/>
+  <label>Black</label>
+  <input name="colorRadio" type="radio" value="white"/>
+  <label>White</label>
+  <input name="colorRadio" type="radio" value="red"/>
+  <label>Red</label>
+  <input name="colorRadio" type="radio" value="green"/>
+  <label>Green</label>
+  <input name="colorRadio" type="radio" value="blue"/>
+  <label>Blue</label>
+</div>
+<div style="margin-top: 5px;">
+  <button id="clear">Clear</button>
+</div>
+<br/>
+<input accept="image/*" id="upload" type="file"/>
+<p>
+  Start drawing on the blank canvas, or upload an image and use the brush to
+  draw on it
+</p>
+ <script src="vanilla.js"></script>
+</body>
+</html>
