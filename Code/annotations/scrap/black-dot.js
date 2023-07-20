@@ -25,6 +25,7 @@ function drawOutline(e) {
   let x = e.clientX - canvas.offsetLeft;
   let y = e.clientY - canvas.offsetTop;
 
+  // If you clear rect, all you're doing is moving a black dot around the screen
   // ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.beginPath();
   ctx.arc(x, y, brushSize, 0, Math.PI * 2);
