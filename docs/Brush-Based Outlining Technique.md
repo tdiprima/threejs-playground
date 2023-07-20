@@ -20,49 +20,6 @@ Enabling brush-based outlining on the canvas.
 
 He has not been able to provide one working example of what I want, so we're done. :(
 
-```js
-drawOnImage();
-
-let size = 25;
-let color = "black";
-
-function drawOnImage(image = null) {
-  let canvasElement = document.getElementById("myCanvas");
-  let context = canvasElement.getContext("2d");
-
-  let isDrawing = false;
-
-  canvasElement.onmousedown = (e) => {
-    isDrawing = true;
-    startDrawing(e.clientX, e.clientY);
-  };
-
-  canvasElement.onmousemove = (e) => {
-    if (isDrawing) {
-      continueDrawing(e.clientX, e.clientY);
-    }
-  };
-
-  canvasElement.onmouseup = () => {
-    isDrawing = false;
-  };
-
-  function startDrawing(x, y) {
-    context.beginPath();
-    context.moveTo(x, y);
-  }
-
-  function continueDrawing(x, y) {
-    context.lineTo(x, y);
-    context.lineWidth = size / 4; // Adjust the line thickness as desired
-    context.strokeStyle = color;
-    context.stroke();
-  }
-}
-```
-
-### Spark Joy
-
 This is just a small line example to play with.
 
 ```js
@@ -72,14 +29,16 @@ function fat_line() {
 
   ctx.lineWidth = 20; // Adjust the line width as needed
   ctx.strokeStyle = 'black'; // Set stroke color to black
-  // ctx.fillStyle = 'rgba(0, 0, 0, 0)'; // Transparent fill
-  ctx.fillStyle = 'rgba(255, 255, 255, 1)'; // White fill
+  // ctx.fillStyle = 'rgba(0, 0, 0, 0)'; // Transparent fill; dafuq this do?
+  ctx.fillStyle = 'rgba(255, 255, 255, 1)'; // White fill; didn't work
 
+  // This is a line; circle would be different.
   ctx.beginPath();
   ctx.moveTo(50, 50); // Starting point of the line
   ctx.lineTo(250, 50); // Ending point of the line
 
   ctx.stroke();
+  ctx.fill(); // didn't work
 }
 ```
 

@@ -13,7 +13,8 @@ function startDrawing(e) {
 // Function to stop drawing
 function stopDrawing() {
   isDrawing = false;
-  ctx.beginPath();
+  // ctx.beginPath(); // dafuq?
+  ctx.closePath();
 }
 
 // Function to draw the outline
@@ -23,12 +24,14 @@ function drawOutline(e) {
   let x = e.clientX - canvas.offsetLeft;
   let y = e.clientY - canvas.offsetTop;
 
-  // ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // ctx.clearRect(0, 0, canvas.width, canvas.height); // clears bgColor too
   ctx.beginPath();
   ctx.arc(x, y, brushSize, 0, Math.PI * 2);
   ctx.strokeStyle = brushColor;
+  // ctx.fillStyle = 'rgba(255, 255, 255, 1)'; // not what I expected
+  // ctx.fill();
   ctx.stroke();
-  ctx.closePath();
+  // ctx.closePath();
 }
 
 // Add event listeners to the canvas
