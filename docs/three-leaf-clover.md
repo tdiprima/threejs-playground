@@ -363,6 +363,14 @@ https://gist.github.com/Sumbera/c6fed35c377a46ff74c3
 
 [OSM Buildings is 3D](https://github.com/OSMBuildings/OSMBuildings)
 
+**Cool**
+
+https://mappa.js.org/docs/examples-three-js.html
+
+**What is better than three JS?**
+
+WebGL, BabylonJS, Unity, D3. js, and PlayCanvas are the most popular alternatives and competitors to three.
+
 <br>
 
 <span style="color:#0000dd;font-weight:bold;font-size:larger;">What is a "lower-poly model"?  What is a "point cloud"?</span>
