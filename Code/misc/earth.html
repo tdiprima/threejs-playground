@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Earth</title>
+</head>
+<body>
+<script async src="/es-module-shims-1.3.6/dist/es-module-shims.js"></script>
+<script type="importmap">{
+  "imports": {
+    "three": "/build/three.module.js",
+    "three/examples/": "/jsm/"
+  }
+}
+</script>
+<script type="module">
+  import * as THREE from "three";
+  import { OrbitControls } from "three/examples/controls/OrbitControls.js";
+
+  let scene = new THREE.Scene();
+  let camera = (window._camera = new THREE.PerspectiveCamera(
+    75, // Field of view
+    window.innerWidth / window.innerHeight, // Aspect ratio
+    0.1, // Near
+    10000 // Far
+  ));
+  camera.position.z = 6.5;
+
+  let renderer = new THREE.WebGLRenderer();
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  let controls = new OrbitControls(camera, renderer.domElement);
+
+  let resourceURL = '/images/simon_dev.jpg';
+
+  /* Textures */
+  let loader = new THREE.TextureLoader();
+  let material = new THREE.MeshBasicMaterial({
+    map: loader.load(resourceURL),
+    side: THREE.DoubleSide
+  });
+
+  let planeGeom = new THREE.PlaneGeometry(10, 10);
+  let mesh = new THREE.Mesh(planeGeom, material);
+  mesh.position.set(0, 0, 0);
+  scene.add(mesh);
+
+  window.addEventListener('resize', () => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.render(scene, camera);
+  });
+
+  (function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  }());
+</script>
+</body>
+</html>
