@@ -1,10 +1,10 @@
 ## Dashed Line Issue Solution
 
-<span style="color:#0000dd;">I have a three.js program that allows the user to free-draw on an image.  It also allows to orbit control the image.  I'm using THREE.Line and THREE.LineBasicMaterial.  Now, if I draw a line, and then move the image using orbit controls, the drawn line looks dashed.</span>
+<span style="color:#0000dd;">I free-draw on an image.  If I move the image using orbit controls, the drawn line looks dashed.</span>
 
 The issue you're experiencing with the drawn line appearing dashed after moving the image using orbit controls in your Three.js program is likely due to the line being affected by the **antialiasing** settings of the renderer.
 
-When the image is moved, the line's position is **sub-pixel aligned**, causing it to be rendered with antialiasing applied, which can result in a dashed or blurred appearance.
+When the image is moved, the line's position is <span style="color:#4a00b4;">sub-pixel aligned</span>, causing it to be rendered with antialiasing applied, which can result in a dashed or blurred appearance.
 
 To avoid this, you can try adjusting the antialiasing settings of the renderer or use an alternative approach. Here are a couple of potential solutions you can try:
 

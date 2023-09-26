@@ -44,16 +44,18 @@ function fat_line() {
 
 ## Where is the qupath implementation?
 
+```sh
 ack -iwl brush
-**qupath-gui-fx/src/main/java/**
+qupath-gui-fx/src/main/java/ # ****
 qupath/lib/gui/prefs/PathPrefs.java
 qupath/lib/gui/viewer/tools/PathTools.java
 qupath/lib/gui/viewer/tools/QuPathPenManager.java
 qupath/lib/gui/viewer/tools/BrushTool.java
 qupath/lib/gui/QuPathGUI.java
 qupath/lib/gui/panes/PreferencePane.java
+```
 
-**BrushTool.java** &ndash; I read the darn thing, but it doesn't make any sense, where is the !@##$ drawing stuff??
+**BrushTool.java** &mdash; I read the darn thing, but it doesn't make any sense, where is the drawing stuff?
 
 qupath-gui-fx/src/main/java/qupath/lib/gui/QuPathGUI.java
 

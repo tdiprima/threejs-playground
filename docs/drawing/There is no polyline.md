@@ -1,12 +1,10 @@
 ## Polyline
 
-What the hell is it, anyway?
-
 A polyline is just a way of drawing shapes using only straight lines and connecting the dots.
 
-## Do we have one in three.js?
+<span style="color:#0000dd;">Do we have one in three.js?</span>
 
-Nope! There is no built-in class specifically named "Polyline" like in Fabric.js.
+No. There is no built-in class specifically named "Polyline" like in Fabric.js.
 
 But we're programmers, and we can make one.
 
@@ -34,7 +32,7 @@ var line = new THREE.Line(geometry, material);
 scene.add(line);
 ```
 
-### So we got points and lines
+<span style="color:#0000dd;">So we got points and lines.</span>
 
 In this example, the `points` array represents the vertices of the polyline. 
 

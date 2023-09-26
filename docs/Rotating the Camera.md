@@ -2,32 +2,32 @@
 
 My three.js code detects a selected camera, etc.
 
-esqueletos/uno.js, pan\_and\_zoom-3.html
+esqueletos/uno.js, pan\_and\_zoom-3.html (543919f)
 
 Why are we rotating by `(0, 1, 0)`, and `(1, 0, 0)`?
 
-
-### Mouse -> Camera
-
-The code is responsible for **rotating** the selected camera in response to **mouse movement.**
-
 ```js
-if (selectedCamera) {
-  // Retrieve the movement distance of the mouse in the horizontal (X) and vertical (Y) directions
-  const deltaX = event.movementX;
-  const deltaY = event.movementY;
+function onDocumentMouseMove(event) {
+  event.preventDefault();
 
-  // Calculate the rotation angles based on the mouse movement and the window size
-  const theta = (deltaX / window.innerWidth) * Math.PI * 2;
-  const phi = (deltaY / window.innerHeight) * Math.PI * 2;
+  if (selectedCamera) {
+    // Retrieve the movement distance of the mouse in the horizontal (X) and vertical (Y) directions
+    const deltaX = event.movementX;
+    const deltaY = event.movementY;
 
-  // Rotate the selected camera
-  selectedCamera.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), theta); // around the world Y-axis (0, 1, 0) by the horizontal angle (theta)
-  selectedCamera.rotateOnWorldAxis(new THREE.Vector3(1, 0, 0), phi); // around the world X-axis (1, 0, 0) by the vertical angle (phi)
+    // Calculate the rotation angles based on the mouse movement and the window size
+    const theta = (deltaX / window.innerWidth) * Math.PI * 2;
+    const phi = (deltaY / window.innerHeight) * Math.PI * 2;
+
+    // Rotate the selected camera
+    selectedCamera.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), theta); // around the world Y-axis (0, 1, 0) by the horizontal angle (theta)
+    selectedCamera.rotateOnWorldAxis(new THREE.Vector3(1, 0, 0), phi); // around the world X-axis (1, 0, 0) by the vertical angle (phi)
+  }
 }
 ```
 
 <br>
+The code is responsible for rotating the selected camera in response to mouse movement.
 
 1. The code first checks if a camera is selected (`if (selectedCamera)`), ensuring that the subsequent code only executes **when a camera is available.**
 

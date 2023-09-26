@@ -1,38 +1,11 @@
 ## THREE.Texture(canvas)
 
+<a href="../fontLoader/create-label.html">create-label.html</a>
+
 ```js
-// create-label.html
-function createLabel(text, fontSize, fontWeight, fontFamily) {
-  let canvas = document.createElement("canvas");
-  let context = canvas.getContext("2d");
+let context = canvas.getContext("2d");context.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
 
-  let metrics = null;
-  context.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
-  metrics = context.measureText(text);
-  let textWidth = metrics.width;
-
-  // Background
-  context.fillStyle = "rgba(255, 255, 255, 0.8)";
-  context.fillRect(0, 0, textWidth, fontSize);
-
-  // Text
-  context.fillStyle = "black";
-  context.fillText(text, 0, fontSize);
-
-  // Create texture
-  let texture = new THREE.Texture(canvas);
-  texture.needsUpdate = true;
-
-  // Material, geometry, mesh
-  let material = new THREE.MeshBasicMaterial({
-    map: texture,
-    side: THREE.DoubleSide
-  });
-  let geometry = new THREE.PlaneGeometry(textWidth / 100, fontSize / 100);
-  let mesh = new THREE.Mesh(geometry, material);
-
-  return mesh;
-}
+let geometry = new THREE.PlaneGeometry(textWidth / 100, fontSize / 100);
 ```
 
 ## Explain context.font and PlaneGeometry
@@ -51,11 +24,9 @@ You can adjust this **scaling factor** to fit your specific needs. If you want l
 
 ## Point or Pixels
 
-<span style="color:#0000dd;">When setting font size, do people generally prefer to use "point" or "pixels".</span>
+<span style="color:#0000dd;font-size:larger;">When setting font size, do people generally prefer to use "point" or "pixels"?</span>
 
-<span style="color:#0000dd;">(Pixels makes sense, but there are other measurements too.)</span>
-
-<span style="color:#0000dd;">And he couldn't say which is used the most.</span> <span style="font-size:27px;">🤠</span>
+<span style="color:#0000dd;font-weight:bold;">Answer: pixels, em, and rem.</span>
 
 **Pixels (px)** are a relative unit of measurement that corresponds directly to the pixels on a screen. If you set a font size to 12px, it will be 12 pixels tall on most screens. Pixels provide precise control over the size of the text and ensure consistent rendering across different devices and resolutions.
 
@@ -63,6 +34,6 @@ You can adjust this **scaling factor** to fit your specific needs. If you want l
 
 If you are designing for the **web** and want to have precise control over the size of the text, pixels are generally preferred. If you are designing for **print** or have specific requirements related to physical sizes, points may be more appropriate.
 
-It's worth noting that using relative units like **em** (em) or **rem** (root em) can also provide flexibility and responsiveness, as they scale with the parent elements or the root element, respectively.
+It's worth noting that using relative units like <span style="color:#a71f36;">**em** (em)</span> or <span style="color:#a71f36;">**rem** (root em)</span> can also provide flexibility and responsiveness, as they scale with the parent elements or the root element, respectively.
 
 <br>

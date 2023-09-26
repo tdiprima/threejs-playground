@@ -1,5 +1,10 @@
 ## The mix function
 
+```js
+// Ales_Inferno/slider_shader.html
+color = mix(vec3(1.0, 0.0, 0.0), vec3(1.0, 0.0, 1.0), hue * 6.0);
+```
+
 The `mix` function is a built-in function in GLSL (the shading language used in WebGL). It is not specific to the GSAP library.
 
 The `mix` function in GLSL performs a linear interpolation between two values based on a specified interpolation factor. 
@@ -15,15 +20,15 @@ mix(value1, value2, interpolationFactor)
 
 In the provided code example, the `mix` function is used to smoothly transition between colors by specifying different colors as `value1` and `value2` based on the current hue value within the respective range.
 
-### GSAP (GreenSock Animation Platform) library
+### GSAP library
 
 ```html
+<!-- GreenSock Animation Platform -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
 ```
 
-### Wut?
-
-THREE.WebGLProgram: Program Info Log: WARNING: **Output of vertex shader** 'webgl\_37cc066937ccaa46' not read by fragment shader.
+<br>
+<span style="color:#0000dd;font-size:larger;">THREE.WebGLProgram: Program Info Log: WARNING: Output of vertex shader 'webgl\_37cc066937ccaa46' not read by fragment shader.</span>
 
 The warning you're seeing is related to the vertex shader's output not being used in the fragment shader. It indicates that the output variable `vUv` defined in the vertex shader is not being read or utilized in the fragment shader.
 
@@ -39,13 +44,11 @@ void main() {
 
 ## "Interpolate" and "Transpose"
 
-No, "interpolate" and "transpose" are not synonyms, and they refer to different concepts.
-
 **"Interpolate"** refers to the process of **estimating** values between two known values based on a linear or non-linear relationship. It involves determining intermediate values within a range to achieve a smooth transition or progression.
 
 **"Transpose,"** on the other hand, is a term used in linear algebra and matrix operations. It refers to the operation of **rearranging** the rows and columns of a matrix, effectively flipping it along its diagonal. The transpose of a matrix is obtained by **swapping** its rows with its columns.
 
-### Wut wut?
+### Deprecations
 
 Scripts "build/three.js" and "build/three.min.js" are deprecated with r150+, and will be removed with r160. Please use ES Modules or alternatives: https://threejs.org/docs/index.html#manual/en/introduction/Installation three.js:1:9
 
