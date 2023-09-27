@@ -1,7 +1,7 @@
 ## Create Points
 
 ```js
-// createPoints
+// parallel-lines/js/swirl.js, create-points helper
 while (i < len) {
   per = i / (len - 1);
   radian = Math.PI * 2 * rotationCount * per;
