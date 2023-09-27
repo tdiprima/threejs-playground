@@ -1,7 +1,8 @@
 ## Parent Camera
 
 In what cases would we want a parent camera (PerspectiveCamera)?
-pan\_and\_zoom-2.html
+<!--pan_and_zoom-2.html-->
+Ales\_Inferno/set\_pan\_zoom\_others.html
 
 <span style="color:#0000dd;">If we had multiple cubes, instead of coding the rotation for each stupid one (although we could just easily do that in a loop), we rotate the parent.  That's the idea.</span>
 
@@ -9,30 +10,26 @@ pan\_and\_zoom-2.html
 
 Code example demonstrating **camera movement coordination** using a parent camera.
 
-(Of course it gives me an *object* instead of a *camera*.  Brilliant.)
+(He gave me an *object* instead of a *camera*, but ok.)
 
 ```javascript
 // Set up the scene, renderer, and camera
 let scene = new THREE.Scene();
 let renderer = new THREE.WebGLRenderer();
 document.body.appendChild(renderer.domElement);
-let width = window.innerWidth;
-let height = window.innerHeight;
-renderer.setSize(width, height);
+renderer.setSize(window.innerWidth, window.innerHeight);
 
 // Create a parent object to group the camera and other objects
 let parentObject = new THREE.Object3D();
 scene.add(parentObject);
 
 // Create the camera and add it as a child of the parent object
-let camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 parentObject.add(camera);
 
 // Create a cube to demonstrate movement coordination
 let geometry = new THREE.BoxGeometry(1, 1, 1);
-let material = new THREE.MeshBasicMaterial({
-  color: 0x00ff00
-});
+let material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 let cube = new THREE.Mesh(geometry, material);
 parentObject.add(cube);
 
@@ -47,16 +44,15 @@ function animate() {
   requestAnimationFrame(animate);
 
   // Rotate the parent object
-  // parentObject.rotation.y += 0.01;
+  parentObject.rotation.y += 0.01;
 
   // Update the rotation of the parent object based on elapsed time
-  // const time = performance.now() * 0.001; // Convert time to seconds
-  // parentObject.rotation.y += time;
+  const time = performance.now() * 0.001; // Convert time to seconds
+  parentObject.rotation.y += time;
 
   // Time
   const currentTime = Date.now();
   const deltaTime = currentTime - time;
-  time = currentTime;
 
   // Update objects
   cube.rotation.y += 0.01 * deltaTime;
@@ -72,15 +68,7 @@ animate();
 
 In this example, we create a parent object (`parentObject`) and add both the camera and a cube as children of that object. By rotating the parent object, the camera and the cube will move together in a coordinated manner. The `animate()` function is called in a loop to continuously update the rotation and render the scene with the updated camera.
 
-## Preguntas
-
-<span style="color:#0000dd;">OK.  The cube wasn't moving.  So I asked what the fluff?</span>
-
-The cube is not moving because the rotation of the parent object is not being updated correctly in the animation loop. To ensure the rotation is applied continuously, the parent object's `rotation` should be updated based on the elapsed time since the last frame.
-
-Now, the cube should rotate around the origin as the parent object's rotation is continuously updated based on the elapsed time.
-
-### Why Parent
+## Why Parent
 
 A parent camera, such as a `PerspectiveCamera`, can be useful in several cases:
 

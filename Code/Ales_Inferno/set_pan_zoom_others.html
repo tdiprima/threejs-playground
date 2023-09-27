@@ -30,12 +30,7 @@
 
   // Set up the parent scene and camera. ¿Por qué?
   const parentScene = new THREE.Scene();
-  const parentCamera = new THREE.PerspectiveCamera(
-    45,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-  );
+  const parentCamera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
   parentCamera.position.set(0, 0, 10);
 
   // Set up the renderer and add it to the DOM
@@ -57,12 +52,7 @@
     parentScene.add(scene);
 
     // Create a separate camera for each image
-    const camera = new THREE.PerspectiveCamera(
-      45,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.name = `camera${i + 1}`;
     camera.position.set(0, 0, 5); // Set position of camera
     scene.add(camera);
