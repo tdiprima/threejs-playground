@@ -14,10 +14,10 @@ Note that the position should be set on the object itself (the cube, in this cas
 
     ```javascript
     const cube = new THREE.Mesh(geometry, material);
-    
+
     // Setting position of the cube
     cube.position.set(1, 2, 3);
-    
+
     scene.add(cube);
     camera.position.z = 5;
     ```
@@ -77,5 +77,12 @@ customDeserialization.objects.forEach(objData => {
     loadedScene.add(cube);
 });
 ```
+
+<br>
+<span style="color:#0000dd;">Not "loadedScene".  Because if we serialize and deserialize the entire scene and then add the cube, we'll have 2 cubes &mdash; one in the right position and one in the wrong position.</span>
+
+You are correct, as usual. <span style="font-size:27px;">✨ 👑 💛</span>
+
+In the custom serialization/deserialization example, the `loadedScene` would be a newly created THREE.Scene object to which you are adding the deserialized objects.
 
 <br>
