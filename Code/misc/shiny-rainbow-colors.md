@@ -34,9 +34,15 @@ The iridescent effect is achieved by adding an iridescent color based on the cur
 
 ## ERR0R
 
-The error indicates that the `vNormal` varying variable used in the fragment shader is **not declared** in the vertex shader.
+```c
+THREE.WebGLProgram: Shader Error 0 - VALIDATE_STATUS false
 
-To fix this error, you need to **pass the normal attribute** from the vertex shader to the fragment shader.
+Program Info Log: Varying `vNormal` has static-use in the frag shader, but is undeclared in the vert shader.
+```
+
+The error indicates that the `vNormal` varying variable used in the fragment shader is not declared in the vertex shader.
+
+To fix this error, you need to pass the `normal` attribute from the vertex shader to the fragment shader.
 
 ```html
 <script id="vertexShader" type="x-shader/x-vertex">
