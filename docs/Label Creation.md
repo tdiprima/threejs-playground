@@ -1,39 +1,49 @@
 ## THREE.Texture(canvas)
 
-<a href="../fontLoader/create-label.html">create-label.html</a>
+fontLoader/create-label.html
 
-```js
-let context = canvas.getContext("2d");context.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
+<span style="color:#0000dd;">The code I'm using is shite, please rewrite it.</span>
 
-let geometry = new THREE.PlaneGeometry(textWidth / 100, fontSize / 100);
+Absolutely, let's try refining the code to resolve your issues. The division by `100` seems to be an attempt to scale the `PlaneGeometry` to a reasonable size in the Three.js scene. However, if this scaling doesn't achieve the desired effect, you might need to adjust it.
+
+Here's a step-by-step walkthrough of the improved `createLabel` function:
+
+1. **Create a Canvas**: Adjust the canvas width and height to match the text dimensions plus some padding if necessary.
+2. **Draw Text**: Render the text onto the canvas, and ensure it's correctly positioned and sized.
+3. **Create a Texture**: Create a `THREE.Texture` from the canvas and ensure it's updated.
+4. **Create a Material**: Create a `THREE.MeshBasicMaterial` using the texture. You might need to adjust the material properties to get the desired visual effect.
+5. **Create Geometry and Mesh**: Create a `THREE.PlaneGeometry` and `THREE.Mesh` with appropriate sizing and return it.
+
+Below is an adjusted version of the `createLabel` function:
+
+```javascript
+function createLabel(text, fontSize, fontWeight, fontFamily) {
+
+  // Yeah, remember - also do it here for some reason.
+  context.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
+
+  let metrics = context.measureText(text);  let textWidth = metrics.width;  canvas.width = textWidth;  canvas.height = fontSize * 1.2; // added some padding for text height
+
+  // Reset font after resizing canvas
+  context.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
+
+  // transparent: true
+  let material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, transparent: true });
+
+  // Instead of textWidth and fontSize (duh)  let geometry = new THREE.PlaneGeometry(canvas.width / 100, canvas.height / 100); // Adjust the scale factor as needed  return new THREE.Mesh(geometry, material);
+}
 ```
 
-## Explain context.font and PlaneGeometry
+### Key Points:
 
-1. When setting the **`context.font`** property, you should use the desired font size followed by the unit of measurement.
+- Ensure the canvas has an appropriate size for the text. The `canvas.width` and `canvas.height` should be set to accommodate the text dimensions.
+- Adjust the `context.fillText` call to properly position the text within the canvas.
+- The scale factor in `THREE.PlaneGeometry` should be adjusted to ensure the text appears at the correct size in your Three.js scene. You might need to tweak the division by `100` to get the right scale.
 
-    In the given code, `${fontSize}px` is used, which means the font size is specified in **pixels.**
+### Testing:
+- Ensure you test the function with different text strings, font sizes, and font weights to confirm it works as expected in various scenarios.
+- Adjust the scaling factor and text positioning as necessary based on your testing.
 
-2. In the code, `textWidth / 100` and `fontSize / 100` are used to calculate the dimensions of the `PlaneGeometry`.
-
-    It seems that the code **assumes a certain relationship** between the canvas size (determined by `textWidth`) and the desired size of the label in the three.js scene.
-
-By dividing `textWidth` by 100 and `fontSize` by 100, the code might be attempting to **scale down** the dimensions of the `PlaneGeometry` to fit within a reasonable range for a label in the scene. This scaling factor of 100 appears to be an arbitrary choice, and the exact reasoning behind it depends on the specific requirements of the scene and how the labels are being used.
-
-You can adjust this **scaling factor** to fit your specific needs. If you want larger labels, you can increase the scaling factor (e.g., `textWidth / 50`, `fontSize / 50`). Conversely, if you want smaller labels, you can decrease the scaling factor (e.g., `textWidth / 200`, `fontSize / 200`). Experiment with different values to achieve the desired size and proportions for your labels in the three.js scene.
-
-## Point or Pixels
-
-<span style="color:#0000dd;font-size:larger;">When setting font size, do people generally prefer to use "point" or "pixels"?</span>
-
-<span style="color:#0000dd;font-weight:bold;">Answer: pixels, em, and rem.</span>
-
-**Pixels (px)** are a relative unit of measurement that corresponds directly to the pixels on a screen. If you set a font size to 12px, it will be 12 pixels tall on most screens. Pixels provide precise control over the size of the text and ensure consistent rendering across different devices and resolutions.
-
-**Points (pt)**, on the other hand, are a unit of measurement commonly used in print media. One point is equivalent to 1/72 of an inch. In CSS, one point is approximately equal to 1.33 pixels (96 pixels per inch divided by 72 points per inch). So, if you set a font size to 12pt, it will be approximately 16 pixels tall on most screens.
-
-If you are designing for the **web** and want to have precise control over the size of the text, pixels are generally preferred. If you are designing for **print** or have specific requirements related to physical sizes, points may be more appropriate.
-
-It's worth noting that using relative units like <span style="color:#a71f36;">**em** (em)</span> or <span style="color:#a71f36;">**rem** (root em)</span> can also provide flexibility and responsiveness, as they scale with the parent elements or the root element, respectively.
+Remember, the appearance of text in Three.js depends on various factors, including camera position, scene scaling, and the size of the renderer. Adjust the code as necessary to fit your specific application's requirements.
 
 <br>

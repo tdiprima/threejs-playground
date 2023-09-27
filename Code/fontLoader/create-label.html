@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Label</title>
-  <!-- Simple label example -->
-  <!-- Create a Texture with an HTML5 canvas -->
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Adjusting Three.js Label Size</title>
+  <link href="/css/main.css" rel="stylesheet">
 </head>
 <body>
 <script async src="/es-module-shims-1.3.6/dist/es-module-shims.js"></script>
@@ -21,14 +20,15 @@
   import { OrbitControls } from "/jsm/controls/OrbitControls.js";
 
   let scene = new THREE.Scene();
+  console.log(`Hello micrometer \u00B5m`)
 
   // Create a label
-  // let fontSize = 18;
-  let fontSize = 50;
-  let label = createLabel("Hello World", fontSize, "bold", "sans-serif");
+  let fontSize = 25;
+  // Microns, also known as micrometers (represented as µm) are a length of measurement equal to one millionth of a meter.
+  let label = createLabel(`Hello micrometer \u00B5m`, fontSize, "bold", "sans-serif");
   scene.add(label);
 
-  let renderer = new THREE.WebGLRenderer();
+  let renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
@@ -37,41 +37,52 @@
 
   let controls = new OrbitControls(camera, renderer.domElement);
 
-  function render() {
+  window.addEventListener("resize", function () {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  });
+
+  (function render() {
     requestAnimationFrame(render);
     controls.update();
     renderer.render(scene, camera);
-  }
-  render();
+  })();
 
-  // Function to create a label
   function createLabel(text, fontSize, fontWeight, fontFamily) {
+    // Create canvas and context
     let canvas = document.createElement("canvas");
-    let context = canvas.getContext("2d");
 
-    let metrics = null;
-    context.font = `${fontWeight} ${fontSize}px ${fontFamily}`; // pt / px
-    metrics = context.measureText(text);
+    let context = canvas.getContext("2d");
+    context.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
+
+    // Measure text and adjust canvas size
+    let metrics = context.measureText(text);
     let textWidth = metrics.width;
 
-    // Background
-    context.fillStyle = "rgba(255, 255, 255, 0.8)";
-    context.fillRect(0, 0, textWidth, fontSize);
+    // Ensure your canvas is exactly the right size for your text
+    canvas.width = textWidth;
+    canvas.height = fontSize * 1.2; // added some padding for text height
 
-    // Text
-    context.fillStyle = "black";
-    context.fillText(text, 0, fontSize);
+    // Draw text on canvas
+    context.font = `${fontWeight} ${fontSize}px ${fontFamily}`; // Reset font after resizing canvas
+    context.fillStyle = "#39ff14"; // Background color
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = "#fff"; // Text color
+    context.fillText(text, 0, fontSize); // Adjusted text position
+
+    // This adjustment ensures that the text is drawn higher up, which could help it fit better.
+    // context.fillText(text, 0, fontSize * 0.8);
 
     // Create texture
     let texture = new THREE.Texture(canvas);
     texture.needsUpdate = true;
 
     // Material, geometry, mesh
-    let material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
-    let geometry = new THREE.PlaneGeometry(textWidth / 100, fontSize / 100);
-    let mesh = new THREE.Mesh(geometry, material);
+    let material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, transparent: true });
+    let geometry = new THREE.PlaneGeometry(canvas.width / 100, canvas.height / 100); // Adjust the scale factor as needed
 
-    return mesh;
+    return new THREE.Mesh(geometry, material);
   }
 </script>
 </body>
