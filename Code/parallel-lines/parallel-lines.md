@@ -6,50 +6,31 @@
 
 It could be that the `blahblah2` stuff doesn't raycast.
 
-### Import
+## Import
 
 ```js
-import { LineSegments2 } from 'three/examples/jsm/lines/LineSegments2.js';
-```
-
-### LineSegments2
-
-```js
-import * as THREE from 'three';
 import { LineMaterial } from 'three/examples/lines/LineMaterial.js';
 import { LineSegments2 } from 'three/examples/lines/LineSegments2.js';
 import { LineSegmentsGeometry } from 'three/examples/lines/LineSegmentsGeometry.js';
+```
 
-let scene = new THREE.Scene();
-let camera = new THREE.PerspectiveCamera(50, 500 / 400, 0.1, 1000);
-let renderer = new THREE.WebGLRenderer();
-renderer.setClearColor(new THREE.Color(0x041122));
-renderer.setSize(825, 600);
-document.body.appendChild(renderer.domElement);
+## LineSegments2
 
+<a href="parallel-lines/line-thickness/myLineSegments.js">myLineSegments.js</a>
+
+```js
 let vertices = [-1, 0, 0, 1, 0, 0];
 
 let geometry = new LineSegmentsGeometry().setPositions(vertices);
 
-let material = new LineMaterial({
-  linewidth: 5,
-  color: 0xff0000
-});
+let material = new LineMaterial({ linewidth: 5, color: 0xff0000 });
 
 let line = new LineSegments2(geometry, material);
 
 scene.add(line);
-
-camera.position.z = 5;
-
-let render = function() {
-  requestAnimationFrame(render);
-  material.resolution.set(window.innerWidth, window.innerHeight);
-  renderer.render(scene, camera);
-};
-
-render();
 ```
+
+<br>
 
 ## Resolution
 
@@ -58,17 +39,11 @@ The `LineMaterial` expects the resolution of the material to be set explicitly, 
 To fix the problem, you need to set the resolution property of the `LineMaterial` to the width and height of the renderer.
 
 ```js
-let vertices = [1, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 1];
-
-let geometry = new LineSegmentsGeometry().setPositions(vertices);
-
-let material = new LineMaterial({ linewidth: 5, color: 0xff0000 });
-material.resolution.set(window.innerWidth, window.innerHeight); // Add this line
-
-let line = new LineSegments2(geometry, material);
-
-scene.add(line);
+// In the animation function
+let material = new LineMaterial({ linewidth: 5, color: 0xff0000 });material.resolution.set(window.innerWidth, window.innerHeight); // Add this line
 ```
+
+<br>
 
 ## Error: Computed radius is NaN
 
@@ -83,6 +58,9 @@ let points = [
   new THREE.Vector3(1, 1, 1),
   // Add more points as needed
 ];
+
+// Flat!
+let vertices = [1, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 1];
 ```
 
 <br>
@@ -100,35 +78,33 @@ let geometry = new LineSegmentsGeometry();
 geometry.setAttribute('position', positionAttribute);
 ```
 
-<br>
 Ya gotta do a flat array.
 
+*(parallel.js uses the Float32Array, but doesn't use a BufferAttribute.  tube1.js uses BufferAttribute.)*
+
 ```js
-// 1st and last
+// 1st and last (heh?)
 let geometry = new LineSegmentsGeometry().setPositions([-2, 0, 0, 2, 0, 0]);
 ```
 
-<br>
-
 Buddy said: The `LineSegmentsGeometry` is not meant to be used directly with custom positions for each line segment. Instead, it is typically used with a BufferAttribute that contains a list of vertices representing the line segments.
 
+<br>
 
 ## Vertices
 
-Then we had a whole big discussion (commit #6195fdf) about array conversion and why if I pass in
+Then we had a whole big discussion (commit #6195fdf) about array conversion and why if I pass in:
 
 ```js
 let vertices = [2, 0, 0, 2, 0, 0, 0, 0, -2, 0, 0, 2];
 ```
 
-It ends up being
+It ends up being:
 
 ```js
 console.log(position.array);
 [-1, 2, 0, 1, 2, 0, -1, 1, 0, 1, 1, 0, -1, 0, 0, 1, 0, 0, -1, -1, 0, 1, -1, 0]
 ```
-
-<br>
 
 Need correct vertex positions in the vertices array. The positions should be in the format of `[x1, y1, z1, x2, y2, z2, ...]`. In your code, you have `[1, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 1]`, which represents two separate line segments.
 
@@ -138,8 +114,6 @@ To fix the problem and display a single line segment, update the vertices array 
 let vertices = [-1, 0, 0, 1, 0, 0];
 ```
 
-<br>
-
-Allegedly!
+*Allegedly.*
 
 <br>
