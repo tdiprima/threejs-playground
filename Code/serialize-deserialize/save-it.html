@@ -8,17 +8,22 @@
 </head>
 <body>
 <script src="/build/three.min.js"></script>
+<button id="restore">restore</button>
 <script>
+  const width = 800; // window.innerWidth
+  const height = 600; // window.innerHeight
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
 
   const renderer = new THREE.WebGLRenderer();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(width, height);
   document.body.appendChild(renderer.domElement);
 
   const geometry = new THREE.BoxGeometry();
   const material = new THREE.MeshBasicMaterial({color: 0xff0000});
+
   const cube = new THREE.Mesh(geometry, material);
+  cube.position.set(1, 2, 3);
   scene.add(cube);
 
   camera.position.z = 5;
@@ -28,9 +33,13 @@
   // TODO: Save to database
 
   // Restore the scene
-  let restoredObjects = deserializeScene(serializedScene);
-  scene.clear();
-  scene.add(restoredObjects);
+  function restore() {
+    let restoredObjects = deserializeScene(serializedScene);
+    scene.clear();
+    scene.add(restoredObjects);
+  }
+
+  document.getElementById("restore").addEventListener("click", restore);
 
   function animate() {
     requestAnimationFrame(animate);
