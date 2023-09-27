@@ -5,11 +5,7 @@
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>Iridiscencia / Iridiscente</title>
-  <style>
-    body {
-      margin: 0;
-    }
-  </style>
+  <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
 <script src="/build/three.min.js"></script>
@@ -27,9 +23,9 @@
   varying vec3 vNormal;
 
   void main() {
-    vec3 light = vec3(1.0, 1.0, 1.0); // Light direction
+    vec3 light = vec3(1.0, 1.0, 1.0);   // Light direction
     vec3 ambient = vec3(0.2, 0.2, 0.2); // Ambient color
-    vec3 color = vec3(0.8, 0.8, 0.8); // Base color
+    vec3 color = vec3(0.8, 0.8, 0.8);   // Base color
 
     float intensity = dot(vNormal, normalize(light));
     vec3 iridescentColor = vec3(sin(time), sin(time + 2.094), sin(time + 4.188)) * 0.5 + 0.5;
@@ -42,7 +38,7 @@
 <script>
   // Create a scene
   let scene = new THREE.Scene();
-  scene.background = new THREE.Color("#212121")
+  scene.background = new THREE.Color("#212121");
 
   // Create a camera
   let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -73,8 +69,8 @@
     requestAnimationFrame(animate);
 
     // Rotate the sphere
-    sphere.rotation.x += 0.01;
-    sphere.rotation.y += 0.01;
+    // sphere.rotation.x += 0.01;
+    // sphere.rotation.y += 0.01;
 
     // Render the scene
     renderer.render(scene, camera);
