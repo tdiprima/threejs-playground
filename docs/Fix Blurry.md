@@ -1,5 +1,16 @@
 ## Fix blurry image
 
+Ales_Inferno/image\_clicked\_coords.html
+
+<mark>**TL;DR**</mark>
+
+```js
+renderer.setPixelRatio(window.devicePixelRatio);
+// that's all you need to do
+```
+
+<br>
+
 If the images loaded into your Three.js `PlaneGeometry` are appearing blurry, there are a few potential causes and solutions you can try:
 
 1. **Image resolution:** Check the resolution of your images. If they have a low resolution, they might appear blurry when stretched across the `PlaneGeometry`. Try using higher-resolution images that **match the size** of the `PlaneGeometry`.
@@ -18,6 +29,7 @@ If the images loaded into your Three.js `PlaneGeometry` are appearing blurry, th
     **Set the filtering mode:**
 
     ```javascript
+    // Ales_Inferno/image_drawing_coords.html
     const texture = new THREE.TextureLoader().load('path/to/image.jpg');
     // Adjust the filtering mode
     texture.magFilter = THREE.LinearFilter;
