@@ -29,7 +29,7 @@ for (let i = 0; i < numScenes; i++) {
   document.getElementById(`image${i + 1}`).appendChild(renderer.domElement);
   renderers.push(renderer);
 
-  let texture = new THREE.TextureLoader().load(`/images/image${i + 1}.jpg`);
+  let texture = new THREE.TextureLoader().load(`../image${i + 1}.jpg`);
   let material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
   let geometry = new THREE.PlaneGeometry(3, 2);
   let mesh = new THREE.Mesh(geometry, material);

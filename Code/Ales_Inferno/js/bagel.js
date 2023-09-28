@@ -30,7 +30,7 @@ for (let i = 0; i < numScenes; i++) {
   document.getElementById(`image${i + 1}`).appendChild(renderer.domElement);
   renderers.push(renderer);
 
-  let texture = new THREE.TextureLoader().load(`/images/image${i + 1}.jpg`);
+  let texture = new THREE.TextureLoader().load(`../image${i + 1}.jpg`);
   let material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
   let geometry = new THREE.PlaneGeometry(3, 2);
   let mesh = new THREE.Mesh(geometry, material);
@@ -80,15 +80,26 @@ function switchActiveControl(index) {
   });
 }
 
-// Toggle button click event listener
+function createButton(name) {
+  let newButton = document.createElement("button");
+  newButton.id = name;
+  newButton.innerHTML = name;
+  document.body.appendChild(newButton);
+  return newButton;
+}
+
+// TODO: Yeah, it's confusing. This toggle makes them both go at the same time or not.
 document.getElementById("toggleButton").addEventListener("click", toggleControlsDetachment);
 
-// Control switch button click event listeners
-document.getElementById("control1Button").addEventListener("click", () => {
+// Control image 1
+createButton("control1Button").addEventListener("click", () => {
   switchActiveControl(0);
 });
-document.getElementById("control2Button").addEventListener("click", () => {
+
+// Control image 2
+createButton("control2Button").addEventListener("click", () => {
   switchActiveControl(1);
 });
 
 update();
+
