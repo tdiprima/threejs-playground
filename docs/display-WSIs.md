@@ -148,4 +148,5 @@ resized_image.close()
 
 Note that when resizing the image, the aspect ratio of the original image is maintained, so the height of the resized image is calculated proportionally to the desired width.
 
+<br>
 
