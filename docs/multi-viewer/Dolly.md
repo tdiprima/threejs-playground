@@ -1,6 +1,6 @@
 ## Dolly Operations in Three.js
 
-[mult\_2d\_images.html](../mult_2d_images.html)
+[Ales\_Inferno/mult\_2d\_images.html](../mult_2d_images.html)
 
 Let me explain the concept of "dolly operation" in a way that's easy to understand.
 
