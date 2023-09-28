@@ -244,18 +244,6 @@ By incorporating a library like `Simplify.js`, you can effectively reduce the nu
 
 THREE.BufferGeometry.computeBoundingSphere(): Computed radius is NaN. The "position" attribute is likely to have NaN values.
 
-It means:
-
-OK, I got it.  My array is just an array of points.  They don't have an x, y, and z.  I have to turn that array into something I can create the THREE.BufferGeometry object with.
-
-Transfer it directly:
-
-```javascript
-// Convert the array of points to a Float32Array
-var positions = new Float32Array(points.length);
-for (var i = 0; i < points.length; i++) {
-  positions[i] = points[i];
-}
-```
+Make sure that your points array contains the correct number of values (divisible by 3 for x,y,z) and that none of them are NaN to avoid the error.
 
 <br>
