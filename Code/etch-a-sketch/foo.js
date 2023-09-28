@@ -33,23 +33,32 @@ btnDraw.addEventListener("click", function () {
     isDrawing = true;
     controls.enabled = false;
 
+    // Set up the mouse event listeners
     renderer.domElement.addEventListener("mousemove", onMouseMove);
     renderer.domElement.addEventListener("mouseup", onMouseUp);
   }
 });
 
+// Set up geometry to raycast against
 let loader = new THREE.TextureLoader();
 let planeGeom = new THREE.PlaneGeometry(10, 10);
+
+// Get texture
 let texture = loader.load(imageSource);
+
+// Set material texture
 let planeMat = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide});
 let plane = new THREE.Mesh(planeGeom, planeMat);
 scene.add(plane);
 
+// Set up the raycaster and mouse vector
 let raycaster = new THREE.Raycaster();
 let mouse = new THREE.Vector2();
 
-// Dashed Line Issue Solution
+// Set up line material and geometry
 let lineMaterial = new THREE.LineBasicMaterial({ color });
+
+// Dashed Line Issue Solution
 lineMaterial.polygonOffset = true;
 lineMaterial.polygonOffsetFactor = -1;
 lineMaterial.depthTest = false;
@@ -76,9 +85,11 @@ renderer.domElement.addEventListener('pointerdown', event => {
 
 function onMouseMove(event) {
   if (isDrawing && mouseIsPressed) {
+    // Calculate mouse position in normalized device coordinates
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
+    // Use raycaster to get intersection point with scene
     raycaster.setFromCamera(mouse, camera);
     let intersects = raycaster.intersectObjects(scene.children, true);
 
