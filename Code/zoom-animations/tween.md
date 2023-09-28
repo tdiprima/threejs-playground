@@ -1,7 +1,5 @@
 ## Tween.js: Animation Simplified
 
-What the h3ll is a "tween"?
-
 [tween.js user guide](https://tweenjs.github.io/tween.js/docs/user_guide.html)
 
 Tween.js is used for creating smooth animations and transitions. The name "tween" in Tween.js is derived from the term "tweening" or "in-betweening," which refers to the process of generating intermediate frames between two keyframes in animation.
@@ -14,7 +12,7 @@ By using Tween.js, developers can easily create smooth and visually appealing an
 
 ## Object-Based Tweening
 
-When creating a new tween, I've seen either coordinates OR an object being passed, such as `controls.target` (as in OrbitControls).
+<span style="color:#0000dd;">When creating a new tween, I've seen either coordinates OR an object being passed, such as controls.target (as in OrbitControls).</span>
 
 ```js
 let tween = new TWEEN.Tween(position);
@@ -55,72 +53,7 @@ You can use this **object-based approach** to animate multiple properties of an 
 
 Animate a rotating cube:
 
-```php
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Three.js with Tween.js Example</title>
-    <style>
-      body { margin: 0; }
-      canvas { display: block; }
-    </style>
-  </head>
-  <body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.umd.js"></script>
-    <script>
-      // Set up the scene, camera, and renderer
-      let scene = new THREE.Scene();
-
-      let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-      camera.position.z = 5;
-
-      let renderer = new THREE.WebGLRenderer();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      document.body.appendChild(renderer.domElement);
-
-      // Create a cube
-      let geometry = new THREE.BoxGeometry();
-      let material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-      let cube = new THREE.Mesh(geometry, material);
-      scene.add(cube);
-
-      // Set up the animation
-      function animate() {
-        requestAnimationFrame(animate);
-        renderer.render(scene, camera);
-      }
-
-      // Add rotation animation using Tween.js
-      let rotation = { y: 0 }; // Initial rotation value
-
-      // Configure the tween animation
-      let tween = new TWEEN.Tween(rotation)
-        .to({ y: Math.PI * 2 }, 2000) // Rotate 360 degrees in 2 seconds
-        .easing(TWEEN.Easing.Quadratic.Out) // Use quadratic easing for smooth animation
-        .onUpdate(() => {
-          cube.rotation.y = rotation.y; // Update cube rotation
-        })
-        .start(); // Start the animation
-
-      // Start the rendering and update loop
-      animate();
-
-      // Update Tween.js on each frame
-      function updateTween() {
-        TWEEN.update();
-        requestAnimationFrame(updateTween);
-      }
-      updateTween();
-    </script>
-  </body>
-</html>
-```
-
-In this example, we first set up the Three.js scene by creating a scene, camera, and renderer. Then, we create a cube and add it to the scene.
-
-Next, we set up the animation loop using the `requestAnimationFrame` function. Inside the loop, we call `renderer.render(scene, camera)` to render the scene.
+<span style="color:#59acf3;font-size:larger;">zoom-animations/tween-cube.html</span>
 
 To animate the cube, we define an initial rotation value and create a tween animation using Tween.js.
 
@@ -136,50 +69,7 @@ When you open this HTML file in a browser, you should see a green cube rotating 
 
 Here's ahow you can use Tween.js to animate the position of an HTML element:
 
-```php
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Tween.js Example</title>
-  <style>
-    #box {
-      width: 100px;
-      height: 100px;
-      background-color: red;
-      position: absolute;
-    }
-  </style>
-</head>
-<body>
-<div id="box"></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.umd.js"></script>
-
-<script>
-  let box = document.getElementById('box'); // Get the element we want to animate.
-
-  let coords = { x: 0, y: 0 }; // Start at (0, 0)
-
-  // Create a new tween
-  let tween = new TWEEN.Tween(coords, false)
-    .to({ x: 200, y: 0 }, 2000) // Animate from x = 0 to x = 200 over 2 seconds
-    .easing(TWEEN.Easing.Quadratic.InOut) // Use quadratic easing
-    .onUpdate(() => {
-      // Update the box's position
-      box.style.left = `${coords.x}px`;
-      // box.style.setProperty('transform', `translate(${coords.x}px, ${coords.y}px)`);
-    })
-    .start() // Start the tween animation
-
-  // Update the tween on each frame
-  function animate(time) {
-    tween.update(time)
-    requestAnimationFrame(animate)
-  }
-  requestAnimationFrame(animate);
-</script>
-</body>
-</html>
-```
+<span style="color:#59acf3;font-size:larger;">move-a-box.html</span>
 
 In this example, we include the Tween.js library from a CDN (Content Delivery Network). We create a red box element with the id "box" and position it absolutely using CSS. 
 
