@@ -5,11 +5,10 @@
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>heroína</title>
-  <!-- TODO: It's still broken, though. -->
-  <!-- Better - the zoom out works; mouse positioning... needs a little work. -->
   <link href="/css/main.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+<div id="info">Left-click: rotate, Mouse-wheel/middle-click: zoom, Right-click: pan</div>
 <script type="importmap">{
     "imports": {
       "three": "/build/three.module.js",
@@ -28,8 +27,8 @@
 
   const scene = new THREE.Scene();
 
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.z = 0.5;
+  const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera.position.z = 1.5;
 
   const renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -48,32 +47,10 @@
   // Set the initial target of the controls to the center of the scene
   controls.target.set(0, 0, 0);
 
-  // Add an event listener to detect mouse hover on the region of interest
-  // and update the controls' target accordingly
-  renderer.domElement.addEventListener('mousemove', (event) => {
-    // Convert the mouse coordinates to normalized device coordinates (NDC)
-    const mouse = new THREE.Vector2();
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-    // Use a raycaster to determine the 3D position of the mouse in the scene
-    const raycaster = new THREE.Raycaster();
-    raycaster.setFromCamera(mouse, camera);
-
-    // Find the intersection point of the ray with your region of interest
-    const intersects = raycaster.intersectObject(mesh, true);
-
-    if (intersects.length > 0) {
-      // Set the controls' target to the intersection point
-      controls.target.copy(intersects[0].point);
-    }
-  });
-
   // Render the scene
   (function animate() {
     requestAnimationFrame(animate);
-    // If you leave it, it conflicts with the main purpose of the program:
-    // controls.update();
+    controls.update();
     renderer.render(scene, camera);
   })();
 
