@@ -1,6 +1,12 @@
 ## Right-click to Pan
 
-Using `OrbitControls` in Three.js, you can configure the mouse buttons that trigger different actions (rotate, zoom, pan). By default, the left mouse button is set to rotate, the right button to pan, and the middle button (or scroll wheel) to zoom.
+<span style="color:#0000dd;font-size:larger;">Saw it in 3d-force-graph:</span>
+
+<span style="color:#59acf3;">orbit: 'Left-click: rotate, Mouse-wheel/middle-click: zoom, Right-click: pan'</span>
+
+Using `OrbitControls` in Three.js, you can configure the mouse buttons that trigger different actions (rotate, zoom, pan).
+
+<mark>**By default:**</mark> the left mouse button is set to rotate, the right button to pan, and the middle button (or scroll wheel) to zoom.
 
 However, if this default configuration isn't working as you desire, you can manually set it up. Below is an example of how you can set the right mouse button to pan:
 
@@ -41,3 +47,5 @@ With this configuration, your left mouse button will trigger the action initiall
 For the code to work correctly, also ensure you are using a version of `OrbitControls` that supports the `mouseButtons` property. If you're using an older version, consider updating Three.js and `OrbitControls` to the latest version available.
 
 If you notice that the panning is still not working as expected, also check if there is no other code or HTML element interfering with the mouse events on your canvas.
+
+<br>
