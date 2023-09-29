@@ -12,7 +12,6 @@ let btnDraw = document.getElementById("toggleButton");
 let imageSource = "/images/image1.jpg";
 let isDrawing = false;
 let mouseIsPressed = false;
-let positions = [];
 let controls;
 let color = "#0000ff";
 
@@ -28,14 +27,15 @@ document.body.appendChild(renderer.domElement);
 controls = new OrbitControls(camera, renderer.domElement);
 
 btnDraw.addEventListener("click", function () {
-  positions = [];
   if (isDrawing) {
     isDrawing = false;
     controls.enabled = true;
 
+    // Remove the mouse event listeners
     renderer.domElement.removeEventListener("mousemove", onMouseMove);
     renderer.domElement.removeEventListener("mouseup", onMouseUp);
   } else {
+    // Drawing on
     isDrawing = true;
     controls.enabled = false;
 
@@ -61,7 +61,10 @@ scene.add(plane);
 let raycaster = new THREE.Raycaster();
 let mouse = new THREE.Vector2();
 
-// Set up line material and geometry
+// NOTE: Due to limitations of the OpenGL Core Profile with the WebGL renderer on most platforms,
+// 'linewidth' will always be 1 regardless of the set value.
+// See: https://threejs.org/docs/#api/en/materials/LineBasicMaterial.linewidth
+
 let lineMaterial = new THREE.LineBasicMaterial({ color });
 
 // Dashed Line Issue Solution
