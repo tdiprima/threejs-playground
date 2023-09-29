@@ -88,6 +88,7 @@ function onMouseMove(event) {
 
     if (intersects.length > 0) {
       let point = intersects[0].point;
+      // Variable name mismatch. You're pushing the coordinates to positions array instead of currentPolygonPositions.
       positions.push(point.x, point.y, point.z);
 
       let bufferGeometry = line.geometry;

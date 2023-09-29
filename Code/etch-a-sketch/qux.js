@@ -1,8 +1,9 @@
 /**
- * new array
- * To handle the first drawn polygon and prevent connections between
- * polygons, you can add an additional check in the onMouseMove function
- * to determine if it's the first vertex being added to the current polygon.
+ * The code checks if it's the first vertex of the current polygon
+ * by comparing the length of currentPolygonPositions with zero.
+ * If it's the first vertex, it is directly added to the positions array
+ * without the distance check. For subsequent vertices, the distance check
+ * is performed as before.
  */
 import * as THREE from "three";
 import { OrbitControls } from "/jsm/controls/OrbitControls.js";
@@ -72,8 +73,9 @@ lineMaterial.transparent = true;
 lineMaterial.alphaTest = 0.5; // Adjust this value as needed
 
 let line;
-let currentPolygonPositions = []; // Declare a variable to store positions for the current polygon
-let polygonPositions = []; // Declare an array to store positions for each polygon
+let currentPolygonPositions = []; // Store positions for current polygon
+let polygonPositions = []; // Store positions for each polygon
+const distanceThreshold = 0.1;
 
 renderer.domElement.addEventListener('pointerdown', event => {
   if (isDrawing) {
@@ -90,23 +92,34 @@ renderer.domElement.addEventListener('pointerdown', event => {
 
 function onMouseMove(event) {
   if (isDrawing && mouseIsPressed) {
-    // Calculate mouse position in normalized device coordinates
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-    // Use raycaster to get intersection point with scene
     raycaster.setFromCamera(mouse, camera);
     let intersects = raycaster.intersectObjects(scene.children, true);
 
     if (intersects.length > 0) {
       let point = intersects[0].point;
-      // positions.push(point.x, point.y, point.z); TODO
+
+      // Check if it's the first vertex of the current polygon
+      const isFirstVertex = currentPolygonPositions.length === 0;
+
+      if (isFirstVertex) {
+        currentPolygonPositions.push(point.x, point.y, point.z);
+      } else {
+        // DISTANCE CHECK
+        const lastVertex = new THREE.Vector3().fromArray(currentPolygonPositions.slice(-3));
+        const currentVertex = new THREE.Vector3(point.x, point.y, point.z);
+        const distance = lastVertex.distanceTo(currentVertex);
+
+        if (distance > distanceThreshold) {
+          console.log("here");
+          currentPolygonPositions.push(point.x, point.y, point.z); // Store the position in the current polygon's array
+          line.geometry.setAttribute("position", new THREE.Float32BufferAttribute(currentPolygonPositions, 3)); // Use the current polygon's array for the line's position attribute
+        }
+      }
 
       let bufferGeometry = line.geometry;
-      // line.geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
-      currentPolygonPositions.push(point.x, point.y, point.z); // Store the position in the current polygon's array
-      line.geometry.setAttribute("position", new THREE.Float32BufferAttribute(currentPolygonPositions, 3)); // Use the current polygon's array for the line's position attribute
-
       bufferGeometry.attributes.position.needsUpdate = true;
     }
   }
@@ -119,9 +132,6 @@ function onMouseUp() {
     // Draw the final line
     line.geometry.setDrawRange(0, currentPolygonPositions.length / 3);
     line.geometry.computeBoundingSphere();
-
-    console.log(`%cNum vertices:`, 'color: #997fff', currentPolygonPositions.length);
-    console.log("positions", line.geometry.getAttribute("position").array);
 
     polygonPositions.push(currentPolygonPositions); // Store the current polygon's positions in the polygonPositions array
     currentPolygonPositions = []; // Clear the current polygon's array
