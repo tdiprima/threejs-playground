@@ -129,21 +129,24 @@ function _finalizeAndAddPath() {
 }
 ```
 
-### I can explain...
+### "I can explain..."
 
 ```js
+const fabPath = {}; // Path object
 const _points0 = fabPath.path.map(item => ({
   x: item[1],
   y: item[2]
 }));
 
 // THERE ARE WAY TOO MANY POINTS; REDUCE THEM:
-let points = _points0.reduce(
-  function(accumulator, currentValue, currentIndex) {
-    if (currentIndex % 7 === 0)
-      accumulator.push(currentValue);
-    return accumulator;
-  }, []);
+const points = _points0.reduce((accumulator, currentValue, currentIndex) => {
+  if (currentIndex % 7 === 0) {
+    accumulator.push(currentValue);
+  }
+  return accumulator;
+}, []);
+
+console.log(points.length, points);
 ```
 
 ## Simplify.js
