@@ -143,11 +143,16 @@ function onMouseUp() {
     currentPolygonPositions = []; // Clear the current polygon's array
 
     // A flat array of x,y,z
-    console.log("%cpolygonPositions", "color: #ff00cc;", polygonPositions);
+    // console.log("%cpolygonPositions", "color: #ff00cc;", polygonPositions);
 
-    // Access the geometry and retrieve the position attribute
-    let positions = line.geometry.attributes.position.array;
-    console.log("%cLine", "color: #ff00cc;", positions);
+    // DECIMATE
+    let originalArray = line.geometry.attributes.position.array;
+    let decimatedArray = [];
+
+    for (let i = 0; i < originalArray.length; i += 9) {
+      decimatedArray.push(originalArray[i], originalArray[i + 1], originalArray[i + 2]);
+    }
+    console.log(decimatedArray.length, decimatedArray);
   }
 }
 
