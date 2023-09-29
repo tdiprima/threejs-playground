@@ -113,14 +113,17 @@ function onMouseMove(event) {
         const distance = lastVertex.distanceTo(currentVertex);
 
         if (distance > distanceThreshold) {
-          console.log("here");
           currentPolygonPositions.push(point.x, point.y, point.z); // Store the position in the current polygon's array
           line.geometry.setAttribute("position", new THREE.Float32BufferAttribute(currentPolygonPositions, 3)); // Use the current polygon's array for the line's position attribute
         }
       }
 
-      let bufferGeometry = line.geometry;
-      bufferGeometry.attributes.position.needsUpdate = true;
+      try {
+        let bufferGeometry = line.geometry;
+        bufferGeometry.attributes.position.needsUpdate = true;
+      } catch (e) {
+        // No big deal.
+      }
     }
   }
 }
@@ -135,6 +138,13 @@ function onMouseUp() {
 
     polygonPositions.push(currentPolygonPositions); // Store the current polygon's positions in the polygonPositions array
     currentPolygonPositions = []; // Clear the current polygon's array
+
+    // A flat array of x,y,z
+    console.log("%cpolygonPositions", "color: #ff00cc;", polygonPositions);
+
+    // Access the geometry and retrieve the position attribute
+    let positions = line.geometry.attributes.position.array;
+    console.log("%cLine", "color: #ff00cc;", positions);
   }
 }
 
