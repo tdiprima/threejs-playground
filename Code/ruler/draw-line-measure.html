@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>Draw line with real-time measurement</title>
+  <!-- TODO: SPRITE OR TEXT -->
 </head>
 <body>
 <script type="importmap">{
@@ -138,18 +139,18 @@
     let canvas = document.createElement("canvas");
     let context = canvas.getContext("2d");
 
-    let textMetrics = context.measureText(text);
-    let width = textMetrics.width;
-    // Guess what?  Manually changing "width" makes it worse.
+    // let textMetrics = context.measureText(text);
+    // let width = textMetrics.width;
     // console.log("text width:", width);
-    let height = 24;
+    let width = 25;
+    let height = 12;
 
     canvas.width = width;
     canvas.height = height;
 
-    context.font = 'Bold 20px Arial';
+    context.font = `Bold ${height - 2}px Arial`;
     context.fillStyle = 'white';
-    context.fillText(text, 0, height / 2 + 5);
+    context.fillText(text, 0, height);
 
     let texture = new THREE.Texture(canvas);
     texture.needsUpdate = true;
@@ -160,7 +161,7 @@
   const Calculate = {
     lineLength(x1, y1, x2, y2) {
       return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-    },
+    }
   };
 
   window.addEventListener("resize", function () {
