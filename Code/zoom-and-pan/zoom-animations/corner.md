@@ -46,7 +46,7 @@ Then, when the mouse hovers over the region of interest, we update the controls'
 
 This causes the camera to orbit around the region of interest when zooming in and out.
 
-<mark>Close!  The mouse movement "pushes" the image away, though.</mark>
+<mark>**Close!  The mouse movement "pushes" the image away, though.**</mark>
 
 Note that `yourRegionOfInterest` is an example variable representing the object or area in your scene that you want to zoom into.
 

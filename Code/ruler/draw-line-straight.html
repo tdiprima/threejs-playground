@@ -14,8 +14,7 @@
 <script>
   let scene, camera, renderer, raycaster;
   let line, geometry, material;
-  let isDrawing = false; // isDown
-  let mode = 'draw';
+  let isDrawing = false;
   let startPoint, endPoint;
   let startVector, endVector;
   let mesh;
@@ -29,7 +28,7 @@
 
   // PLANE
   let planeGeometry = new THREE.PlaneGeometry(14.5, 7.5);
-  let planeMaterial = new THREE.MeshBasicMaterial({ color: 0xe5e5e5});
+  let planeMaterial = new THREE.MeshBasicMaterial({ color: 0x5a5a5a});
   let plane = new THREE.Mesh(planeGeometry, planeMaterial);
   scene.add(plane);
 
@@ -47,24 +46,20 @@
     startVector = new THREE.Vector3(startPoint.x, startPoint.y, 0);
 
     // The line is created using THREE.Line with a basic material.
-    // if (mode === 'draw') {
     geometry.setFromPoints([startVector, startVector]);
 
     line = new THREE.Line(geometry, material);
     scene.add(line);
-    // }
   }
 
   // The line's geometry is updated based on the mouse movement.
   function onMouseMove(event) {
     if (!isDrawing) return;
 
-    // if (mode === 'draw') {
     endPoint = getMouseCoordinates(event);
     endVector = new THREE.Vector3(endPoint.x, endPoint.y, 0);
     line.geometry.setFromPoints([startVector, endVector]);
     line.geometry.attributes.position.needsUpdate = true;
-    // }
   }
 
   function onMouseUp() {
@@ -79,18 +74,13 @@
     let raycaster = new THREE.Raycaster();
     raycaster.setFromCamera(mouse, camera);
 
-    // todo: NOTE: look at the "type" - it was "Line" which is not what I want.
-    //  So I will add a plane to raycast against. Duh.
     // let children = scene.children;
-    // console.log(Array.isArray(children));
-    // console.log("%cscene.children", "color: deeppink", children[0]);
+    // console.log("%cscene.children", "color: deeppink", children[0].geometry.type);
+    // let intersects = raycaster.intersectObjects(children, true);
 
-    // todo: NOTE! If you use "plane", it won't work.
-    let intersects = raycaster.intersectObjects(scene.children, true);
-    // let intersects = raycaster.intersectObjects(plane);
+    let intersects = raycaster.intersectObjects([plane]);
 
     if (intersects.length > 0) {
-      // console.log(Array.isArray(intersects));
       // console.log("%cintersects", "color: #ccff00", intersects[0]);
       let point = intersects[0].point;
       return { x: point.x, y: point.y };
