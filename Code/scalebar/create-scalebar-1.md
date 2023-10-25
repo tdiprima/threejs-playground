@@ -230,6 +230,14 @@ In [this code](sprite-me.html):
 
 This approach should work and display the label as a sprite in your three.js scene. Make sure that the styling and positioning of the text on the canvas suits your needs. Adjust the `createTextTexture` function, `context.font`, and `context.fillText` parameters as necessary.
 
-<span style="color:yellow;">And... it still doesn't work.  See ruler notes.</span>
+<span style="color:yellow;">This was the problem:</span>
+
+````javascript
+function createTextTexture(text) {
+  context.fillStyle = "black";
+}
+````
+
+<span style="color:yellow;">Now to figure out the sizing and orbit controls.</span>
 
 <br>
