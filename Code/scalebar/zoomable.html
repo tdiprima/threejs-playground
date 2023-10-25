@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Zoomable Scalebar</title>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script> -->
+  <script src="/js/p5.min.js"></script>
+</head>
+<body>
+<script>
+  // Load the image
+  let img;
+  function preload() {
+    img = loadImage('/images/Victoriosa.jpg ');
+  }
+
+  function setup() {
+    createCanvas(800, 600);
+    image(img, 0, 0, width, height);
+  }
+
+  // Zoom functionality
+  let zoom = 1;
+
+  function draw() {
+    clear();
+    image(img, 0, 0, width * zoom, height * zoom);
+  }
+
+  function mouseWheel(event) {
+    zoom += event.delta * -0.001; // Adjust the 0.001 to control the zoom speed
+    zoom = constrain(zoom, 0.1, 10); // Adjust min and max zoom levels
+    return false; // Prevent default scrolling behavior
+  }
+
+  // Add scale bar
+  function drawScaleBar() {
+    let scaleBarLength = 100 * (1 / zoom); // 100 pixels at zoom level 1
+    let scaleBarHeight = 10;
+
+    fill(255);
+    rect(50, height - 50, scaleBarLength, scaleBarHeight);
+    fill(0);
+    textSize(16);
+    text('100 units', 50 + scaleBarLength + 5, height - 50 + scaleBarHeight);
+  }
+
+  function draw() {
+    clear();
+    image(img, 0, 0, width * zoom, height * zoom);
+    drawScaleBar();
+  }
+</script>
+</body>
+</html>
