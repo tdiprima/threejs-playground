@@ -70,7 +70,7 @@ function update() {
   scaleBar.scale.set(scale, 1, 1);
 
   // Update text labels
-  labelDiv.textContent = 'Scale: ' + (1 / scale).toFixed(2);
+  labelDiv.textContent = `Scale: ${(1 / scale).toFixed(2)}`;
 }
 
 window.addEventListener("resize", function () {

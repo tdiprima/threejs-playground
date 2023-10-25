@@ -38,6 +38,7 @@
 
   // const controls = new OrbitControls(camera, renderer.domElement);
 
+  // Add a cube just because
   let geometry = new THREE.BoxGeometry(1, 1, 1);
   let material = new THREE.MeshBasicMaterial({ color: 0x0000ff });
   let cube = new THREE.Mesh(geometry, material);
@@ -71,13 +72,16 @@
     return 1 / zoom;
   }
 
+  // Update scale bar position
   function update() {
     // Update scale bar position relative to the camera
+    // Calculate position in the viewport, perhaps using vector projection
     let vector = new THREE.Vector3(-0.95, -0.95, -1);
     vector.unproject(camera);
     scaleBar.position.copy(vector);
 
-    // Update scale bar size based on camera zoom
+    // Update scale bar size
+    // Calculate size based on camera zoom
     let scale = calculateScale(camera.zoom);
     scaleBar.scale.set(scale, 1, 1);
 
