@@ -1,8 +1,6 @@
 ## Create Zoomable Image Scalebar
 
-Sure&mdash;I'd love to help you create a scale bar for an image in an app where you can zoom in and out! A scale bar is a line or bar that helps show the size of an object or distance between objects in an image. As you zoom in and out, the scale bar should adjust to represent the accurate size or distance based on the level of zoom.
-
-Here's a simplified step-by-step guide to creating a scale bar:
+Sure &mdash; I'd love to help you create a scale bar for an image in an app where you can zoom in and out! A scale bar is a line or bar that helps show the size of an object or distance between objects in an image. As you zoom in and out, the scale bar should adjust to represent the accurate size or distance based on the level of zoom.
 
 ### 1. Cheat:
 Let's assume you are using JavaScript and a library like p5.js for simplicity.
@@ -74,9 +72,11 @@ Now, run your app in a web browser, and you should be able to zoom in and out us
 ### 7. Polish and Debug:
 Finally, make sure to test different parts of your app, handle any errors that might occur, and polish the user interface to make it as user-friendly as possible.
 
+## Reverse 🔄
+
 <span style="color:#0000dd;">In this code, the bar shrinks as we zoom in, to reflect the scale of 100 units.  Now, what if I wanted the bar to stay the same size, but the number of units to change?</span>
 
-You're welcome! I'm glad you found the previous explanation helpful. If you want the scale bar to stay the same size on the screen while the number of units it represents changes as you zoom in and out, you can do that with a bit of modification to the code.
+If you want the scale bar to stay the same size on the screen while the number of units it represents changes as you zoom in and out, you can do that with a bit of modification to the code.
 
 ### Update the Scale Bar Function:
 
@@ -99,6 +99,7 @@ function drawScaleBar() {
 In this code:
 
 - The `fixedScaleBarLength` variable determines the on-screen size of the scale bar, which stays constant regardless of zoom level.
+
 - The `unitsRepresented` variable calculates how many units the scale bar represents, changing based on the current zoom level. The `.toFixed(0)` function is used to round the number to the nearest whole number, making it easier to read.
 
 ### Update the Draw Function:
@@ -118,8 +119,6 @@ This approach gives the user a consistent visual reference for scale, while stil
 Making the text white in p5.js is really simple. The `fill()` function in p5.js sets the color for the text and shapes, and you can use it to set the text color to white.
 
 You can set the color to white by passing `255` to the `fill()` function before you draw the text. In p5.js, colors are specified by values between 0 and 255 for each color component. A value of `255` represents the maximum brightness of white.
-
-Here’s how you can update the `drawScaleBar` function to make the text white:
 
 ```javascript
 function drawScaleBar() {
