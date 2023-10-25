@@ -6,13 +6,13 @@ A scale bar is usually used to give a visual indication of the size of objects i
 
 To calculate the scale bar's position in the viewport, update text labels, and fill in the `calculateScale` function, you can follow these steps:
 
-1. **Calculate Scale Bar Position in the Viewport**: 
+1. **Calculate Scale Bar Position in the Viewport**:
    - You can position the scale bar at a fixed position relative to the camera so that it stays in the same place in the viewport regardless of where you move in the scene.
 
-2. **Update Text Labels**: 
+2. **Update Text Labels**:
    - You can use the `THREE.Sprite` with `THREE.TextTexture` or `THREE.CSS2DObject` to create labels for your scale bar. You would update these labels in the `update` function based on the scale of the scale bar.
 
-3. **Calculate Scale Function**: 
+3. **Calculate Scale Function**:
    - The `calculateScale` function can calculate the scale based on the camera's distance from the origin or another point of reference in your scene. This depends on how you want the scale to behave.
 
 Here's an example of how you can do this:
@@ -181,5 +181,55 @@ function animate() {
 ```
 
 After making these changes, you should be able to see the scale bar and text label correctly. Adjust the positions, scales, and styles as necessary to achieve the desired appearance.
+
+## Still no text
+
+<span style="color:#0000dd;">I still don't see any text.</span>
+
+Let's address both issues:
+
+### 1. Text Label Not Visible
+
+Given your code, the CSS2DObject should work. However, you might need to ensure that your CSS styles are actually being applied. You can add a `<style>` tag directly in your HTML to make sure that the styles are present.
+
+<span style="color:yellow;">Been there, done that.</span>
+
+### 2. Using the Calculated Scale
+
+<span style="color:yellow;">I did use it.</span>
+
+```javascript
+function update() {
+  let scale = calculateScale(camera.zoom);
+  scaleBar.scale.set(scale, 1, 1);
+  labelDiv.textContent = 'Scale: ' + (1 / scale).toFixed(2);
+}
+```
+
+This will adjust the scale bar's size based on the camera's zoom level, and it will also update the label text to reflect the current scale.
+
+After making these changes, you should see the text label (if the styles are applied correctly), and the scale bar should adjust its size based on the camera's zoom level.
+
+If the text label is still not visible, there might be additional issues with how the `CSS2DRenderer` is set up or how the styles are being applied.
+
+Ensure that the `CSS2DRenderer`'s DOM element is correctly positioned and sized to cover your viewport.
+
+## Use a sprite, then.
+
+Using `THREE.Sprite` for the label can be a good alternative since it's a part of the main three.js library and might be easier to work with in this context. Below is the modified version of your program that uses a `THREE.Sprite` for the label:
+
+First, you need to create a texture for the sprite using a canvas. The text will be drawn on the canvas, and the canvas will be used as a texture for the sprite.
+
+In [this code](sprite-me.html):
+
+1. A `createTextTexture` function is added, which creates a canvas, draws text on it, and then creates a texture from this canvas.
+
+2. A `THREE.Sprite` is used for the label, and its material’s map is set to the texture created by `createTextTexture`.
+
+3. In the `update` function, the scale is calculated, applied to the scale bar, and also used to update the label’s text.
+
+This approach should work and display the label as a sprite in your three.js scene. Make sure that the styling and positioning of the text on the canvas suits your needs. Adjust the `createTextTexture` function, `context.font`, and `context.fillText` parameters as necessary.
+
+<span style="color:yellow;">And... it still doesn't work.  See ruler notes.</span>
 
 <br>

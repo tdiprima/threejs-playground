@@ -7,9 +7,9 @@
   <!-- <link href="/css/main.css" rel="stylesheet"> -->
   <style>
     .label {
-      color: black;
+      color: lime; /* changed color because background is black */
       font-family: Arial, sans-serif;
-      border: 1px solid lime;
+      border: 1px solid lime; /* To help visualize the label's position */
     }
   </style>
 </head>
@@ -25,7 +25,8 @@
 <script type="module">
   import * as THREE from "three";
   import { CSS2DRenderer, CSS2DObject } from 'three/examples/renderers/CSS2DRenderer.js';
-  console.info({ CSS2DRenderer, CSS2DObject });
+  // console.info({ CSS2DRenderer, CSS2DObject });
+  // Something's causing this not to work now:
   // import { OrbitControls } from 'three/examples/controls/OrbitControls.js';
 
   let scene = new THREE.Scene();
@@ -56,8 +57,10 @@
   labelDiv.className = 'label';
   labelDiv.textContent = 'Scale: ';
   labelDiv.style.marginTop = '-1em';
+
   let label = new CSS2DObject(labelDiv);
   label.position.set(0, 0.1, 0); // Set position of label above the scale bar
+  // label.position.set(0, 0, 0); // Oy! Still nothing.
   scaleBar.add(label);
 
   let labelRenderer = new CSS2DRenderer();
@@ -83,10 +86,11 @@
     // Update scale bar size
     // Calculate size based on camera zoom
     let scale = calculateScale(camera.zoom);
-    scaleBar.scale.set(scale, 1, 1);
+    // scaleBar.scale.set(scale, 1, 1);  // Apply the calculated scale to the scale bar
+    scaleBar.scale.set(scale, 0.1, 0.1);  // Adjust scale as necessary
 
-    // Update text labels
-    labelDiv.textContent = `Scale: ${(1 / scale).toFixed(2)}`;
+    // Update the label text
+    labelDiv.textContent = `Scale: ${(1 / scale).toFixed(2)}`; // 1.00
   }
 
   window.addEventListener("resize", function () {
