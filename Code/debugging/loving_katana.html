@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Parameters</title>
+  <!-- TODO: http://127.0.0.1:5500/Code/debugging/loving_katana.html?debug=true -->
+  <!-- http://www.btcusdt.tech/manual/#en/debugging-javascript -->
+  <link href="wise_cracker.css" rel="stylesheet">
+</head>
+<body>
+<!-- CANVAS -->
+<canvas id="c"></canvas>
+
+<!-- DEBUG -->
+<!-- <div id="debug" style="display: none;"> -->
+<div id="debug">
+  <pre>Send some parameters: ?debug=true</pre>
+</div>
+
+<!-- INTERACTIVE -->
+<div id="info">click to launch</div>
+
+<script type="importmap">{
+	"imports": {
+		"three": "/build/three.module.js"
+	}
+}
+</script>
+<script async src="/es-module-shims-1.3.6/dist/es-module-shims.js"></script>
+
+<script type="module">
+  import * as THREE from 'three';
+
+  /**
+   * Returns the query parameters as a key/value object.
+   * Example: If the query parameters are
+   *
+   *    abc=123&def=456&name=gman
+   *
+   * Then `getQuery()` will return an object like
+   *
+   *    {
+   *      abc: '123',
+   *      def: '456',
+   *      name: 'gman',
+   *    }
+   */
+  function getQuery() {
+    let params = {};
+    let q = (window.location.search || '').substring(1);
+    q.split('&').forEach((pair) => {
+      let keyValue = pair.split('=').map(decodeURIComponent);
+      params[keyValue[0]] = keyValue[1];
+    });
+    return params;
+  }
+
+  class DummyLogger {
+    log() {}
+    render() {}
+  }
+
+  class ClearingLogger {
+    constructor(elem) {
+      this.elem = elem;
+      this.lines = [];
+    }
+    log(...args) {
+      this.lines.push([...args].join(' '));
+    }
+    render() {
+      this.elem.textContent = this.lines.join('\n');
+      this.lines = [];
+    }
+  }
+
+  let query = getQuery();
+  let debug = query.debug === 'true';
+  let logger = debug
+    ? new ClearingLogger(document.querySelector('#debug pre'))
+    : new DummyLogger();
+  if (debug) {
+    document.querySelector('#debug').style.display = '';
+  }
+
+  function main() {
+    let canvas = document.querySelector('#c');
+    let renderer = new THREE.WebGLRenderer({canvas});
+
+    let fov = 75;
+    let aspect = 2;  // the canvas default
+    let near = 0.1;
+    let far = 50;
+    let camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+    camera.position.z = 20;
+
+    let scene = new THREE.Scene();
+    scene.background = new THREE.Color('cyan');
+
+    let geometry = new THREE.SphereGeometry();
+    let material = new THREE.MeshBasicMaterial({color: 'red'});
+
+    let things = [];
+
+    function rand(min, max) {
+      if (max === undefined) {
+        max = min;
+        min = 0;
+      }
+      return Math.random() * (max - min) + min;
+    }
+
+    function createThing() {
+      let mesh = new THREE.Mesh(geometry, material);
+      scene.add(mesh);
+      things.push({
+        mesh,
+        timer: 2,
+        velocity: new THREE.Vector3(rand(-5, 5), rand(-5, 5), rand(-5, 5)),
+      });
+    }
+
+    canvas.addEventListener('click', createThing);
+
+    function resizeRendererToDisplaySize(renderer) {
+      let canvas = renderer.domElement;
+      let width = canvas.clientWidth;
+      let height = canvas.clientHeight;
+      let needResize = canvas.width !== width || canvas.height !== height;
+      if (needResize) {
+        renderer.setSize(width, height, false);
+      }
+      return needResize;
+    }
+
+    let then = 0;
+    function render(now) {
+      now *= 0.001;  // convert to seconds
+      let deltaTime = now - then;
+      then = now;
+
+      if (resizeRendererToDisplaySize(renderer)) {
+        let canvas = renderer.domElement;
+        camera.aspect = canvas.clientWidth / canvas.clientHeight;
+        camera.updateProjectionMatrix();
+      }
+
+      if (things.length === 0) {
+        createThing();
+      }
+
+      logger.log('fps:', (1 / deltaTime).toFixed(1));
+      logger.log('num things:', things.length);
+      for (let i = 0; i < things.length;) {
+        let thing = things[i];
+        let mesh = thing.mesh;
+        let pos = mesh.position;
+        logger.log(
+          'timer:', thing.timer.toFixed(3),
+          'pos:', pos.x.toFixed(3), pos.y.toFixed(3), pos.z.toFixed(3));
+        thing.timer -= deltaTime;
+        if (thing.timer <= 0) {
+          // remove this thing. Note we don't advance `i`
+          things.splice(i, 1);
+          scene.remove(mesh);
+        } else {
+          mesh.position.addScaledVector(thing.velocity, deltaTime);
+          ++i;
+        }
+      }
+
+      renderer.render(scene, camera);
+      logger.render();
+
+      requestAnimationFrame(render);
+    }
+
+    requestAnimationFrame(render);
+  }
+
+  main();
+</script>
+</body>
+</html>

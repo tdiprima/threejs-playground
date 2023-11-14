@@ -1,0 +1,29 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+#c {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#debug, #info {
+  font-family: monospace;
+  position: absolute;
+  padding: 1em;
+  color: white;
+  background: rgba(0, 0, 0, .9);
+}
+
+#debug {
+  top: 1em;
+  left: 1em;
+}
+
+#info {
+  right: 1em;
+  bottom: 1em;
+  pointer-events: none;
+}
