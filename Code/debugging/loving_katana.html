@@ -49,10 +49,12 @@
   function getQuery() {
     let params = {};
     let q = (window.location.search || '').substring(1);
+
     q.split('&').forEach((pair) => {
       let keyValue = pair.split('=').map(decodeURIComponent);
       params[keyValue[0]] = keyValue[1];
     });
+
     return params;
   }
 
@@ -66,9 +68,11 @@
       this.elem = elem;
       this.lines = [];
     }
+
     log(...args) {
       this.lines.push([...args].join(' '));
     }
+
     render() {
       this.elem.textContent = this.lines.join('\n');
       this.lines = [];
@@ -77,9 +81,11 @@
 
   let query = getQuery();
   let debug = query.debug === 'true';
+
   let logger = debug
     ? new ClearingLogger(document.querySelector('#debug pre'))
     : new DummyLogger();
+
   if (debug) {
     document.querySelector('#debug').style.display = '';
   }
@@ -114,6 +120,7 @@
     function createThing() {
       let mesh = new THREE.Mesh(geometry, material);
       scene.add(mesh);
+
       things.push({
         mesh,
         timer: 2,
@@ -152,14 +159,18 @@
 
       logger.log('fps:', (1 / deltaTime).toFixed(1));
       logger.log('num things:', things.length);
+
       for (let i = 0; i < things.length;) {
         let thing = things[i];
         let mesh = thing.mesh;
         let pos = mesh.position;
+
         logger.log(
           'timer:', thing.timer.toFixed(3),
           'pos:', pos.x.toFixed(3), pos.y.toFixed(3), pos.z.toFixed(3));
+
         thing.timer -= deltaTime;
+
         if (thing.timer <= 0) {
           // remove this thing. Note we don't advance `i`
           things.splice(i, 1);
