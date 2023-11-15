@@ -28,7 +28,7 @@ Let's break down your code:
 ```js
 time *= 0.001;
 ```
- 
+
 converts the time from milliseconds to seconds. This is because the time variable probably increases too quickly (since it's in milliseconds), and using it directly would make the movement too fast to be natural.
 
 ### 2. Using sine for Positioning:
@@ -44,7 +44,7 @@ Math.sin(time * 1.2) * 5
 ### Now, why use "sin" instead of "cos" or "tan"?
 
 - **`sin` and `cos`**: Both `sin` and `cos` are similar in that they produce smooth, repeating wave-like patterns. The main difference is their starting point; `sin` starts at 0 (when time is 0), while `cos` starts at 1. You could use `cos` instead of `sin` if you wanted a different starting position but the same type of movement.
-  
+
 - **`tan` (tangent)**: `tan` is quite different from `sin` and `cos`. It doesn't oscillate between -1 and 1. Instead, it goes off to infinity at certain points (which are known as "asymptotes"). This would make the movement very erratic and unnatural, with sudden jumps to extremely high or low values, which is not usually desired in smooth animations.
 
 In summary, `sin` is used in your code to create smooth, natural, and repeating movements for the mesh in your 3D scene. It's a common choice for animations because of the way it smoothly transitions between values, creating the appearance of natural motion.
@@ -61,7 +61,7 @@ Imagine a point moving in a circle. If you break down this movement, you'll noti
 
    - The `sin` function describes the vertical movement (y-axis) in a circle, while `cos` describes the horizontal movement (x-axis).
 
-    <span style="color:lime;">sin = vertical = "ascend"</span>
+      <span style="color:lime;">sin = vertical = "ascend"</span>
 
    - When `time` starts at 0, `sin(0)` is 0, but `cos(0)` is 1. This means if you use `sin` for the y-coordinate and `cos` for the x-coordinate, your object will start at the rightmost point of the circle (assuming the center of the circle is at the origin (0,0)).
 
@@ -111,5 +111,14 @@ In this code:
 - The z-coordinate is set to 0, meaning the mesh will stay in the same plane.
 
 With these changes, your mesh will move in a circular path with a radius of 5 units in the x-y plane. The speed of the movement will be determined by the multiplier `1.2`, and you can adjust this value to make the motion faster or slower.
+
+## Clockwise
+
+<span style="color:blue;font-weight:bold;font-size:larger;">That's counter-clock; what if I want it to go clockwise?</span>
+
+```javascript
+// Negate either x or y
+Math.cos(time * 1.2) * -5
+```
 
 <br>

@@ -2,10 +2,8 @@
 
 ```js
 let canvas = renderer.domElement;
-let width = canvas.clientWidth;
-let height = canvas.clientHeight;
-// width != client width. ¿Por qué?
-let needResize = canvas.width !== width || canvas.height !== height;
+let needResize = canvas.width !== canvas.clientWidth ||
+                canvas.height !== canvas.clientHeight;
 // Set canvas (renderer) size.
 ```
 

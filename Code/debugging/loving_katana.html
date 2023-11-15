@@ -59,8 +59,11 @@
   }
 
   class DummyLogger {
-    log() {}
-    render() {}
+    log() {
+    }
+
+    render() {
+    }
   }
 
   class ClearingLogger {
@@ -70,6 +73,7 @@
     }
 
     log(...args) {
+      // ...args represents an indefinite number of arguments as an array
       this.lines.push([...args].join(' '));
     }
 
@@ -92,10 +96,10 @@
 
   function main() {
     let canvas = document.querySelector('#c');
-    let renderer = new THREE.WebGLRenderer({canvas});
+    let renderer = new THREE.WebGLRenderer({ canvas });
 
     let fov = 75;
-    let aspect = 2;  // the canvas default
+    let aspect = 2; // the canvas default
     let near = 0.1;
     let far = 50;
     let camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
@@ -105,7 +109,7 @@
     scene.background = new THREE.Color('cyan');
 
     let geometry = new THREE.SphereGeometry();
-    let material = new THREE.MeshBasicMaterial({color: 'red'});
+    let material = new THREE.MeshBasicMaterial({ color: 'red' });
 
     let things = [];
 
@@ -142,6 +146,7 @@
     }
 
     let then = 0;
+
     function render(now) {
       now *= 0.001;  // convert to seconds
       let deltaTime = now - then;
@@ -167,7 +172,8 @@
 
         logger.log(
           'timer:', thing.timer.toFixed(3),
-          'pos:', pos.x.toFixed(3), pos.y.toFixed(3), pos.z.toFixed(3));
+          'pos:', pos.x.toFixed(3), pos.y.toFixed(3), pos.z.toFixed(3)
+        );
 
         thing.timer -= deltaTime;
 
