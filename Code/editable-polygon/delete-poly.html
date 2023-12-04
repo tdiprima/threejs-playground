@@ -50,8 +50,8 @@
     const el = document.createElement('div');
     el.innerHTML = '<i class="fa fa-trash"></i>';
     objectCSS = new CSS2DObject(el);
-    objectCSS.position.set(position.x, position.y + 1, position.z);
-    // objectCSS.position.set(0, 0, 0);
+    // TODO: Why is the 'y' off by so much?
+    objectCSS.position.set(position.x, position.y + 8, 0);
     scene.add(objectCSS);
 
     el.addEventListener('click', onIconClick, false);
