@@ -5,23 +5,39 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>Font Awesome Icon</title>
   <!-- https://stackoverflow.com/questions/74522180/how-to-render-fontawsome-icon-using-css2d-renderer-object -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.122.0/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.122.0/examples/js/controls/OrbitControls.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.122.0/examples/js/renderers/CSS2DRenderer.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" rel="stylesheet"
         type="text/css">
-  <link rel="stylesheet" href="/css/main.css">
+  <style>
+    body {
+      font-family: "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      margin: 0;
+      color: #fff;
+      background-color: #21252d;
+    }
+  </style>
 </head>
 <body>
-<script>
-  let camera, scene, renderer;
+<script async src="/es-module-shims-1.3.6/dist/es-module-shims.js"></script>
+<script type="importmap">{
+  "imports": {
+    "three": "/build/three.module.js"
+  }
+}
+</script>
+
+<script type="module">
+  import * as THREE from "three";
+  import { OrbitControls } from "/jsm/controls/OrbitControls.js";
+  import { CSS2DRenderer, CSS2DObject } from '/jsm/renderers/CSS2DRenderer.js';
+
+  let camera, scene, renderer, controls, labelRenderer;
 
   init();
   animate();
 
   /**
    * draw cube
-   **/
+   */
   function drawCube(pos, scene) {
     const geometry = new THREE.BoxGeometry(1, 1, 1);
     const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
@@ -31,7 +47,7 @@
 
     const el = document.createElement('div')
     el.innerHTML = 'Hi <i class="fa-solid fa-user"</i>'
-    const objectCSS = new THREE.CSS2DObject(el)
+    const objectCSS = new CSS2DObject(el)
     objectCSS.position.set(pos.x, pos.y + 1, pos.z)
 
     cube.add(objectCSS);
@@ -39,7 +55,7 @@
   }
 
   /**
-   Create the scene, camera, renderer
+   * Create the scene, camera, renderer
    */
   function init() {
     scene = new THREE.Scene();
@@ -55,13 +71,13 @@
     camera.position.z = 5;
     scene.add(camera);
 
-    labelRenderer = new THREE.CSS2DRenderer();
+    labelRenderer = new CSS2DRenderer();
     labelRenderer.setSize(window.innerWidth, window.innerHeight);
     labelRenderer.domElement.style.position = 'absolute';
     labelRenderer.domElement.style.top = '0px';
     document.body.appendChild(labelRenderer.domElement);
 
-    controls = new THREE.OrbitControls(camera, labelRenderer.domElement);
+    controls = new OrbitControls(camera, labelRenderer.domElement);
 
     const cube_pos = new THREE.Vector3(1, 0, 2);
     drawCube(cube_pos, scene);
