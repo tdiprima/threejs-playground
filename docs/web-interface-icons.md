@@ -15,6 +15,8 @@ First, you'll need an HTML file. This will include your button and a container f
 <html>
 <head>
     <title>Three.js Interface</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css.map">
     <style>
         /* Basic styling for the button */
         #myButton {
@@ -32,8 +34,9 @@ First, you'll need an HTML file. This will include your button and a container f
 </head>
 <body>
     <div id="canvasContainer"></div>
-    <button id="myButton">Click Me</button>
-    <!-- Three.js and your JavaScript file -->
+    <!-- <button id="myButton">Click Me</button> -->
+    <button id="myButton"><i class="fa fa-superpowers" aria-hidden="true"></i></button>
+    <!-- Three.js and your JavaScript -->
     <script src="https://threejs.org/build/three.js"></script>
     <script>
       // ...

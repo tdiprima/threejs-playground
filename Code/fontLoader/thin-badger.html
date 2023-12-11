@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Font Loader</title>
+  <!-- https://youtu.be/l7K9AMnesJQ?si=PFUDNOBRFhOGcEa9&t=44 -->
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<script async src="/es-module-shims-1.3.6/dist/es-module-shims.js"></script>
+<script type="importmap">{
+  "imports": {
+    "three": "/build/three.module.js"
+  }
+}
+</script>
+
+<script type="module">
+  import * as THREE from "three";
+  import { FontLoader } from '/jsm/loaders/FontLoader.js';
+  import { TextGeometry } from '/jsm/geometries/TextGeometry.js';
+  import { OrbitControls } from "/jsm/controls/OrbitControls.js";
+
+  // Create the scene
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  let controls = new OrbitControls(camera, renderer.domElement);
+
+  // const boxGeometry = new THREE.BoxGeometry(16, 16, 16);
+  // const boxMaterial = new THREE.MeshNormalMaterial();
+  // const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
+  // scene.add(boxMesh);
+
+  // part 1 - typeface.json font loader
+  const fontLoader = new FontLoader();
+  fontLoader.load(
+    '/fonts/droid_serif_regular.typeface.json',
+    (droidFont) => {
+      const textGeometry = new TextGeometry('hello world', {
+        height: 2,
+        size: 10,
+        font: droidFont
+      });
+
+      const textMaterial = new THREE.MeshNormalMaterial();
+      const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+      textMesh.position.x = -36;
+      textMesh.position.y = 5;
+      scene.add(textMesh);
+    }
+  );
+
+  // Camera position
+  camera.position.z = 50;
+
+  // Animation loop
+  (function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  })();
+</script>
+</body>
+</html>
