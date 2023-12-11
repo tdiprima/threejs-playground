@@ -1,6 +1,10 @@
 ## 3D Interface with Buttons
 
-Creating a web interface in Three.js often involves integrating HTML/CSS for the interface elements like buttons, and using Three.js for the 3D aspects. Here's a step-by-step guide to creating an interface with a button in Three.js:
+<a href="../../secure-witchfire/Code/icons.html" style="color:#59acf3;font-size:larger;">icons.html</a>
+
+[fontawsome-icon.html](Code/misc/fontawsome-icon.html)
+
+Creating a web interface in Three.js often involves integrating HTML/CSS for the interface elements like buttons, and using Three.js for the 3D aspects.
 
 ### 1. Set Up Basic HTML and CSS
 
@@ -31,14 +35,16 @@ First, you'll need an HTML file. This will include your button and a container f
     <button id="myButton">Click Me</button>
     <!-- Three.js and your JavaScript file -->
     <script src="https://threejs.org/build/three.js"></script>
-    <script src="yourScript.js"></script>
+    <script>
+      // ...
+    </script>
 </body>
 </html>
 ```
 
 ### 2. Initialize Three.js in JavaScript
 
-In your JavaScript file (`yourScript.js`), initialize a basic Three.js scene.
+Initialize a basic Three.js scene.
 
 ```javascript
 // Get the container element
@@ -99,7 +105,5 @@ window.addEventListener('resize', () => {
 - **Complex Interfaces**: For more complex interfaces, consider using a UI library like dat.GUI.
 - **Integration with Frameworks**: If you're using a framework like React or Vue, you can integrate Three.js within their component system.
 - **Performance**: Keep an eye on performance, especially when adding multiple interactive elements.
-
-This setup gives you a fundamental framework for a Three.js project with HTML/CSS buttons. You can expand this by adding more complex 3D objects, animations, and interactions.
 
 <br>
