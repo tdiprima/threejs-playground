@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Text</title>
+  <title>Font Loader</title>
   <!-- Dany -->
   <link rel="stylesheet" href="/css/main.css">
 </head>
@@ -36,12 +36,12 @@
 
   // Load a font
   loader.load('/fonts/droid_serif_regular.typeface.json', function (font) {
-    const geometry = new TextGeometry('Your Text Here', {
-      font: font,
-      size: 80,
-      height: 5,
-      curveSegments: 12,
-      bevelEnabled: true,
+    const geometry = new TextGeometry('DPA Villarreal', {
+      font: font,         // Pass the loaded font
+      size: 80,           // Size of the text
+      height: 5,          // Thickness of the text
+      curveSegments: 12,  // Number of points on the curves
+      bevelEnabled: true, // Enable bevel
       bevelThickness: 10,
       bevelSize: 8,
       bevelOffset: 0,
@@ -59,7 +59,7 @@
 
     // Set the position
     // Ended up manually setting it anyway
-    textMesh.position.set(-400, 0, 0);
+    textMesh.position.set(-360, 0, 0);
     scene.add(textMesh);
   });
 
