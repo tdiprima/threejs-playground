@@ -1,6 +1,10 @@
 ## Create Zoomable Image Scalebar
 
-Sure &mdash; I'd love to help you create a scale bar for an image in an app where you can zoom in and out! A scale bar is a line or bar that helps show the size of an object or distance between objects in an image. As you zoom in and out, the scale bar should adjust to represent the accurate size or distance based on the level of zoom.
+<span style="color:blue;font-weight:bold;font-size:larger;">Create a scale bar for an image in an app where you can zoom in and out.</span>
+
+[ready-dynamite.html](ready-dynamite.html)
+
+A scale bar is a line or bar that helps show the size of an object or distance between objects in an image. As you zoom in and out, the scale bar should adjust to represent the accurate size or distance based on the level of zoom.
 
 ### 1. Cheat:
 Let's assume you are using JavaScript and a library like p5.js for simplicity.
@@ -74,7 +78,9 @@ Finally, make sure to test different parts of your app, handle any errors that m
 
 ## Reverse 🔄
 
-<span style="color:#0000dd;">In this code, the bar shrinks as we zoom in, to reflect the scale of 100 units.  Now, what if I wanted the bar to stay the same size, but the number of units to change?</span>
+<span style="color:#0000dd;font-weight:bold;">In this code, the bar shrinks as we zoom in, to reflect the scale of 100 units.  Now, what if I wanted the bar to stay the same size, but the number of units to change?</span>
+
+[witty-scorpion.html](witty-scorpion.html)
 
 If you want the scale bar to stay the same size on the screen while the number of units it represents changes as you zoom in and out, you can do that with a bit of modification to the code.
 
