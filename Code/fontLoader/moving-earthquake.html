@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Custom Fonts</title>
+  <title>Custom Fonts | TrueType font</title>
   <!-- https://www.jetbrains.com/lp/mono/ -->
   <!-- https://youtu.be/l7K9AMnesJQ?si=U8kHdDleX9UQNN80&t=161-->
   <link href="/css/main.css" rel="stylesheet">
@@ -35,7 +35,8 @@
 
   // let myFont = "JetBrainsMono-BoldItalic.ttf";
   // let myFont = "JetBrainsMono-Regular.ttf";
-  let myFont = "Connection.ttf"; // Similar to Lomo Copy Std.
+  // let myFont = "Connection.ttf"; // Similar to Lomo Copy Std.
+  let myFont = "kenpixel.ttf";
 
   // part 1 - typeface.json font loader
   const fontLoader = new FontLoader();
@@ -55,8 +56,7 @@
 
     const textMaterial = new THREE.MeshNormalMaterial();
     const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-    textMesh.position.x = -36;
-    textMesh.position.y = 5;
+    textMesh.position.x = -52;
     scene.add(textMesh);
   });
 
