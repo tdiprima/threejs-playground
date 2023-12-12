@@ -2,7 +2,7 @@
 
 <a href="../../secure-witchfire/Code/icons.html" style="color:#59acf3;font-size:larger;">icons.html</a>
 
-[fontawsome-icon.html](Code/misc/fontawsome-icon.html)
+[fontawsome-icon.html](../Code/misc/fontawsome-icon.html)
 
 Creating a web interface in Three.js often involves integrating HTML/CSS for the interface elements like buttons, and using Three.js for the 3D aspects.
 

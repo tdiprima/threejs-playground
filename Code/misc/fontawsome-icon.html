@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Font Awesome Icon</title>
+  <title>CSS 2D</title>
   <!-- https://stackoverflow.com/questions/74522180/how-to-render-fontawsome-icon-using-css2d-renderer-object -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" rel="stylesheet"
-        type="text/css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" rel="stylesheet">
   <style>
     body {
       font-family: "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -38,17 +37,19 @@
   /**
    * draw cube
    */
-  function drawCube(pos, scene) {
+  function drawCube(scene) {
     const geometry = new THREE.BoxGeometry(1, 1, 1);
     const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
     material.transparent = true;
     material.opacity = 0.2;
     const cube = new THREE.Mesh(geometry, material);
 
-    const el = document.createElement('div')
-    el.innerHTML = 'Hi <i class="fa-solid fa-user"</i>'
-    const objectCSS = new CSS2DObject(el)
-    objectCSS.position.set(pos.x, pos.y + 1, pos.z)
+    const pos = cube.position;
+
+    const el = document.createElement('div');
+    el.innerHTML = 'Hi <i class="fa-solid fa-user"</i>';
+    const objectCSS = new CSS2DObject(el);
+    objectCSS.position.set(pos.x + 1, pos.y + 1, pos.z);
 
     cube.add(objectCSS);
     scene.add(cube);
@@ -79,8 +80,7 @@
 
     controls = new OrbitControls(camera, labelRenderer.domElement);
 
-    const cube_pos = new THREE.Vector3(1, 0, 2);
-    drawCube(cube_pos, scene);
+    drawCube(scene);
 
     window.addEventListener('resize', onWindowResize);
 
