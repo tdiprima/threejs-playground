@@ -8,13 +8,12 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 // Create a polygon
-let polygon;
 let material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
 let geometry = new THREE.BufferGeometry();
 let positions = [];
 let vertices = new Float32Array(positions);
 geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
-polygon = new THREE.LineLoop(geometry, material);
+let polygon = new THREE.LineLoop(geometry, material);
 scene.add(polygon);
 
 // Handle mouse events
@@ -60,14 +59,16 @@ function onDoubleClick(event) {
     points.pop(); // Remove the duplicated point from double-click
     updatePolygon();
   }
+  positions = []; // Reset for next time
+  points = [];
 }
 
 function getMousePosition(clientX, clientY) {
-  let rect = renderer.domElement.getBoundingClientRect();
+  let domRect = renderer.domElement.getBoundingClientRect();
 
   let mouse = new THREE.Vector2();
-  mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
-  mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
+  mouse.x = ((clientX - domRect.left) / domRect.width) * 2 - 1;
+  mouse.y = -((clientY - domRect.top) / domRect.height) * 2 + 1;
 
   let raycaster = new THREE.Raycaster();
   raycaster.setFromCamera(mouse, camera);
