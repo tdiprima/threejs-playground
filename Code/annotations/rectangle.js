@@ -10,10 +10,12 @@ document.body.appendChild(renderer.domElement);
 let rect;
 let material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
 
-let geometry = new THREE.BufferGeometry();
-let vertices = new Float32Array(12); // 4 vertices * 3 coordinates (x, y, z)
-geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
+// Set up geometry
+let geometry = new THREE.BufferGeometry(); // our 3D object
+let vertices = new Float32Array(12); // 4 vertices
+geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3)); // each vertex is composed of 3 values
 
+// LineLoop: A continuous line that connects back to the start.
 rect = new THREE.LineLoop(geometry, material);
 scene.add(rect);
 
@@ -47,16 +49,21 @@ function onMouseUp(event) {
 }
 
 function getMousePosition(clientX, clientY) {
+  // Get the size and position of the canvas element
   let domRect = renderer.domElement.getBoundingClientRect();
 
+  // Normalize mouse coordinates
   let mouse = new THREE.Vector2();
   mouse.x = ((clientX - domRect.left) / domRect.width) * 2 - 1;
   mouse.y = -((clientY - domRect.top) / domRect.height) * 2 + 1;
 
+  // Initialize our Raycaster
   let raycaster = new THREE.Raycaster();
-  raycaster.setFromCamera(mouse, camera);
+  raycaster.setFromCamera(mouse, camera); // set raycaster's origin and direction
 
+  // Define an intersection point
   let intersectionPoint = new THREE.Vector3();
+  // Calculate intersection with plane
   raycaster.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 0, 1)), intersectionPoint);
 
   return intersectionPoint;
