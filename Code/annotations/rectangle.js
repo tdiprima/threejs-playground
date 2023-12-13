@@ -1,3 +1,4 @@
+// Create a scene
 let scene = new THREE.Scene();
 let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = 5;
@@ -7,7 +8,6 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 // Create a rectangle
-let rect;
 let material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
 
 // Set up geometry
@@ -16,7 +16,7 @@ let vertices = new Float32Array(12); // 4 vertices
 geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3)); // each vertex is composed of 3 values
 
 // LineLoop: A continuous line that connects back to the start.
-rect = new THREE.LineLoop(geometry, material);
+let rect = new THREE.LineLoop(geometry, material);
 scene.add(rect);
 
 // Handle mouse events
