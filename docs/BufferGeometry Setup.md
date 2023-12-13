@@ -1,5 +1,13 @@
 ## BufferGeometry Setup
 
+[How to create a simple dynamically expanding rectangle geometry](https://discourse.threejs.org/t/how-to-create-a-simple-dynamically-expanding-rectangle-geometry/)
+
+[BufferGeometry](https://threejs.org/docs/index.html#api/en/core/BufferGeometry)
+
+[How to update things &mdash; BufferGeometry](https://threejs.org/docs/index.html#manual/en/introduction/How-to-update-things)
+
+[Collection of Examples](https://hofk.de/main/discourse.threejs/)
+
 ```js
 let geometry = new THREE.BufferGeometry();
 let vertices = new Float32Array(12);
@@ -36,6 +44,8 @@ Overall, this code sets up the basic structure for a 3D object by defining its g
 
 
 ## Raycasting
+
+[Raycaster](https://threejs.org/docs/#api/en/core/Raycaster)
 
 ```js
 let raycaster = new THREE.Raycaster();
