@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Planetary Orbit Simulation</title>
+  <script src='https://www.x3dom.org/download/x3dom.js'></script>
+  <link href='https://www.x3dom.org/download/x3dom.css' rel='stylesheet'></link>
+  <style>
+    x3d {
+      width: 800px;
+      height: 600px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+<x3d>
+  <scene>
+    <!-- Sun -->
+    <transform translation='0 0 0'>
+      <shape>
+        <appearance>
+          <material diffuseColor='1 1 0'></material>
+        </appearance>
+        <sphere radius='1'></sphere>
+      </shape>
+    </transform>
+
+    <!-- Planet Orbits -->
+    <transform id='orbit1' translation='3 0 0'>
+      <shape>
+        <appearance>
+          <material diffuseColor='0 0 1'></material>
+        </appearance>
+        <sphere radius='0.3'></sphere>
+      </shape>
+    </transform>
+
+    <transform id='orbit2' translation='5 0 0'>
+      <shape>
+        <appearance>
+          <material diffuseColor='1 0 0'></material>
+        </appearance>
+        <sphere radius='0.5'></sphere>
+      </shape>
+    </transform>
+
+    <!-- Animation -->
+    <timeSensor DEF='clock' cycleInterval='10' loop='true'></timeSensor>
+    <orientationInterpolator DEF='spin1' key='0 1' keyValue='0 1 0 0 0 1 0 6.28'></orientationInterpolator>
+    <orientationInterpolator DEF='spin2' key='0 1' keyValue='0 1 0 0 0 1 0 4.28'></orientationInterpolator>
+
+    <route fromField='fraction_changed' fromNode='clock' toField='set_fraction' toNode='spin1'></route>
+    <route fromField='value_changed' fromNode='spin1' toField='set_rotation' toNode='orbit1'></route>
+
+    <route fromField='fraction_changed' fromNode='clock' toField='set_fraction' toNode='spin2'></route>
+    <route fromField='value_changed' fromNode='spin2' toField='set_rotation' toNode='orbit2'></route>
+  </scene>
+</x3d>
+</body>
+</html>

@@ -26,9 +26,9 @@ Here's how it works:
 
 In summary, X3DOM is a tool that makes it easier and more accessible to have interactive 3D graphics on web pages, without needing extra software, making the web a more dynamic and visually engaging place.
 
-## Example
+## Cube Example in x3dom
 
-<span style="color:#59acf3;font-size:larger;">X3Dom.html</span>
+[X3Dom.html](X3Dom.html)
 
 ```html
 <script src='https://www.x3dom.org/download/x3dom.js'></script>
@@ -60,5 +60,21 @@ In summary, X3DOM is a tool that makes it easier and more accessible to have int
 - The `<box>` tag inside `<shape>` creates a simple 3D cube.
 
 You'll see a 3D cube that you can interact with – rotate, zoom in and out. You can create more complex 3D scenes by adding more shapes, lights, and animations.
+
+## Planet Orbit Simulation in x3dom
+
+`x3dom` is a framework that enables integration of 3D content into HTML5 web pages using the X3D standard.
+
+This example will create a simple solar system model with a few planets orbiting around the sun. Keep in mind that this is a basic representation and may not be accurate in terms of scale or orbital mechanics.
+
+[planets.html](planets.html)
+
+This code sets up a basic 3D scene with the sun and two planets.
+
+The `timeSensor` node is used to create an animation loop, and `orientationInterpolator` nodes define how each planet should move.
+
+The `route` elements link the time sensor to the interpolators and then to the transforms of the planets to create the orbital movement.
+
+The orbits are simplified and circular for the purposes of this demonstration. In a more advanced simulation, you could add more planets, adjust their sizes, colors, and orbits to be more realistic.
 
 <br>
