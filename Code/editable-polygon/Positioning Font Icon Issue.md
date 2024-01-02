@@ -1,5 +1,16 @@
 ## Positioning Font Icon Issue
 
+<span style="color:#59acf3;font-size:larger;">delete-rect.html</span>
+
+1. When you delete an object in three.js, it doesn't really go away.
+2. I had to finagle the icon's position in order to get it right.
+
+<span style="color:#59acf3;font-size:larger;">fontawsome-icon.html</span>
+
+1. Why is the positioning correct?  Like, there's no scrolling down, so the position is fine.
+
+### Seems fine...
+
 The issue you are experiencing with the positioning of the font-awesome icon seems to be related to the way you are converting the mouse coordinates to the Three.js world coordinates. This can be a bit tricky, as Three.js coordinates don't directly correspond to screen pixel coordinates.
 
 From your code, it looks like you are correctly calculating the intersection point in the `getMousePosition` function and setting the position of the CSS2DObject (`objectCSS`) using those coordinates. However, the Y-coordinate may be incorrectly aligned due to different coordinate systems used by CSS and Three.js.
