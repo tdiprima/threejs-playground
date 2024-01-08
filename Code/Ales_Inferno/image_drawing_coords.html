@@ -77,12 +77,17 @@
   });
 
   function calcDom(vector) {
-    // Calculate the DOM coordinates
-    let widthHalf = window.innerWidth / 2;
-    let heightHalf = window.innerHeight / 2;
-    let xDOM = (vector.x * widthHalf) + widthHalf;
-    let yDOM = -(vector.y * heightHalf) + heightHalf;
-    console.log("%cDOM coordinates:", "color: #ccff00;", xDOM, yDOM);
+    let xDOM = 0;
+    let yDOM = 0;
+
+    if (vector) {
+      // Calculate the DOM coordinates
+      let widthHalf = window.innerWidth / 2;
+      let heightHalf = window.innerHeight / 2;
+      xDOM = (vector.x * widthHalf) + widthHalf;
+      yDOM = -(vector.y * heightHalf) + heightHalf;
+      console.log("%cDOM coordinates:", "color: #ccff00;", xDOM, yDOM);
+    }
 
     return new THREE.Vector3( xDOM, yDOM, 0 );
   }
@@ -114,7 +119,7 @@
   });
 
   renderer.domElement.addEventListener('mouseup', function (event) {
-    // console.log("drawingCoordinates", drawingCoordinates);
+    console.log("drawingCoordinates", drawingCoordinates);
     let last = drawingCoordinates[drawingCoordinates.length - 1];
     console.log("%clast:", "color: #ff00cc;", last);
     let vector = calcDom(last);
