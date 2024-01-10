@@ -1,6 +1,6 @@
 ## Free-draw with Tube
 
-I have three.js code that allows the user to free-draw a line on an image.  And I am using `THREE.Line`, `THREE.BufferGeometry`, and `THREE.LineBasicMaterial` for the drawn line.  Is there a way to take this code and change it so that instead of using Line, BufferGeometry, and LineBasicMaterial, it uses `THREE.TubeGeometry` or `THREE.TubeBufferGeometry` and whatever material and mesh goes with it?
+<span style="color:blue;font-size:larger;">I have three.js code that allows the user to free-draw a line on an image.  And I am using `THREE.Line`, `THREE.BufferGeometry`, and `THREE.LineBasicMaterial` for the drawn line.  Is there a way to take this code and change it so that instead of using Line, BufferGeometry, and LineBasicMaterial, it uses `THREE.TubeGeometry` or `THREE.TubeBufferGeometry` and whatever material and mesh goes with it?</span>
 
 Yes.  The `THREE.TubeGeometry` or `THREE.TubeBufferGeometry` allows you to create a tube-shaped geometry based on a given path.
 
@@ -116,224 +116,42 @@ In this modified code, the key changes include:
 
 ## No.
 
-When we do `tubeGeometry.setFromPoints(positions);`, I get an error: "can't access property "setFromPoints", tubeGeometry is undefined".
+<span style="color:blue;font-size:larger;">When we do `tubeGeometry.setFromPoints(positions);`, I get an error: "can't access property "setFromPoints", tubeGeometry is undefined".</span>
 
 It seems that the `setFromPoints` method is not available directly on `TubeBufferGeometry`.
 
-<span style="color:red;">How does that logic make sense?</span>
+<span style="color:lime;font-size:larger;">No. The problem is tubeGeometry is undefined.</span>
 
 To update the path of the tube geometry, you can manually update the position attribute using `tubeGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))`.
 
 ```javascript
-let imageSource = "/images/image1.jpg";
-let isDrawing = false;
-let mouseIsPressed = false;
-let positions = []; // Set up arrays to hold line data
-
-let scene = new THREE.Scene();
-let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 5;
-camera.lookAt(new THREE.Vector3(0, 0, 0));
-
-let renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
-
-const loader = new THREE.TextureLoader();
-const planeGeom = new THREE.PlaneGeometry(10, 10);
-const texture = loader.load(imageSource);
-const material = new THREE.MeshBasicMaterial({
-  map: texture,
-  side: THREE.DoubleSide
-});
-const mesh = new THREE.Mesh(planeGeom, material);
-scene.add(mesh);
-
-let raycaster = new THREE.Raycaster();
-let mouse = new THREE.Vector2();
-
-let tubeMaterial = new THREE.MeshBasicMaterial({ color: "#0000ff" });
-let tubeGeometry;
-let tubeMesh;
-
-renderer.domElement.addEventListener('pointerdown', event => {
-  if (isDrawing) {
-    mouseIsPressed = true;
-    debugger; // todo: hello
-
-    // Create a new TubeBufferGeometry for each line
-    tubeGeometry = new THREE.TubeBufferGeometry(new THREE.CatmullRomCurve3(), 100, 0.1, 8, false);
-    tubeMesh = new THREE.Mesh(tubeGeometry, tubeMaterial);
-    scene.add(tubeMesh);
-  }
-});
-
-function onMouseMove(event) {
-  if (isDrawing && mouseIsPressed) {
-    // Calculate mouse position in normalized device coordinates
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-    // Use raycaster to get intersection point with scene
-    raycaster.setFromCamera(mouse, camera);
-    let intersects = raycaster.intersectObjects(scene.children, true);
-
-    if (intersects.length > 0) {
-      let point = intersects[0].point;
-      positions.push(point);
-
-      // Update the position attribute of the TubeBufferGeometry
-      tubeGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(positions.flatMap(p => [p.x, p.y, p.z])), 3));
-
-      // Set needsUpdate to true for the position attribute
-      tubeGeometry.attributes.position.needsUpdate = true;
-      tubeGeometry.computeBoundingSphere();
-    }
-  }
-}
-
-function onMouseUp() {
-  if (isDrawing) {
-    mouseIsPressed = false;
-
-    // Compute the TubeBufferGeometry's bounding sphere
-    tubeGeometry.computeBoundingSphere();
-
-    positions = [];
-  }
-}
-
-function animate() {
-  requestAnimationFrame(animate);
-  renderer.render(scene, camera);
-}
-
-animate();
-
-renderer.domElement.addEventListener('mousemove', onMouseMove);
-renderer.domElement.addEventListener('mouseup', onMouseUp);
+renderer.domElement.addEventListener('pointerdown', event => {  if (isDrawing) {    mouseIsPressed = true;    debugger; // todo: hello    // Create a new TubeBufferGeometry for each line    tubeGeometry = new THREE.TubeBufferGeometry(new THREE.CatmullRomCurve3(), 100, 0.1, 8, false);    tubeMesh = new THREE.Mesh(tubeGeometry, tubeMaterial);    scene.add(tubeMesh);  }});function onMouseMove(event) {  if (isDrawing && mouseIsPressed) {    // Calculate mouse position in normalized device coordinates    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;    // Use raycaster to get intersection point with scene    raycaster.setFromCamera(mouse, camera);    let intersects = raycaster.intersectObjects(scene.children, true);    if (intersects.length > 0) {      let point = intersects[0].point;      positions.push(point);      // Update the position attribute of the TubeBufferGeometry      tubeGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(positions.flatMap(p => [p.x, p.y, p.z])), 3));      // Set needsUpdate to true for the position attribute      tubeGeometry.attributes.position.needsUpdate = true;      tubeGeometry.computeBoundingSphere();    }  }}function onMouseUp() {  if (isDrawing) {    mouseIsPressed = false;    // Compute the TubeBufferGeometry's bounding sphere    tubeGeometry.computeBoundingSphere();    positions = [];  }}
 ```
 
 This updated code manually updates the position attribute of the `TubeBufferGeometry` by calling `tubeGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(positions.flatMap(p => [p.x, p.y, p.z])), 3))`. It converts the positions array into a Float32Array and updates the position attribute accordingly.
 
-<!--
-#polite
-I apologize for the confusion...
-Apologies for the confusion...
-Here's the updated code with the correction...
-I apologize for the oversight in the previous response, and I appreciate your understanding.
-Please give it a try, and let me know if you have any further issues.
--->
-
 ## Wait a sec...
 
-It seems that the error actually lies in trying to create the THREE.TubeBufferGeometry.  As soon as we try to do
+<span style="color:blue;font-size:larger;">It seems that the error actually lies in trying to create the THREE.TubeBufferGeometry.  As soon as we try to do</span>
 
 ```js
 tubeGeometry = new THREE.TubeBufferGeometry(new THREE.CatmullRomCurve3(), 100, 0.1, 8, false);
 ```
 
-this error occurs: "Uncaught TypeError: can't access property "x", t is undefined".
+<span style="color:blue;font-size:larger;">this error occurs: "Uncaught TypeError: can't access property "x", t is undefined".</span>
 
-<mark>Any time you get some stupid error like that, it means you're doing it wrong.  So try to figure it out.</mark>
+<mark>**Any time you get some stupid error like that, it means you're doing it wrong.  Try to figure it out.  And use the unminified JavaScript source for a better error.**</mark>
 
 The error you encountered indicates that the `THREE.CatmullRomCurve3()` **requires points** to be passed as an argument.
 
 To create a tube geometry based on the user-drawn line, you can use `THREE.CatmullRomCurve3` with the `positions` array as the path points.
 
-Then...
+<span style="color:blue;font-size:larger;">Then...</span>
 
 The error you encountered might be due to the empty `positions` array when trying to create the `THREE.CatmullRomCurve3`. To resolve this issue, you can create the `THREE.CatmullRomCurve3` object separately and update it as the user draws the line.
 
 ```javascript
-let imageSource = "/images/image1.jpg";
-let isDrawing = false;
-let mouseIsPressed = false;
-let positions = []; // Set up arrays to hold line data
-
-let scene = new THREE.Scene();
-let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 5;
-camera.lookAt(new THREE.Vector3(0, 0, 0));
-
-let renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
-
-const loader = new THREE.TextureLoader();
-const planeGeom = new THREE.PlaneGeometry(10, 10);
-const texture = loader.load(imageSource);
-const material = new THREE.MeshBasicMaterial({
-  map: texture,
-  side: THREE.DoubleSide
-});
-const mesh = new THREE.Mesh(planeGeom, material);
-scene.add(mesh);
-
-let raycaster = new THREE.Raycaster();
-let mouse = new THREE.Vector2();
-
-let tubeMaterial = new THREE.MeshBasicMaterial({ color: "#0000ff" });
-let tubeGeometry;
-let tubeMesh;
-let tubePath;
-
-renderer.domElement.addEventListener('pointerdown', event => {
-  if (isDrawing) {
-    mouseIsPressed = true;
-
-    // Create a new TubeBufferGeometry for each line
-    tubePath = new THREE.CatmullRomCurve3(positions);
-    tubeGeometry = new THREE.TubeBufferGeometry(tubePath, 100, 0.1, 8, false);
-    tubeMesh = new THREE.Mesh(tubeGeometry, tubeMaterial);
-    scene.add(tubeMesh);
-  }
-});
-
-function onMouseMove(event) {
-  if (isDrawing && mouseIsPressed) {
-    // Calculate mouse position in normalized device coordinates
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-    // Use raycaster to get intersection point with scene
-    raycaster.setFromCamera(mouse, camera);
-    let intersects = raycaster.intersectObjects(scene.children, true);
-
-    if (intersects.length > 0) {
-      let point = intersects[0].point;
-      positions.push(point);
-
-      // Update the position attribute of the TubeBufferGeometry
-      tubeGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(positions.flatMap(p => [p.x, p.y, p.z])), 3));
-
-      // Set needsUpdate to true for the position attribute
-      tubeGeometry.attributes.position.needsUpdate = true;
-      tubeGeometry.computeBoundingSphere();
-    }
-  }
-}
-
-function onMouseUp() {
-  if (isDrawing) {
-    mouseIsPressed = false;
-
-    // Compute the TubeBufferGeometry's bounding sphere
-    tubeGeometry.computeBoundingSphere();
-
-    positions = [];
-  }
-}
-
-function animate() {
-  requestAnimationFrame(animate);
-  renderer.render(scene, camera);
-}
-
-animate();
-
-renderer.domElement.addEventListener('mousemove', onMouseMove);
-renderer.domElement.addEventListener('mouseup', onMouseUp);
+let tubePath;renderer.domElement.addEventListener('pointerdown', event => {  if (isDrawing) {    mouseIsPressed = true;    // Create a new TubeBufferGeometry for each line    tubePath = new THREE.CatmullRomCurve3(positions);    tubeGeometry = new THREE.TubeBufferGeometry(tubePath, 100, 0.1, 8, false);    tubeMesh = new THREE.Mesh(tubeGeometry, tubeMaterial);    scene.add(tubeMesh);  }});
 ```
 
 ~~In this updated code, I've passed the `positions` array as the argument to `THREE.CatmullRomCurve3` when creating the tube geometry: `tubeGeometry = new THREE.TubeBufferGeometry(new THREE.CatmullRomCurve3(positions), 100, 0.1, 8, false);`.~~
