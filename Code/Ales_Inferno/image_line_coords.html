@@ -64,7 +64,10 @@
     let planeWidth = plane.geometry.parameters.width;
     let planeHeight = plane.geometry.parameters.height;
     const imageCoordinates = worldToImageCoordinates(linePoints, imageWidth, imageHeight, planeWidth, planeHeight);
-    console.log("imageCoordinates", imageCoordinates);
+    console.log("Image coordinates:", imageCoordinates);
+
+    const imgCoords = convertToImageCoordinates(positionArray, imageWidth, imageHeight, planeWidth, planeHeight);
+    console.log("Image coordinates1:", imgCoords);
   });
 
   function worldToImageCoordinates(worldPoints, imageWidth, imageHeight, planeWidth, planeHeight) {
@@ -79,6 +82,29 @@
 
       return { x: imageX, y: imageY };
     });
+  }
+
+  function convertToImageCoordinates(positionArray, imageWidth, imageHeight, planeWidth, planeHeight) {
+    const imageCoordinates = [];
+
+    for (let i = 0; i < positionArray.length; i += 3) {
+      // Extract the x and y coordinates
+      let point = {};
+      point.x = positionArray[i];
+      point.y = positionArray[i + 1];
+
+      // Normalize coordinates to [-1, 1]
+      const normalizedX = point.x / (planeWidth / 2);
+      const normalizedY = point.y / (planeHeight / 2);
+
+      // Convert normalized coordinates to image coordinates
+      const imageX = (normalizedX + 1) * (imageWidth / 2);
+      const imageY = (1 - normalizedY) * (imageHeight / 2);
+
+      imageCoordinates.push({ x: imageX, y: imageY });
+    }
+
+    return imageCoordinates;
   }
 
   window.addEventListener("resize", () => {
