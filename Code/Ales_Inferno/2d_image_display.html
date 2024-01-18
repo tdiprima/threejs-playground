@@ -21,47 +21,25 @@
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
-  function simple() {
-    let texture = new THREE.TextureLoader().load(imgSrc);
-    let factor = 4;
-    // aspect ratio is 1:0.75
-    let width = factor;
-    let height = 0.75 * factor;
-    let geometry = new THREE.PlaneGeometry(width, height);
-    console.log("plane parameters", geometry.parameters);
-    // Create a material with the texture applied to it
-    let material = new THREE.MeshBasicMaterial({ map: texture });
-    let mesh = new THREE.Mesh(geometry, material);
-    scene.add(mesh);
-  }
+  let planeGeom = new THREE.PlaneGeometry(4, 4);
+  let tex = new THREE.TextureLoader().load(imgSrc, (tex) => {
+    tex.needsUpdate = true;
 
-  simple();
+    const width = tex.image.width;
+    const height = tex.image.height;
+    const aspect = height / width;
+    console.log(width, height);
+    console.log(aspect);
 
-  function withAspectRatio() {
-    // play around with this for size
-    let planeGeom = new THREE.PlaneGeometry(4, 4);
-    let mesh;
-    let tex = new THREE.TextureLoader().load(imgSrc, (tex) => {
-      tex.needsUpdate = true;
-      const width = tex.image.width;
-      const height = tex.image.height;
-      const aspect = height / width;
-      console.log(width, height);
-      console.log(aspect);
-      mesh.scale.set(1.0, aspect, 1.0);
-    });
-
-    console.log("plane parameters", planeGeom.parameters);
-
-    let material = new THREE.MeshBasicMaterial({
+    let planeMaterial = new THREE.MeshBasicMaterial({
       color: 0xffffff,
       map: tex
     });
-    mesh = new THREE.Mesh(planeGeom, material);
-    scene.add(mesh);
-  }
 
-  // withAspectRatio();
+    let plane = new THREE.Mesh(planeGeom, planeMaterial);
+    plane.scale.set(1.0, aspect, 1.0);
+    scene.add(plane);
+  });
 
   window.addEventListener("resize", () => {
     camera.aspect = window.innerWidth / window.innerHeight;
