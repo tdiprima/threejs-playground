@@ -25,7 +25,7 @@ function init() {
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.z = 5;
 
-  renderer = new THREE.WebGLRenderer();
+  renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
@@ -68,14 +68,22 @@ function onMouseMove(event) {
     // p.s. If it looks like a box, then you didn't do loader.load(font)!
     if (textMesh) scene.remove(textMesh);
 
-    let length = Calculate.lineLength(startPoint.x, startPoint.y, endPoint.x, endPoint.y).toFixed(2);
+    let length = Calculate.lineLength(
+      startPoint.x,
+      startPoint.y,
+      endPoint.x,
+      endPoint.y,
+      calculateScaleFactor(camera, renderer)
+    ).toFixed(2);
+
     message = `Length ${length}`;
+
     let textGeometry = new TextGeometry(message, {
       font: font,
-      size: .2,
+      size: 0.2,
       height: 0.1,
-      curveSegments: 12,
-      bevelEnabled: false
+      // curveSegments: 12,
+      // bevelEnabled: false
     });
 
     let textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
@@ -110,10 +118,25 @@ function getMouseCoordinates(event) {
 }
 
 const Calculate = {
-  lineLength(x1, y1, x2, y2) {
-    return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+  lineLength(x1, y1, x2, y2, scaleFactor) {
+    const threeJsUnitsLength = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    return threeJsUnitsLength * scaleFactor; // Convert to pixels
   }
 };
+
+// Determine scaleFactor based on scene setup
+function calculateScaleFactor(camera, renderer) {
+  // Calculate the visible height at the depth of the plane
+  const distance = camera.position.z;
+  const vFov = (camera.fov * Math.PI) / 180; // Convert vertical fov to radians
+  const planeHeightAtDistance = 2 * Math.tan(vFov / 2) * distance;
+
+  // Calculate the scale factor
+  const screenHeight = renderer.domElement.clientHeight;
+  const scaleFactor = screenHeight / planeHeightAtDistance;
+
+  return scaleFactor;
+}
 
 window.addEventListener("resize", function () {
   renderer.setSize(window.innerWidth, window.innerHeight);
