@@ -41,11 +41,52 @@ function onMouseMove(event) {
   }
 }
 
+// Function to add a new rectangle
+function addRectangle(startPoint, endPoint) {
+    let newGeometry = new THREE.BufferGeometry();
+    let vertices = new Float32Array(12); // 4 vertices
+
+    vertices[0] = startPoint.x;
+    vertices[1] = startPoint.y;
+    vertices[2] = startPoint.z;
+    vertices[3] = endPoint.x;
+    vertices[4] = startPoint.y;
+    vertices[5] = startPoint.z;
+    vertices[6] = endPoint.x;
+    vertices[7] = endPoint.y;
+    vertices[8] = startPoint.z;
+    vertices[9] = startPoint.x;
+    vertices[10] = endPoint.y;
+    vertices[11] = startPoint.z;
+
+    newGeometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
+    let newRect = new THREE.LineLoop(newGeometry, material);
+    scene.add(newRect);
+}
+
+function updateRectangle() {
+  let positions = rect.geometry.attributes.position.array;
+  positions[0] = startPoint.x;
+  positions[1] = startPoint.y;
+  positions[2] = startPoint.z;
+  positions[3] = endPoint.x;
+  positions[4] = startPoint.y;
+  positions[5] = startPoint.z;
+  positions[6] = endPoint.x;
+  positions[7] = endPoint.y;
+  positions[8] = startPoint.z;
+  positions[9] = startPoint.x;
+  positions[10] = endPoint.y;
+  positions[11] = startPoint.z;
+  rect.geometry.attributes.position.needsUpdate = true;
+}
+
 function onMouseUp(event) {
   event.preventDefault();
   isDrawing = false;
   endPoint = getMousePosition(event.clientX, event.clientY);
-  updateRectangle();
+  // updateRectangle();
+  addRectangle(startPoint, endPoint);
 }
 
 function getMousePosition(clientX, clientY) {
@@ -67,23 +108,6 @@ function getMousePosition(clientX, clientY) {
   raycaster.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 0, 1)), intersectionPoint);
 
   return intersectionPoint;
-}
-
-function updateRectangle() {
-  let positions = rect.geometry.attributes.position.array;
-  positions[0] = startPoint.x;
-  positions[1] = startPoint.y;
-  positions[2] = startPoint.z;
-  positions[3] = endPoint.x;
-  positions[4] = startPoint.y;
-  positions[5] = startPoint.z;
-  positions[6] = endPoint.x;
-  positions[7] = endPoint.y;
-  positions[8] = startPoint.z;
-  positions[9] = startPoint.x;
-  positions[10] = endPoint.y;
-  positions[11] = startPoint.z;
-  rect.geometry.attributes.position.needsUpdate = true;
 }
 
 function animate() {
