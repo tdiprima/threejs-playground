@@ -5,6 +5,7 @@ export function testing(scene, camera, renderer) {
   let segments;
   let typeOfShape;
   let allMeshes = []; // Array to store all meshes
+  let positions = [];
 
   // Material for the shapes
   let material = new THREE.LineBasicMaterial({ color: 0x0000ff, linewidth: 10 });

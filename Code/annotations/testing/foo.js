@@ -6,6 +6,7 @@ export function testing(scene, camera, renderer) {
   let typeOfShape;
   let temporaryMesh; // Temporary mesh for drawing
   let allMeshes = []; // Array to store all permanent meshes
+  let positions = [];
 
   // Material for the shapes
   let material = new THREE.LineBasicMaterial({ color: 0x0000ff, linewidth: 10 });
