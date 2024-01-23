@@ -228,4 +228,6 @@ const updatePolygon = function (geometry) {
 
 These functions should be used in your existing code to update the geometry of the respective shapes. They modify the `position` attribute of the passed `geometry` with the new set of vertices calculated based on the current state of `startPoint`, `endPoint`, and `points`.
 
+<span style="color:blue;font-size:larger;">That didn't work. bar.js</span>
+
 <br>
