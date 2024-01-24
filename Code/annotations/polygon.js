@@ -1,4 +1,3 @@
-// Point and click works
 let scene = new THREE.Scene();
 let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.z = 5;
@@ -7,18 +6,11 @@ let renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Create a polygon
 let material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
-let geometry = new THREE.BufferGeometry();
-let positions = [];
-let vertices = new Float32Array(positions);
-geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
-let polygon = new THREE.LineLoop(geometry, material);
-scene.add(polygon);
-
-// Handle mouse events
 let isDrawing = false;
 let points = [];
+let currentPolygon = null;
+
 renderer.domElement.addEventListener("mousedown", onMouseDown, false);
 renderer.domElement.addEventListener("mousemove", onMouseMove, false);
 renderer.domElement.addEventListener("mouseup", onMouseUp, false);
@@ -28,9 +20,10 @@ function onMouseDown(event) {
   event.preventDefault();
   if (!isDrawing) {
     isDrawing = true;
+    points = []; // Reset points
     let point = getMousePosition(event.clientX, event.clientY);
     points.push(point);
-    updatePolygon();
+    currentPolygon = createPolygon();
   }
 }
 
@@ -58,9 +51,8 @@ function onDoubleClick(event) {
     isDrawing = false;
     points.pop(); // Remove the duplicated point from double-click
     updatePolygon();
+    currentPolygon = null;
   }
-  positions = []; // Reset for next time
-  points = [];
 }
 
 function getMousePosition(clientX, clientY) {
@@ -79,26 +71,24 @@ function getMousePosition(clientX, clientY) {
   return intersectionPoint;
 }
 
-// You need to update the vertices array whenever the points array changes.
+function createPolygon() {
+  let geometry = new THREE.BufferGeometry();
+  let polygon = new THREE.LineLoop(geometry, material);
+  scene.add(polygon);
+  return polygon;
+}
+
 function updatePolygon() {
-  let numPoints = points.length;
-  if (numPoints > 0) {
-    positions = new Float32Array(numPoints * 3);
-    for (let i = 0; i < numPoints; i++) {
+  if (currentPolygon && points.length > 0) {
+    let positions = new Float32Array(points.length * 3);
+    for (let i = 0; i < points.length; i++) {
       positions[i * 3] = points[i].x;
       positions[i * 3 + 1] = points[i].y;
       positions[i * 3 + 2] = points[i].z;
     }
-
-    if (isDrawing) {
-      positions[numPoints * 3] = points[0].x; // Connect the last point with the first point
-      positions[numPoints * 3 + 1] = points[0].y;
-      positions[numPoints * 3 + 2] = points[0].z;
-    }
+    currentPolygon.geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    currentPolygon.geometry.attributes.position.needsUpdate = true;
   }
-
-  polygon.geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
-  polygon.geometry.attributes.position.needsUpdate = true;
 }
 
 function animate() {
