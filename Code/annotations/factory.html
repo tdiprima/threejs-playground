@@ -35,8 +35,6 @@
       super(mesh);
       // Initialize the geometry with four vertices
       this.mesh.geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(4 * 3), 3));
-      // Initialize with an arbitrary number of vertices, you can dynamically resize this later
-      // this.mesh.geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(10 * 3), 3));
     }
 
     onMouseDown(event) {

@@ -7,19 +7,15 @@ let renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Create an ellipse
 let material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
 let segments = 64; // 64 line segments is a common choice
-let geometry = new THREE.BufferGeometry();
-let vertices = new Float32Array((segments + 1) * 3); // To create a closed loop, the last vertex must connect back to the first vertex.
-geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
-let ellipse = new THREE.LineLoop(geometry, material);
-scene.add(ellipse);
 
 // Handle mouse events
 let isDrawing = false;
 let startPoint;
 let endPoint;
+let currentEllipse; // This will hold the ellipse currently being drawn
+
 renderer.domElement.addEventListener("mousedown", onMouseDown, false);
 renderer.domElement.addEventListener("mousemove", onMouseMove, false);
 renderer.domElement.addEventListener("mouseup", onMouseUp, false);
@@ -28,6 +24,13 @@ function onMouseDown(event) {
   event.preventDefault();
   isDrawing = true;
   startPoint = getMousePosition(event.clientX, event.clientY);
+
+  // Create a new ellipse for the current drawing action
+  let geometry = new THREE.BufferGeometry();
+  let vertices = new Float32Array((segments + 1) * 3);
+  geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
+  currentEllipse = new THREE.LineLoop(geometry, material);
+  scene.add(currentEllipse);
 }
 
 function onMouseMove(event) {
@@ -43,6 +46,7 @@ function onMouseUp(event) {
   isDrawing = false;
   endPoint = getMousePosition(event.clientX, event.clientY);
   updateEllipse();
+  currentEllipse = null; // Reset currentEllipse after drawing is completed
 }
 
 function getMousePosition(clientX, clientY) {
@@ -62,7 +66,8 @@ function getMousePosition(clientX, clientY) {
 }
 
 function updateEllipse() {
-  let positions = ellipse.geometry.attributes.position.array;
+  if (!currentEllipse) return; // Check if there is a current ellipse to update
+  let positions = currentEllipse.geometry.attributes.position.array;
   let center = new THREE.Vector3().addVectors(startPoint, endPoint).multiplyScalar(0.5);
   let radiusX = Math.abs(startPoint.x - endPoint.x) * 0.5;
   let radiusY = Math.abs(startPoint.y - endPoint.y) * 0.5;
@@ -76,7 +81,7 @@ function updateEllipse() {
     positions[i * 3 + 2] = 0;
   }
 
-  ellipse.geometry.attributes.position.needsUpdate = true;
+  currentEllipse.geometry.attributes.position.needsUpdate = true;
 }
 
 function animate() {
