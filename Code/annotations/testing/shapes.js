@@ -34,7 +34,6 @@ export function testing(scene, camera, renderer) {
 
   // Set up geometry and "update" function
   function initGeometry() {
-    console.log("initGeometry")
     switch (typeOfShape) {
       case "rectangle":
         vertices = new Float32Array(12); // 4 vertices
@@ -50,7 +49,7 @@ export function testing(scene, camera, renderer) {
         updateMesh = updatePolygon;
         break;
       default:
-        console.log("Invalid polygon type");
+        console.log("Invalid shape type");
         return; // Return if typeOfShape is invalid
     }
 
@@ -73,14 +72,12 @@ export function testing(scene, camera, renderer) {
   renderer.domElement.addEventListener("dblclick", onDoubleClick, false);
 
   function onMouseDown(event) {
-    event.preventDefault();
     isDrawing = true;
     startPoint = getMousePosition(event.clientX, event.clientY);
     points.push(startPoint);
   }
 
   function onMouseMove(event) {
-    event.preventDefault();
     if (isDrawing) {
       endPoint = getMousePosition(event.clientX, event.clientY);
       points[points.length - 1] = endPoint;
@@ -89,7 +86,6 @@ export function testing(scene, camera, renderer) {
   }
 
   function onMouseUp(event) {
-    event.preventDefault();
     if (typeOfShape !== "polygon") isDrawing = false;
     endPoint = getMousePosition(event.clientX, event.clientY);
     points.push(endPoint);
@@ -97,7 +93,6 @@ export function testing(scene, camera, renderer) {
   }
 
   function onDoubleClick(event) {
-    event.preventDefault();
     if (typeOfShape === "polygon") {
       if (isDrawing && points.length >= 3) {
         isDrawing = false;
