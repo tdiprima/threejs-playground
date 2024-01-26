@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Hollow brush</title>
+  <title>Draw with Vanilla JS</title>
+  <style>
+    #canvas { border: 1px solid black; }
+  </style>
 </head>
 <body>
-<canvas height="500" id="canvas" style="border: 1px solid black;" width="500"></canvas>
-
+<canvas height="500" id="canvas" width="500"></canvas>
 <script>
   // Get the canvas element and its context
   let canvas = document.getElementById("canvas");
@@ -22,9 +24,7 @@
   // Change the background color to light blue
   changeBackgroundColor("lightblue");
 </script>
-
 <script src="black-dot.js"></script>
 <!-- <script src="empty-circle.js"></script> -->
-
 </body>
 </html>
