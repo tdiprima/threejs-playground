@@ -1,7 +1,9 @@
 <span style="color:blue;font-size:larger;">There's a navigation bar on top, so the location where the square shows up is different from the location I click at.  How do I adjust for this?</span>
 
 ```js
-// Convert mouse position to normalized device coordinates (-1 to +1)mouse.x = (event.clientX / window.innerWidth) * 2 - 1;mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+// X / width; Y / height
+mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 ```
 
 To adjust for the offset caused by a navigation bar or any other element on the page, you need to take into account the position of the canvas element relative to the viewport. When calculating the mouse position, subtract the offset of the canvas from the mouse's client coordinates.
@@ -16,7 +18,13 @@ Here's the updated code:
 
 ```javascript
 function onMouseClick(event) {
-  // Get the canvas element and its bounding rectangle  const canvas = document.querySelector('canvas');  const rect = canvas.getBoundingClientRect();  // Adjust mouse position for canvas offset  mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;  mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+  // Get the canvas element and its bounding rectangle
+  const canvas = document.querySelector('canvas');
+  const rect = canvas.getBoundingClientRect();
+
+  // Adjust mouse position for canvas offset
+  mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 }
 
 window.addEventListener('click', onMouseClick);
