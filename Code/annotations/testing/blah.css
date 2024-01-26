@@ -1,0 +1,14 @@
+#imageButton {
+  background-image: url('brush.png');
+  background-size: cover;
+  height: 32px;
+  width: 32px;
+  border: none;
+  cursor: pointer;
+  display: block; /* Ensures the button is treated as a block-level element */
+}
+
+#imageButton.brushDark {
+  background-image: url('brush-dark.png');
+}
+
