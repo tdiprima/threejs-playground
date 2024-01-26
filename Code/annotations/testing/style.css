@@ -1,0 +1,8 @@
+#imageButton {
+  background-image: url('brush.png'); /* Path to your image */
+  background-size: cover; /* This ensures your image covers the button */
+  height: 32px; /* Height of the button */
+  width: 32px; /* Width of the button */
+  border: none; /* Optional: removes the border */
+  cursor: pointer; /* Changes the cursor on hover */
+}
