@@ -1,8 +1,29 @@
 import * as THREE from "/build/three.module.js";
 
-export function hollowBrush(scene, camera, renderer) {
+export function hollowBrush(scene, camera, renderer, controls) {
+  // let brushButton = createButton({
+  //   id: "ellipse",
+  //   innerHtml: "<i class=\"fa-regular fa-circle\"></i>",
+  //   title: "ellipse"
+  // });
+
+  let isDrawing = false; // Flag to check if drawing is active
+  let brushButton = document.getElementById('imageButton');
+
+  brushButton.addEventListener("click", function () {
+    // if (isDrawing) {
+    //   isDrawing = false;
+    //   // controls.enabled = true;
+    //   // this.classList.replace('btnOn', 'annotationBtn');
+    // } else {
+    //   isDrawing = true;
+    //   // controls.enabled = false;
+    //   // this.classList.replace('annotationBtn', 'btnOn');
+    // }
+    this.classList.toggle('brushDark');
+  });
+
   let points = []; // Array to store the points of the line
-  let drawing = false; // Flag to check if drawing is active
   let raycaster = new THREE.Raycaster();
 
   // Function to convert mouse coordinates to Three.js coordinates using raycasting
@@ -26,7 +47,7 @@ export function hollowBrush(scene, camera, renderer) {
 
   // Function to start drawing
   function startDrawing(event) {
-    drawing = true;
+    isDrawing = true;
     points = [];
     const mousePos = getMousePos(event);
     if (mousePos === null) return;
@@ -35,7 +56,7 @@ export function hollowBrush(scene, camera, renderer) {
 
   // Function to update the line while drawing
   function updateDrawing(event) {
-    if (!drawing) return;
+    if (!isDrawing) return;
     const mousePos = getMousePos(event);
     if (mousePos === null) return;
     points.push(new THREE.Vector3(mousePos.x, mousePos.y, 0)); // Add new point
@@ -44,7 +65,7 @@ export function hollowBrush(scene, camera, renderer) {
 
   // Function to stop drawing
   function stopDrawing() {
-    drawing = false;
+    isDrawing = false;
   }
 
   // Function to update or create the line loop
