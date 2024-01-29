@@ -29,7 +29,7 @@
       let size = this.map.getSize();
 
       // Create a new WebGL renderer and append it to the Leaflet's overlay pane
-      this.renderer = new THREE.WebGLRenderer({alpha: true});
+      this.renderer = new THREE.WebGLRenderer({ alpha: true });
       this.renderer.setSize(size.x, size.y);
       this.renderer.domElement.style.position = 'absolute';
       this.renderer.domElement.style.top = 0;
@@ -43,8 +43,8 @@
       this.camera.position.z = 500;
 
       // Add Three.js object
-      let geometry = new THREE.BoxGeometry(200, 200, 200);
-      let material = new THREE.MeshBasicMaterial({color: 0x00ff00});
+      let geometry = new THREE.BoxGeometry(100, 100, 100);
+      let material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
       this.cube = new THREE.Mesh(geometry, material);
       this.scene.add(this.cube);
 
@@ -53,8 +53,8 @@
 
     animate: function () {
       // Update Three.js scene
-      // this.cube.rotation.x += 0.01;
-      // this.cube.rotation.y += 0.01;
+      this.cube.rotation.x += 0.01;
+      this.cube.rotation.y += 0.01;
       this.renderer.render(this.scene, this.camera);
 
       // Next frame

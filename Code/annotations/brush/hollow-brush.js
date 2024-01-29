@@ -78,7 +78,8 @@ export function hollowBrush(scene, camera, renderer, controls) {
   function updateLineLoop() {
     if (lineLoop) scene.remove(lineLoop); // Remove old line loop if it exists
     const lineGeom = new THREE.BufferGeometry().setFromPoints(points);
-    lineLoop = new THREE.LineLoop(lineGeom, new THREE.LineBasicMaterial({color: 0xff0000}));
+    lineLoop = new THREE.LineLoop(lineGeom, new THREE.LineBasicMaterial({ color: "#82a9c4" }));
+    // lineLoop = new THREE.LineLoop(lineGeom, new THREE.LineBasicMaterial({ color: 0x0000ff }));
     scene.add(lineLoop);
   }
 
