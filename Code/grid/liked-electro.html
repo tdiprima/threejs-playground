@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Create Custom Grid</title>
+  <link href="/css/main.css" rel="stylesheet">
+</head>
+<body>
+<script src="/build/three.min.js"></script>
+<script>
+  let scene = new THREE.Scene();
+  let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.z = 5;
+
+  let renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  // We'll create a grid of plane geometries, where each plane represents a square in the grid.
+  const gridWidth = 20; // Grid will be gridWidth x gridHeight
+  const gridHeight = 14;
+  const squareSize = 0.5; // Size of each square
+  const grid = new THREE.Group(); // Group to hold the grid
+
+  for (let i = 0; i < gridWidth; i++) {
+    for (let j = 0; j < gridHeight; j++) {
+      const geometry = new THREE.PlaneGeometry(squareSize, squareSize);
+      const material = new THREE.MeshBasicMaterial({ wireframe: true, color: 0x0000ff, side: THREE.DoubleSide });
+      const square = new THREE.Mesh(geometry, material);
+
+      // Position each square
+      square.position.x = i * squareSize - (gridWidth * squareSize) / 2 + squareSize / 2;
+      square.position.y = j * squareSize - (gridHeight * squareSize) / 2 + squareSize / 2;
+
+      square.userData = { row: i, column: j }; // Optional: Store grid position
+
+      grid.add(square);
+    }
+  }
+
+  scene.add(grid);
+
+  // Initialize a raycaster and add mouse event listeners:
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
+
+  function onMouseMove(event) {
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  }
+
+  function onMouseDown(event) {
+    // Logic for coloring a square
+    colorSquare();
+  }
+
+  document.addEventListener('mousemove', onMouseMove, false);
+  document.addEventListener('mousedown', onMouseDown, false);
+
+  // Add a function to color the squares:
+  function colorSquare() {
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(grid.children);
+
+    if (intersects.length > 0) {
+      const square = intersects[0].object;
+      square.material.color.set(0xff0000); // Change color on click
+    }
+  }
+
+  window.addEventListener("resize", function () {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  });
+
+  (function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+  })();
+</script>
+</body>
+</html>
