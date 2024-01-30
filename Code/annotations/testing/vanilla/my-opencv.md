@@ -85,4 +85,59 @@ ctx.strokeStyle = 'black'; // or your chosen color
 
 If after addressing these you're still facing issues, it might help to isolate parts of your code to test them separately. For example, try just drawing on the offscreen canvas and then copying that directly to the main canvas without OpenCV processing to ensure drawing works as expected. Then, separately test the OpenCV processing with a static image to ensure that part works on its own. This approach can help narrow down where the issue might be.
 
+## Err0r
+
+The error message "Error in processOffscreenCanvas: 6604560" suggests a problem at a deeper level in the OpenCV.js library, likely related to the memory management or internal operations. This kind of error can be challenging to debug directly, as it points to an issue within the compiled WebAssembly code of OpenCV.js, rather than something directly addressable in your JavaScript code.
+
+Here are some steps to further investigate and potentially resolve the issue:
+
+1. **Check for Memory Issues**: Ensure that there is no memory overflow or leak. OpenCV.js handles a lot of data, and operations like `cv.imread` can consume significant memory. Make sure that the size of the canvas or the image data being processed isn't too large.
+
+2. **Simplify the Operations**: Try simplifying the operations you're performing step by step. For example, start by only converting the canvas to a Mat and displaying it back without any processing. Then, gradually add each operation (like `cvtColor`, `threshold`, `findContours`, etc.) one by one, testing at each step.
+
+3. **Review OpenCV.js Version**: Make sure you are using a stable version of OpenCV.js. Sometimes, using a bleeding-edge version can introduce bugs or compatibility issues.
+
+4. **Check Browser Console for Warnings**: Sometimes, the browser console can provide additional warnings or errors that precede the final error message. These can offer clues about what's going wrong.
+
+5. **Try a Different Browser or Machine**: Occasionally, issues with OpenCV.js can be specific to a particular browser or machine. Testing on a different browser or a different computer might help identify if the issue is environment-specific.
+
+6. **OpenCV.js Community and Documentation**: If the issue persists, consider reaching out to the OpenCV.js community or searching through their documentation and forums. There might be known issues or patches available.
+
+7. **Fallback to Server-side Processing**: If client-side processing continues to be problematic, consider processing the image on the server side where you have more control and can use the full OpenCV library.
+
+In the meantime, here's a simplified version of your function for testing purposes:
+
+```javascript
+function processOffscreenCanvas() {
+  console.log("processOffscreenCanvas");
+
+  let src, dst;
+  try {
+    src = cv.imread(offscreenCanvas);
+    if (!src) {
+      console.error("Failed to read image from canvas");
+      return;
+    }
+
+    // Test displaying the image back without processing
+    cv.imshow(canvas, src);
+
+    // If this works, gradually uncomment and test the following lines
+    /*
+    dst = new cv.Mat();
+    cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY, 0);
+    cv.threshold(dst, dst, 120, 255, cv.THRESH_BINARY);
+    // ... continue with other operations
+    */
+  } catch (e) {
+    console.error(`Error in processOffscreenCanvas: ${e.message || e}`);
+  } finally {
+    if (src) src.delete();
+    if (dst) dst.delete();
+  }
+}
+```
+
+This code will help you determine if the basic read and display operations work correctly before adding more complex processing steps.
+
 <br>
