@@ -48,6 +48,8 @@ function processOffscreenCanvas() {
   if (!cv || !cv.imread) {
     console.log('%cOpenCV.js is not initialized.', "color: #ff6a5a; font-size: larger;");
     return;
+  } else {
+    console.log("OpenCV.js is initialized.");
   }
 
   let src, dst, contours, hierarchy;
@@ -60,7 +62,7 @@ function processOffscreenCanvas() {
       return;
     }
 
-    // Test displaying the image back without processing
+    // TODO: Test displaying the image back without processing
     // cv.imshow(canvas, src);
 
     // If this works, gradually uncomment and test the following lines

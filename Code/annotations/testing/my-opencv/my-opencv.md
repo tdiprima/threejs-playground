@@ -172,4 +172,7 @@ In this revised code:
 
 This should resolve the "cv is not defined" error and ensure that your OpenCV.js code runs at the correct time.
 
+```html
+<script async src="https://docs.opencv.org/master/opencv.js" onload="onOpenCvReady();" onerror="console.error('Error loading opencv.js');"></script>
+```
 <br>

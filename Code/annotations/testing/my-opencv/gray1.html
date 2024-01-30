@@ -6,7 +6,7 @@
   <title>grayscale</title>
   <!-- load an image file and convert it to grayscale -->
   <!-- OpenCV.js is a large library and can take a significant amount of time to load. It's recommended to load it asynchronously and provide some form of user feedback while loading, as in this example. -->
-  <script async src="https://docs.opencv.org/master/opencv.js" onload="onOpenCvReady();" onerror="console.error('Error loading opencv.js');"></script>
+  <script async src="opencv.js" onload="onOpenCvReady();" onerror="console.error('Error loading opencv.js');"></script>
 </head>
 <body>
 <input type="file" id="inputImage" onchange="loadImage()" style="display:none">
@@ -26,10 +26,13 @@
       canvas.width = img.width;
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0, img.width, img.height);
+
       let src = cv.imread(canvas);
       let dst = new cv.Mat();
       cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY);
+
       cv.imshow(canvas, dst);
+
       src.delete();
       dst.delete();
     };
