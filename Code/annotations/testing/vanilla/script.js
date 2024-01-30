@@ -9,31 +9,36 @@ let points = [];
 
 function startDrawing(event) {
   isDrawing = true;
-  [points, isDrawing] = [{ x: event.clientX, y: event.clientY }, true];
+  points.push({ x: event.clientX, y: event.clientY });
 }
 
 function draw(event) {
   if (!isDrawing) return;
 
+  const newPoint = { x: event.clientX, y: event.clientY };
+  const lastPoint = points[points.length - 1];
+
   ctx.beginPath();
   ctx.fillStyle = 'white';
-  ctx.arc(points.x, points.y, 10, 0, Math.PI * 2);
+  ctx.arc(lastPoint.x, lastPoint.y, 10, 0, Math.PI * 2);
   ctx.fill();
   ctx.closePath();
-
-  points = { x: event.clientX, y: event.clientY };
 
   ctx.beginPath();
   ctx.strokeStyle = 'black';
   ctx.lineWidth = 2;
-  ctx.moveTo(points[0].x, points[0].y);
-  ctx.lineTo(points[1].x, points[1].y);
+  ctx.moveTo(lastPoint.x, lastPoint.y);
+  ctx.lineTo(newPoint.x, newPoint.y);
   ctx.stroke();
   ctx.closePath();
+
+  points.push(newPoint);
 }
 
 function stopDrawing() {
   isDrawing = false;
+
+  if (points.length < 3) return;
 
   // Fill the polygon
   ctx.beginPath();
