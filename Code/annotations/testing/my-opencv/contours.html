@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>OpenCV.js findContours and drawContours Example</title>
+  <style>
+    #canvasOutput {
+      width: 100%;
+      height: 80vh;
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+<h1>OpenCV.js findContours and drawContours Example</h1>
+
+<div>
+  <img id="inputImage" src="/images/image3.jpg" alt="Input image">
+</div>
+<br>
+<div>
+  <canvas id="canvasOutput"></canvas>
+</div>
+
+<script async src="opencv.js" onload="onOpenCvLoad();" onerror="console.error('Error loading opencv.js');"></script>
+<script>
+  function onOpenCvLoad() {
+    cv['onRuntimeInitialized'] = onOpenCvReady;
+  }
+
+  function onOpenCvReady() {
+    // OpenCV.js is ready. Place your OpenCV related code here.
+    console.log("OpenCV.js is ready.");
+    const src = cv.imread('inputImage');
+    cv.cvtColor(src, src, cv.COLOR_RGBA2GRAY);
+    cv.threshold(src, src, 127, 255, cv.THRESH_BINARY);
+
+    var contours = new cv.MatVector();
+    var hierarchy = new cv.Mat();
+    cv.findContours(src, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+
+    // Draw contours on a black canvas
+    const dst = new cv.Mat(src.rows, src.cols, cv.CV_8UC4, [0, 0, 0, 255]);
+    // const dst = cv.Mat.zeros(src.rows, src.cols, cv.CV_8UC4);
+    cv.drawContours(dst, contours, -1, [255, 0, 0, 255], 2);
+
+    // Show the result
+    cv.imshow('canvasOutput', dst);
+    // ... rest of your code ...
+  }
+</script>
+</body>
+</html>
+

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>OpenCV.js Edge Detection Example</title>
+  <script async src="https://docs.opencv.org/master/opencv.js" type="text/javascript"></script>
+</head>
+<body>
+<h2>Original Image</h2>
+<img id="imageSrc" alt="Source Image" src="/images/image3.jpg" />
+<h2>Edge Detection Result</h2>
+<canvas id="canvasOutput"></canvas>
+
+<script type="text/javascript">
+  // Function to be called after the OpenCV.js library has loaded
+  function onOpenCvReady() {
+    cv['onRuntimeInitialized'] = () => {
+      // Load the source image
+      let imgElement = document.getElementById('imageSrc');
+      let srcMat = cv.imread(imgElement);
+
+      // Convert the image to grayscale
+      let grayMat = new cv.Mat();
+      cv.cvtColor(srcMat, grayMat, cv.COLOR_RGBA2GRAY, 0);
+
+      // Perform edge detection
+      let edgesMat = new cv.Mat();
+      // cv.Canny(source grayscale image, destination image for the edges, lower and upper threshold values
+      // for the hysteresis procedure, aperture size of the Sobel operator)
+      cv.Canny(grayMat, edgesMat, 50, 100, 3, false);
+
+      // Display the edge detection result in the canvas
+      cv.imshow('canvasOutput', edgesMat);
+
+      // Clean up
+      srcMat.delete();
+      grayMat.delete();
+      edgesMat.delete();
+    };
+  }
+
+  // Add the callback to the OpenCV.js script load
+  document.getElementsByTagName('script')[0].onload = onOpenCvReady;
+</script>
+</body>
+</html>
