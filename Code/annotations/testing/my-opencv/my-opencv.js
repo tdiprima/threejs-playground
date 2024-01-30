@@ -4,7 +4,7 @@ offscreenCanvas.height = canvas.height;
 let offscreenCtx = offscreenCanvas.getContext('2d');
 
 // Set up brush properties
-let brushSize = 10;
+let brushSize = 20;
 let isDrawing = false;
 
 ctx.lineWidth = brushSize;
@@ -63,6 +63,7 @@ function processOffscreenCanvas() {
     }
 
     // TODO: Test displaying the image back without processing
+    // First time is a solid line, subsequent runs are circles
     // cv.imshow(canvas, src);
 
     // If this works, gradually uncomment and test the following lines
@@ -82,10 +83,12 @@ function processOffscreenCanvas() {
     dst.setTo(new cv.Scalar(255, 255, 255, 255));
 
     let color = new cv.Scalar(0, 0, 255, 128); // Blue transparent color to fill
+    // let color = new cv.Scalar(0, 0, 0, 255); // Black color to fill
     cv.drawContours(dst, contours, 0, color, -1, cv.LINE_8, hierarchy, 100);
 
     // Convert Mat back to Canvas
     cv.imshow(canvas, dst);
+
   } catch (e) {
     console.error(`Error in processOffscreenCanvas: ${e.message || e}`);
   } finally {
