@@ -59,31 +59,8 @@ Also, make sure you have included OpenCV.js in your project. You can either down
 
 <span style="color:blue;font-size:larger;">Nothing is being drawn to the screen (provided empty-circle4.js).</span>
 
-Your code is well-structured and seems to be on the right track for achieving the drawing of polygons using circles, processing them with OpenCV, and then displaying the processed image. However, there are a few key aspects that might be causing the issue of nothing being drawn to the screen upon mouseup. Let's address these potential issues:
-
-**Missing Brush Properties Initialization:** In the `drawOutline` function, you're copying the `lineWidth`, `lineCap`, and `strokeStyle` from the main canvas context (`ctx`) to the offscreen canvas context (`offscreenCtx`). However, you haven't explicitly set these properties for `ctx`. This might not be directly causing the issue described, but it's worth setting these explicitly to ensure consistent behavior.
-
-Before the event listeners, add:
-
-```js
-ctx.lineWidth = brushSize;
-ctx.lineCap = 'round'; // or whatever you prefer
-ctx.strokeStyle = 'black'; // or your chosen color
-```
-
-**Immediate Processing of Offscreen Canvas:** It looks like you're trying to process the drawn content with OpenCV right after drawing, but depending on your intentions (like if you're trying to allow for multiple circles to be drawn before processing), you might be processing too early or not redrawing processed content effectively. Confirm if the process should be triggered immediately or after some user action, like a button press, especially if multiple drawings should accumulate.
-
-**OpenCV Initialization:** Ensure that OpenCV.js is properly loaded and initialized before any of its functions are called. Your check seems fine, but double-check if OpenCV is fully ready by the time drawing operations start. This usually involves making sure the script tag to load OpenCV.js is correctly placed and loads before your script tries to use it. Also, make sure you're correctly handling the asynchronous nature of `onRuntimeInitialized`.
-
-**Error Checking:** It might be beneficial to add some `console.log` statements or breakpoints in your developer tools to check if functions like `processCanvasWithOpenCV` are being called as expected and if there are any errors during the OpenCV processing steps.
-
-**Drawing the Processed Image:** After processing the image with OpenCV, you correctly use `cv.imshow(canvas, dst);` to display the result. Ensure that this operation is successful and that the `dst Mat` contains the expected processed image. Sometimes, errors in processing might lead to an empty or incorrect `dst Mat`, resulting in nothing being displayed.
-
-**Event Listener Context:** Make sure the event listeners are correctly capturing the mouse coordinates relative to the canvas. If you're testing this in a complex layout, sometimes the calculation of x and y might be off. Your calculation seems correct for a simple layout, but if your canvas is nested deeply, consider checking if those values are always accurate.
-
-**Visibility of Canvas and OffscreenCanvas:** Since you're drawing to an offscreen canvas and then processing it, ensure that the visibility and existence of the offscreen canvas isn't an issue. Your code doesn't append the offscreen canvas to the document, which is generally fine since you're using it as a drawing buffer, but ensure this isn't affecting the ability to read from it with `cv.imread`.
-
-If after addressing these you're still facing issues, it might help to isolate parts of your code to test them separately. For example, try just drawing on the offscreen canvas and then copying that directly to the main canvas without OpenCV processing to ensure drawing works as expected. Then, separately test the OpenCV processing with a static image to ensure that part works on its own. This approach can help narrow down where the issue might be.
+Work with empty-circle3.js instead.  The `src` and `dst` might be mixed up.  In the end, nothing is still drawn to the screen.
+Debugging one by one helped, though.
 
 ## Err0r
 

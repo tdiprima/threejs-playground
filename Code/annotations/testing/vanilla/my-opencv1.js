@@ -60,18 +60,25 @@ function processOffscreenCanvas() {
       return;
     }
 
+    // Test displaying the image back without processing
+    // cv.imshow(canvas, src);
+
+    // If this works, gradually uncomment and test the following lines
     dst = new cv.Mat();
+
     contours = new cv.MatVector();
+
     hierarchy = new cv.Mat();
 
-    cv.cvtColor(src, src, cv.COLOR_RGBA2GRAY, 0);
-    cv.threshold(src, src, 120, 255, cv.THRESH_BINARY);
+    cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY, 0);
+    cv.threshold(dst, dst, 120, 255, cv.THRESH_BINARY);
 
     // Find Contours
-    cv.findContours(src, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+    cv.findContours(dst, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
 
     // Draw Contours (Fill the largest contour)
     dst.setTo(new cv.Scalar(255, 255, 255, 255));
+
     let color = new cv.Scalar(0, 0, 255, 128); // Blue transparent color to fill
     cv.drawContours(dst, contours, 0, color, -1, cv.LINE_8, hierarchy, 100);
 
@@ -86,7 +93,6 @@ function processOffscreenCanvas() {
     if (contours) contours.delete();
     if (hierarchy) hierarchy.delete();
   }
-
   // };
 }
 
