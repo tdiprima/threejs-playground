@@ -57,7 +57,7 @@ offscreenCanvas.width = canvas.width;
 offscreenCanvas.height = canvas.height;
 let offscreenCtx = offscreenCanvas.getContext('2d');
 //...
-offscreenCtx.beginPath(); 
+offscreenCtx.beginPath();
 //...
 ```
 
@@ -85,62 +85,7 @@ Please note that the `processOffscreenCanvas` function in this code is greatly s
 
 <span style="color:blue;font-size:larger;">I'm tryna replicate PaintPolygon.js, and everywhere I go is a roadblock. So far.</span>
 
-## OpenCV
-
-Using OpenCV.js to process the combined shape of overlapping circles and clear out its interior requires several steps involving image processing techniques. OpenCV (Open Source Computer Vision Library) is a library of programming functions mainly aimed at real-time computer vision, and it's a powerful tool for image processing tasks.
-
-The general steps to achieve your goal using OpenCV.js would be:
-
-1. **Convert the Canvas to a Mat**: Convert the image data from your off-screen canvas to an OpenCV `Mat` object.
-2. **Grayscale and Thresholding**: Convert the image to grayscale and apply a threshold to create a binary image where the circles are white and the background is black.
-3. **Find Contours**: Use OpenCV's `findContours` function to find the contours of these white areas.
-4. **Draw Contours**: Fill the largest contour (which should be the outer boundary of your combined shape) with black color to clear the interior.
-5. **Convert Back to Canvas**: Convert the processed `Mat` object back to an image that can be drawn on your main canvas.
-
-Here's a conceptual example of how this might be implemented in code:
-
-```javascript
-// Assuming you have included OpenCV.js in your project
-
-function processOffscreenCanvas() {
-    cv['onRuntimeInitialized'] = () => {
-        // Convert Canvas to Mat
-        let src = cv.imread(offscreenCanvas);
-        let dst = new cv.Mat();
-        cv.cvtColor(src, src, cv.COLOR_RGBA2GRAY, 0);
-        cv.threshold(src, src, 120, 255, cv.THRESH_BINARY);
-
-        // Find Contours
-        let contours = new cv.MatVector();
-        let hierarchy = new cv.Mat();
-        cv.findContours(src, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
-
-        // Draw Contours (Fill the largest contour)
-        dst.setTo(new cv.Scalar(255, 255, 255, 255));
-        // let color = new cv.Scalar(0, 0, 0, 255); // Black color to fill
-        let color = new cv.Scalar(0, 0, 255, 128); // Fill with blue transparent
-        cv.drawContours(dst, contours, 0, color, -1, cv.LINE_8, hierarchy, 100);
-
-        // Convert Mat back to Canvas
-        cv.imshow(canvas, dst);
-
-        // Clean up
-        src.delete(); dst.delete(); contours.delete(); hierarchy.delete();
-    };
-}
-```
-
-In this example:
-
-- `cv.imread(offscreenCanvas)` reads the image data from your off-screen canvas.
-- `cv.cvtColor` and `cv.threshold` are used to convert the image to a binary form.
-- `cv.findContours` is used to find the contours in the binary image.
-- `cv.drawContours` with a negative thickness (`-1`) fills the largest contour, effectively clearing the interior.
-- `cv.imshow(canvas, dst)` puts the processed image back onto your main canvas.
-
-Please note that working with OpenCV.js can be complex, and this code is a basic guideline. You might need to adjust it according to the specific requirements of your project and the characteristics of the images you are working with.
-
-Also, make sure you have included OpenCV.js in your project. You can either download it and host it yourself or use a CDN. More information can be found on the [OpenCV.js tutorial page](https://docs.opencv.org/4.x/d5/d10/tutorial_js_root.html).
+## OpenCV &mdash; see my-opencv.md
 
 <span style="color:blue;font-size:larger;">Has anybody written a plugin that does what I want?  For example, PaintPolygon.js does it; except the problem is that it is tightly coupled with Leaflet.js.  I need something that's not tightly coupled with anything.</span>
 
@@ -155,5 +100,14 @@ I found a couple of JavaScript libraries that might be helpful for your task of 
 Both of these libraries offer a basis for polygon drawing and could potentially be extended or modified to include the specific functionality you need, such as processing the combined shape of overlapping circles and clearing out its interior. Keep in mind that you might need to add custom code to achieve the exact behavior you're looking for.
 
 <span style="color:blue;font-size:larger;">When he gives up and goes to Bing?  It's a dead end.</span>
+
+## script.js
+
+Creating a full drawing application is beyond the scope of this platform, but I can provide you with a basic example of how to draw a polygon using circles and then fill its interior with JavaScript and HTML canvas. This example will create a brush that draws with overlapping circles and then clears the interior area enclosed by the outer edges of these circles.
+
+This code creates a simple drawing application that allows the user to draw a polygon using circles as a brush. The circles overlap as the user draws, and when the user releases the mouse button, the interior of the polygon is filled with white color.
+
+It's important to note that the clearing of the interior area is not perfect, as it can leave some gaps. If you want a more accurate interior filling, you may need to implement a more advanced algorithm, such as the Scanline fill or the even-odd rule.
+
 
 <br>

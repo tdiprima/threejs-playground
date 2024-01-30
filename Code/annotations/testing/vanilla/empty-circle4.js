@@ -7,10 +7,6 @@ let offscreenCtx = offscreenCanvas.getContext('2d');
 let brushSize = 10;
 let isDrawing = false;
 
-ctx.lineWidth = brushSize;
-ctx.lineCap = 'round'; // or whatever you prefer
-ctx.strokeStyle = 'black'; // or your chosen color
-
 // Function to start drawing
 function startDrawing(e) {
   isDrawing = true;
@@ -40,37 +36,38 @@ function stopDrawing() {
 }
 
 function processOffscreenCanvas() {
-  console.log("processOffscreenCanvas");
-  // cv['onRuntimeInitialized'] = () => {
-  //   console.log("here");
-
-  try {
-    // Convert Canvas to Mat
-    let src = cv.imread(offscreenCanvas);
-    let dst = new cv.Mat();
-    cv.cvtColor(src, src, cv.COLOR_RGBA2GRAY, 0);
-    cv.threshold(src, src, 120, 255, cv.THRESH_BINARY);
-
-    // Find Contours
-    let contours = new cv.MatVector();
-    let hierarchy = new cv.Mat();
-    cv.findContours(src, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
-
-    // Draw Contours (Fill the largest contour)
-    dst.setTo(new cv.Scalar(255, 255, 255, 255));
-    let color = new cv.Scalar(0, 0, 0, 255); // Black color to fill
-    cv.drawContours(dst, contours, 0, color, -1, cv.LINE_8, hierarchy, 100);
-
-    // Convert Mat back to Canvas
-    cv.imshow(canvas, dst);
-
-    // Clean up
-    src.delete(); dst.delete(); contours.delete(); hierarchy.delete();
-  } catch (e) {
-    console.log(`%c${e.message}`, "color: #ff6a5a; font-size: larger;");
+  // Check if OpenCV is already initialized
+  if (cv && cv instanceof Object && cv.Mat) {
+    console.log("here");
+    processCanvasWithOpenCV();
+  } else {
+    console.log("there");
+    cv['onRuntimeInitialized'] = processCanvasWithOpenCV;
   }
+}
 
-  // };
+function processCanvasWithOpenCV() {
+  // Convert Canvas to Mat
+  let src = cv.imread(offscreenCanvas);
+  let dst = new cv.Mat();
+  cv.cvtColor(src, src, cv.COLOR_RGBA2GRAY, 0);
+  cv.threshold(src, src, 120, 255, cv.THRESH_BINARY);
+
+  // Find Contours
+  let contours = new cv.MatVector();
+  let hierarchy = new cv.Mat();
+  cv.findContours(src, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+
+  // Draw Contours (Fill the largest contour)
+  dst.setTo(new cv.Scalar(255, 255, 255, 255));
+  let color = new cv.Scalar(0, 0, 0, 255); // Black color to fill
+  cv.drawContours(dst, contours, 0, color, -1, cv.LINE_8, hierarchy, 100);
+
+  // Convert Mat back to Canvas
+  cv.imshow(canvas, dst);
+
+  // Clean up
+  src.delete(); dst.delete(); contours.delete(); hierarchy.delete();
 }
 
 // Add event listeners to the canvas
