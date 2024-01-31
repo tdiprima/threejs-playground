@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Three.js Serialize/Deserialize</title>
+  <!-- gpt-4-turbo: saved all data -->
+  <link href="/css/main.css" rel="stylesheet">
+</head>
+<body>
+<button id="serialize">Serialize Scene</button>
+<button id="deserialize">Deserialize Scene</button>
+<!-- <script src="https://cdn.jsdelivr.net/npm/three@0.141.0/build/three.min.js"></script> -->
+<script src="/build/three.min.js"></script>
+<script>
+  let scene, renderer, camera;
+  let serializedData;
+  let sphere, cube;
+
+  init();
+  animate();
+
+  function init() {
+    // Set up the scene
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Add a sphere to the scene
+    const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
+    const sphereMaterial = new THREE.MeshBasicMaterial({color: 0xff0000});
+    sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+    sphere.userData = {name: 'mySphere'};
+    scene.add(sphere);
+
+    // Add a cube to the scene
+    const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+    const cubeMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00});
+    cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+    cube.position.set(2, 0, 0); // Move the cube right
+    cube.userData = {name: 'myCube'};
+    scene.add(cube);
+
+    // Set camera position
+    camera.position.z = 5;
+
+    // Set up button listeners
+    document.getElementById('serialize').addEventListener('click', serializeScene);
+    document.getElementById('deserialize').addEventListener('click', deserializeScene);
+  }
+
+  function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+  }
+
+  function serializeScene() {
+    // Serialize the scene into JSON
+    serializedData = JSON.stringify(scene.toJSON());
+    console.log('Serialized Data:', serializedData);
+    alert('Scene serialized. Check console for details.');
+  }
+
+  function deserializeScene() {
+    if (!serializedData) {
+      alert('No serialized data found. Serialize the scene first.');
+      return;
+    }
+
+    // Clear the current scene
+    while (scene.children.length > 0) {
+      scene.remove(scene.children[0]);
+    }
+
+    // Deserialize the JSON back into a scene object
+    const loader = new THREE.ObjectLoader();
+    scene = loader.parse(JSON.parse(serializedData));
+
+    // Re-render the scene
+    renderer.render(scene, camera);
+    alert('Scene deserialized.');
+  }
+</script>
+</body>
+</html>

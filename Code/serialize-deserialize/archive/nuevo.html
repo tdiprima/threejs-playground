@@ -7,11 +7,10 @@
   <link href="/css/main.css" rel="stylesheet">
 </head>
 <body>
-<!-- <script src="/build/three.min.js"></script> -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.156.1/three.min.js"></script>
+<script src="/build/three.min.js"></script>
 <script>
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
   const renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -24,7 +23,7 @@
   // Setting position of the cube
   cube.position.set(1, 2, 3);
   scene.add(cube);
-  console.log(cube.position);
+  console.log("position:", cube.position);
 
   camera.position.z = 5;
 
@@ -35,7 +34,7 @@
 
   const sceneJSON = scene.toJSON();
   const sceneString = JSON.stringify(sceneJSON);
-  // console.log(sceneString);
+  console.log("sceneString:", sceneString);
 
   // Nope. Still puts it in the wrong spot.
   scene.clear();
@@ -43,7 +42,7 @@
   const loader = new THREE.ObjectLoader();
 
   const loadedScene = loader.parse(loadedSceneJSON);
-  console.log(loadedScene.children[0].position);
+  console.log("position:", loadedScene.children[0].position);
   scene.add(loadedScene);
 
   animate();

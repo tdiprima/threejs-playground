@@ -11,7 +11,7 @@
   </style>
 </head>
 <body>
-<script src="https://threejs.org/build/three.js"></script>
+<script src="/build/three.min.js"></script>
 <script>
   // Basic setup
   const scene = new THREE.Scene();
@@ -44,11 +44,11 @@
         void main() {
             float dist = distance(vUv, vec2(0.5, 0.5));
             if (dist < brushSize) discard;
-            gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0); // Black color for edges
+            gl_FragColor = vec4(0.0, 0.0, 1.0, 0.5); // Blue color for edges
         }
     `,
     uniforms: {
-      brushSize: { value: 0.05 } // Adjust the brush size
+      brushSize: { value: 0.1 } // Adjust the brush size
     },
     side: THREE.DoubleSide
   });
@@ -59,9 +59,10 @@
 
   // Drawing logic
   let isDrawing = false;
+  let brushSize = 0.5;
   window.addEventListener('mousedown', (event) => {
     isDrawing = true;
-    const mesh = new THREE.Mesh(new THREE.CircleGeometry(0.1, 32), shaderMaterial);
+    const mesh = new THREE.Mesh(new THREE.CircleGeometry(brushSize, 32), shaderMaterial);
     mesh.position.x = (event.clientX / window.innerWidth) * 2 - 1;
     mesh.position.y = -(event.clientY / window.innerHeight) * 2 + 1;
     drawingGroup.add(mesh);
@@ -69,7 +70,7 @@
 
   window.addEventListener('mousemove', (event) => {
     if (!isDrawing) return;
-    const mesh = new THREE.Mesh(new THREE.CircleGeometry(0.1, 32), shaderMaterial);
+    const mesh = new THREE.Mesh(new THREE.CircleGeometry(brushSize, 32), shaderMaterial);
     mesh.position.x = (event.clientX / window.innerWidth) * 2 - 1;
     mesh.position.y = -(event.clientY / window.innerHeight) * 2 + 1;
     drawingGroup.add(mesh);

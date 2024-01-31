@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Serialize/Deserialize</title>
+  <!-- Note that this example uses basic serialization and doesn't handle more complex
+  aspects like materials or nested objects. For a more comprehensive approach, you might
+  want to explore Three's .toJSON() and .ObjectLoader() methods. -->
+  <link href="/css/main.css" rel="stylesheet">
+  <script src="/build/three.min.js"></script>
+</head>
+<body>
+<button id="serialize">Serialize Scene</button>
+<button id="clear">Clear Scene</button>
+<button id="deserialize">Deserialize Scene</button>
+<!-- <script src="https://threejs.org/build/three.js"></script> -->
+<script>
+  let scene, camera, renderer, serializedData;
+
+  function init() {
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 5;
+
+    renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    const light = new THREE.AmbientLight(0x404040);
+    scene.add(light);
+
+    addRandomGeometry();
+    render();
+  }
+
+  function addRandomGeometry() {
+    const geometryTypes = [THREE.BoxGeometry, THREE.SphereGeometry, THREE.ConeGeometry];
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+
+    for (let i = 0; i < 5; i++) {
+      const geometry = new geometryTypes[Math.floor(Math.random() * geometryTypes.length)]();
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.set(Math.random() * 5 - 2.5, Math.random() * 5 - 2.5, Math.random() * 5 - 2.5);
+      mesh.rotation.set(Math.random() * 2 * Math.PI, Math.random() * 2 * Math.PI, Math.random() * 2 * Math.PI);
+      mesh.userData = { id: i }; // Example user data
+      scene.add(mesh);
+    }
+  }
+
+  // position: {
+  //   x: obj.position.x,
+  //     y: obj.position.y,
+  //     z: obj.position.z
+  // },
+
+  function serializeScene() {
+    // Only process objects that have geometries
+    serializedData = scene.children.filter(obj => obj.isMesh).map(obj => {
+      return {
+        type: obj.geometry.type,
+        position: obj.position,
+        rotation: obj.rotation,
+        scale: obj.scale,
+        userData: obj.userData
+      };
+    });
+    console.log('Serialized Data:', serializedData);
+  }
+
+
+  function deserializeScene() {
+    serializedData.forEach(data => {
+      const geometry = new THREE[data.type]();
+      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+      const mesh = new THREE.Mesh(geometry, material);
+
+      mesh.position.copy(data.position);
+      mesh.rotation.copy(data.rotation);
+      mesh.userData = data.userData;
+
+      scene.add(mesh);
+    });
+  }
+
+  function render() {
+    requestAnimationFrame(render);
+    renderer.render(scene, camera);
+  }
+
+  document.getElementById("clear").addEventListener("click", function () {
+    scene.clear();
+  })
+
+  document.getElementById('serialize').addEventListener('click', () => {
+    serializeScene();
+  });
+
+  document.getElementById('deserialize').addEventListener('click', () => {
+    deserializeScene();
+  });
+
+  init();
+</script>
+</body>
+</html>

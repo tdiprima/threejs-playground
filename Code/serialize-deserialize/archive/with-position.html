@@ -19,7 +19,7 @@
   document.body.appendChild(renderer.domElement);
 
   let geometry = new THREE.BoxGeometry(1, 1, 1);
-  let material = new THREE.MeshBasicMaterial({color: "red"});
+  let material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
   let cube = new THREE.Mesh(geometry, material);
   cube.position.set(2, 0.5, 0);
   scene.add(cube);

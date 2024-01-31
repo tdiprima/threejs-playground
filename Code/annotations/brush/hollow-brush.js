@@ -1,26 +1,12 @@
 import * as THREE from "/build/three.module.js";
 
-export function hollowBrush(scene, camera, renderer, controls) {
-  // let brushButton = createButton({
-  //   id: "ellipse",
-  //   innerHtml: "<i class=\"fa-regular fa-circle\"></i>",
-  //   title: "ellipse"
-  // });
-
+export function hollowBrush(scene, camera, renderer) {
   let isDrawing = false; // Flag to check if drawing is active
   let mouseIsPressed = false;
   let brushButton = document.getElementById('imageButton');
 
   brushButton.addEventListener("click", function () {
-    if (isDrawing) {
-      isDrawing = false;
-      // controls.enabled = true;
-      // this.classList.replace('btnOn', 'annotationBtn');
-    } else {
-      isDrawing = true;
-      // controls.enabled = false;
-      // this.classList.replace('annotationBtn', 'btnOn');
-    }
+    isDrawing = !isDrawing;
     this.classList.toggle('brushDark');
   });
 

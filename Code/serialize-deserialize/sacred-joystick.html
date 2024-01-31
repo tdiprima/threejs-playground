@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Serialize/Deserialize</title>
+  <!-- gpt-3.5-turbo-1106: has pre-knowledge of objects to be recreated -->
+  <link href="/css/main.css" rel="stylesheet">
+  <script src="/build/three.min.js"></script>
+</head>
+<body>
+<script>
+  // Create a scene, camera, and renderer
+  let scene = new THREE.Scene();
+  let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  let renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  // Add a sphere to the scene
+  let sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
+  let sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+  let sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+  sphere.position.set(0, 0, -5);
+  scene.add(sphere);
+
+  // Add a cube to the scene
+  let cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+  let cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+  let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+  cube.position.set(2, 0, -5);
+  scene.add(cube);
+
+  // Define a function to serialize all objects in the scene
+  function serializeScene() {
+    let serializedObjects = [];
+    scene.traverse(function (object) {
+      let serializedObject = {
+        type: object.type,
+        position: object.position,
+        rotation: object.rotation,
+        userData: object.userData
+      };
+      serializedObjects.push(serializedObject);
+    });
+    console.log(JSON.stringify(serializedObjects));
+  }
+
+  // Define a function to deserialize objects and add them back to the scene
+  function deserializeScene(serializedScene) {
+    let objects = JSON.parse(serializedScene);
+    objects.forEach(function (obj) {
+      let newObject;
+      if (obj.type === 'Sphere') {
+        newObject = new THREE.Mesh(sphereGeometry, sphereMaterial);
+      } else if (obj.type === 'Box') {
+        newObject = new THREE.Mesh(cubeGeometry, cubeMaterial);
+      }
+      newObject.position.copy(obj.position);
+      newObject.rotation.copy(obj.rotation);
+      newObject.userData = obj.userData;
+      scene.add(newObject);
+    });
+  }
+
+  // Create a button to trigger serialization
+  let serializeButton = document.createElement('button');
+  serializeButton.textContent = 'Serialize Scene';
+  serializeButton.onclick = function () {
+    serializeScene();
+  };
+  document.body.appendChild(serializeButton);
+
+  // Create a button to trigger deserialization
+  let deserializeButton = document.createElement('button');
+  deserializeButton.textContent = 'Deserialize Scene';
+  deserializeButton.onclick = function () {
+    let serializedScene = prompt('Enter serialized scene:');
+    if (serializedScene) {
+      deserializeScene(serializedScene);
+    }
+  };
+  document.body.appendChild(deserializeButton);
+
+  // Set up the camera position and render the scene
+  camera.position.z = 5;
+  function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+  }
+  animate();
+</script>
+</body>
+</html>
