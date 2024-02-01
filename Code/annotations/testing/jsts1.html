@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>JSTS</title>
+  <!-- gpt-4-0314 -->
+  <!-- This script creates two green circles (geometries A and B) and calculates their union. The union's boundary is then drawn with a blue line on the canvas. -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsts/2.1.1/jsts.min.js"></script>
+</head>
+<body>
+<canvas id="myCanvas" width="500" height="500"></canvas>
+<script>
+  const canvas = document.getElementById("myCanvas");
+  const ctx = canvas.getContext("2d");
+
+  function createCircle(center, radius) {
+    const geometryFactory = new jsts.geom.GeometryFactory();
+    const jstsCenter = geometryFactory.createPoint(center);
+    return jstsCenter.buffer(radius);
+  }
+
+  function drawCircle(circle, color) {
+    ctx.beginPath();
+    ctx.arc(circle.getCentroid().getX(), circle.getCentroid().getY(), circle.getBoundary().getLength() / (2 * Math.PI), 0, 2 * Math.PI);
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.closePath();
+  }
+
+  function drawUnionLine(union, color) {
+    ctx.beginPath();
+    ctx.moveTo(union.getCoordinates()[0].x, union.getCoordinates()[0].y);
+
+    union.getCoordinates().forEach((coord) => {
+      ctx.lineTo(coord.x, coord.y);
+    });
+
+    ctx.strokeStyle = color;
+    ctx.stroke();
+    ctx.closePath();
+  }
+
+  const circleA = createCircle(new jsts.geom.Coordinate(200, 250), 80);
+  const circleB = createCircle(new jsts.geom.Coordinate(300, 250), 80);
+  const union = circleA.union(circleB);
+
+  drawCircle(circleA, "green");
+  drawCircle(circleB, "green");
+  drawUnionLine(union.getBoundary(), "blue");
+</script>
+</body>
+</html>

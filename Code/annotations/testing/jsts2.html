@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>jsts and three</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsts/2.1.1/jsts.min.js"></script>
+</head>
+<body>
+<div id="threeCanvas"></div>
+<script>
+  // Set up the Three.js scene
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.getElementById("threeCanvas").appendChild(renderer.domElement);
+
+  // Add two overlapping circle geometries in the scene
+  const circleAGeometry = new THREE.CircleGeometry(1, 32);
+  const circleAMaterial = new THREE.MeshBasicMaterial({ color: "green" });
+  const circleA = new THREE.Mesh(circleAGeometry, circleAMaterial);
+  circleA.position.set(-0.5, 0, 0);
+  scene.add(circleA);
+
+  const circleBGeometry = new THREE.CircleGeometry(1, 32);
+  const circleBMaterial = new THREE.MeshBasicMaterial({ color: "green" });
+  const circleB = new THREE.Mesh(circleBGeometry, circleBMaterial);
+  circleB.position.set(0.5, 0, 0);
+  scene.add(circleB);
+
+  // Set up JSTS geometries
+  const geometryFactory = new jsts.geom.GeometryFactory();
+  const circleA2D = geometryFactory.createPoint(new jsts.geom.Coordinate(-0.5, 0)).buffer(1);
+  const circleB2D = geometryFactory.createPoint(new jsts.geom.Coordinate(0.5, 0)).buffer(1);
+
+  // Calculate the union of the circles
+  const union = circleA2D.union(circleB2D);
+
+  // Create a Three.js shape from the union's boundary coordinates
+  const shape = new THREE.Shape();
+  shape.moveTo(union.getCoordinates()[0].x, union.getCoordinates()[0].y);
+  union.getCoordinates().forEach((coord) => {
+    shape.lineTo(coord.x, coord.y);
+  });
+
+  // Create a Three.js mesh from the shape and add it to the scene
+  const unionGeometry = new THREE.ShapeGeometry(shape);
+  const unionMaterial = new THREE.MeshBasicMaterial({ color: "blue", side: THREE.DoubleSide });
+  const unionMesh = new THREE.Mesh(unionGeometry, unionMaterial);
+  scene.add(unionMesh);
+
+  // Set the camera position
+  camera.position.z = 5;
+
+  // Render the scene
+  function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+  }
+  animate();
+</script>
+</body>
+</html>
