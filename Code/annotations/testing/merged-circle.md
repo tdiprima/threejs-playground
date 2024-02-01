@@ -73,7 +73,7 @@ To achieve this task, you can follow these steps:
 
 3. Create a JavaScript script that defines the two circle geometries, calculates their union, and draws them on the canvas
 
-<span style="color:#ffb439;font-weight:bold;font-size:larger;">jsts1.html</span>
+<span style="color:#59acf3;font-size:larger;">jsts1.html</span>
 
 This script creates two green circles (geometries A and B) and calculates their union. The union's boundary is then drawn with a blue line on the canvas. Note that you might need to adjust the circle's center coordinates and radius values depending on the size and layout of your canvas.
 
@@ -92,5 +92,51 @@ Yes, JSTS can be integrated with Three.js to perform similar operations on 3D ge
 This script sets up a 3D scene using Three.js, creates two overlapping circle geometries, and calculates their union using JSTS. The union's boundary is then converted into a Three.js shape, and a mesh is created and added to the scene. The camera is positioned, and the scene is rendered.
 
 Note that this example assumes both circles lie on the same plane (Z=0) and uses 2D coordinates for JSTS calculations. If you need to work with truly 3D geometries, you'll need to use a 3D geometry library, such as [three.js-csg](https://github.com/manthrax/THREE-CSGMesh), which offers CSG (Constructive Solid Geometry) operations for Three.js geometries.
+
+## Deleting the circles on mouseup
+
+<span style="color:#59acf3;font-size:larger;">blue-dot.html</span>
+
+To delete the circles from the scene when the mouse button is released (`mouseup` event), you can modify the `stopDrawing` function to not only calculate and draw the union but also clear the circles that were drawn during the session. Since you're adding each drawn circle to a `THREE.Group` (`brushShapeGroup`), you can simply remove all children from this group as part of the `mouseup` event handling. Here's how you can do it:
+
+### Update the `stopDrawing` Function
+
+In the `stopDrawing` function, after calculating and potentially drawing the union, remove all children from `brushShapeGroup`. This can be done by repeatedly calling `.remove()` on the group for each of its children until it has no children left, or by setting its `children` array to an empty array. Here's an updated version of `stopDrawing` incorporating this logic:
+
+```javascript
+function stopDrawing() {
+    drawing = false;
+    const unionGeometry = calculateUnion(); // Calculate the union of all drawn circles
+    if (unionGeometry) {
+        drawUnion(unionGeometry); // Visualize the union
+    }
+    circles = []; // Reset circle data for the next drawing session
+
+    // Remove all circles from the scene
+    while(brushShapeGroup.children.length > 0){
+        brushShapeGroup.remove(brushShapeGroup.children[0]);
+    }
+}
+```
+
+This approach removes each circle added to `brushShapeGroup` during the drawing phase, effectively clearing the drawn circles from the scene once the mouse button is released.
+
+### Considerations
+
+- **Performance**: If you're dealing with a very large number of circles, this removal process is efficient enough for most cases. However, if performance becomes an issue, other strategies, like object pooling (reusing geometries, materials, and meshes rather than creating and destroying them), might be considered.
+- **Scene Management**: This method removes the circles from the scene, but it doesn't free up the memory associated with the geometries and materials used by those circles. If your application creates and destroys a lot of geometries and materials, you might also want to explicitly dispose of those resources to avoid memory leaks. Here's how you could extend the removal loop to include disposal:
+
+```javascript
+while (brushShapeGroup.children.length > 0) {
+    let child = brushShapeGroup.children[0];
+    if (child.geometry) child.geometry.dispose();
+    if (child.material) child.material.dispose();
+    brushShapeGroup.remove(child);
+}
+```
+
+- **Resetting `brushShapeGroup`**: After clearing the circles, `brushShapeGroup` is ready for the next drawing session. There's no need to recreate it unless you specifically want to remove and recreate the group for some reason.
+
+By following these steps, you'll ensure that the drawn circles are removed from the scene when the user finishes drawing, keeping the scene clean for subsequent actions.
 
 <br>
