@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Circle</title>
+  <link href="/css/main.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<script type="importmap">
+  {
+    "imports": {
+      "three": "/build/three.module.js",
+      "three/addons/": "/jsm/"
+    }
+  }
+</script>
+<script type="module">
+  import * as THREE from 'three';
+  import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js';
+
+  console.log(THREE.REVISION)
+
+  // Setup basic scene and camera
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.z = 5;
+
+  // Setup the renderer
+  const renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor("#f8edeb");
+  document.body.appendChild(renderer.domElement);
+
+  const circleGeometry1 = new THREE.CircleGeometry(1, 32); // First circle
+  const circleGeometry2 = new THREE.CircleGeometry(1, 32); // Second circle
+  circleGeometry2.translate(0.5, 0, 0); // Move the second circle to overlap
+
+  // Merge geometries
+  const mergedGeometry = BufferGeometryUtils.mergeBufferGeometries([circleGeometry1, circleGeometry2], false);
+
+  const material = new THREE.MeshBasicMaterial({ color: 0x0000ff, transparent: true, opacity: 0.1 }); // A material for the merged object
+  const mergedCircle = new THREE.Mesh(mergedGeometry, material); // Create a mesh with the merged geometry
+
+  scene.add(mergedCircle); // Add the merged object to the scene
+
+  // Render function
+  function animate() {
+    requestAnimationFrame(animate);
+    // You can add any animations or transformations here
+    renderer.render(scene, camera);
+  }
+
+  animate();
+</script>
+</body>
+</html>
