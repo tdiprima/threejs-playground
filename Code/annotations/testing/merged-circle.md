@@ -1,4 +1,4 @@
-## Thursday February 1, 2024
+## Thursday, February 1, 2024
 
 https://www.nayuki.io/page/convex-hull-algorithm
 
@@ -14,7 +14,7 @@ It's a java script port of Java JTS.
 var union = a.union(b)
 ```
 
-and it support WKT...yes...this looks very promising
+and it supports WKT...yes...this looks very promising
 
 <span style="color:blue;font-size:larger;">using JSTS, create two geometries given the external points in the arrays a and b</span>
 
@@ -77,7 +77,7 @@ To achieve this task, you can follow these steps:
 
 This script creates two green circles (geometries A and B) and calculates their union. The union's boundary is then drawn with a blue line on the canvas. Note that you might need to adjust the circle's center coordinates and radius values depending on the size and layout of your canvas.
 
-<span style="color:blue;font-size:larger;">Can jsts be integrated with three.js in order to do the same thing with 2 overlapping circlegeometries?</span>
+<span style="color:blue;font-size:larger;">Can jsts be integrated with three.js in order to do the same thing with 2 overlapping CircleGeometries?</span>
 
 Yes, JSTS can be integrated with Three.js to perform similar operations on 3D geometries. However, since JSTS is a 2D geometry library, you'll need to project your 3D geometries to 2D for calculations and then map the results back to 3D space. In this example, I'll show you how to perform a union of two overlapping circles in 3D using Three.js and JSTS:
 
