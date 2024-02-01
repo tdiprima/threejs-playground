@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Circle</title>
+  <title>Merged Circles</title>
+  <!-- Merged Circles and Perimeter -->
   <link href="/css/main.css" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -18,6 +19,7 @@
 <script type="module">
   import * as THREE from 'three';
   import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js';
+  import { ConvexHull } from 'three/addons/math/ConvexHull.js';
 
   console.log(THREE.REVISION)
 
@@ -43,6 +45,65 @@
   const mergedCircle = new THREE.Mesh(mergedGeometry, material); // Create a mesh with the merged geometry
 
   scene.add(mergedCircle); // Add the merged object to the scene
+
+  // GET THE PERIMETER
+  function perimeter() {
+    // Get the positions of the vertices in the merged geometry
+    const positions = mergedGeometry.attributes.position.array;
+
+    // Extract the perimeter points
+    const perimeterPoints = [];
+    for (let i = 0; i < positions.length; i += 3) {
+      const x = positions[i];
+      const y = positions[i + 1];
+      const z = positions[i + 2];
+      perimeterPoints.push(new THREE.Vector3(x, y, z));
+    }
+
+    // Display the perimeter points as a sanity check
+    const perimeterGeometry = new THREE.BufferGeometry().setFromPoints(perimeterPoints);
+    const perimeterMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
+    const perimeterLine = new THREE.LineLoop(perimeterGeometry, perimeterMaterial);
+    scene.add(perimeterLine);
+  }
+
+  perimeter();
+
+  // CONVEX HULL
+  function convex_hull() {
+    // ConvexHull algorithm to get only the outer perimeter points of the merged circle geometry
+    // Get the positions of the vertices in the merged geometry
+    const positions = mergedGeometry.attributes.position.array;
+
+    // Extract the perimeter points using ConvexHull
+    const points = [];
+    for (let i = 0; i < positions.length; i += 3) {
+      const x = positions[i];
+      const y = positions[i + 1];
+      const z = positions[i + 2];
+      // points.push(new THREE.Vector3(x, y, z));
+      // Skip NaN values
+      if (!isNaN(x) && !isNaN(y) && !isNaN(z)) {
+        points.push(new THREE.Vector3(x, y, z));
+      }
+    }
+
+    const convexHull = new ConvexHull();
+    convexHull.setFromPoints(points);
+    // convexHull.setFromPoints(positions);
+
+    // Get the outer perimeter points
+    const perimeterPoints = convexHull.vertices;
+
+    // Display the perimeter points as a sanity check
+    const perimeterGeometry = new THREE.BufferGeometry().setFromPoints(perimeterPoints);
+    const perimeterMaterial = new THREE.LineBasicMaterial({ color: 0x0000ff });
+    const perimeterLine = new THREE.LineLoop(perimeterGeometry, perimeterMaterial);
+    scene.add(perimeterLine);
+    // THREE.BufferGeometry.computeBoundingSphere(): Computed radius is NaN. The "position" attribute is likely to have NaN values.
+  }
+
+  // convex_hull();
 
   // Render function
   function animate() {
