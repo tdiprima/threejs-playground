@@ -1,6 +1,8 @@
-## Rest Parameter Syntax
+## Rest Parameter Syntax and Spread Operator
 
 <span style="color:blue;font-weight:bold;font-size:larger;">What is ...args?</span>
+
+<span style="color:#59acf3;font-size:larger;">loving_katana.html</span>
 
 ```js
 class ClearingLogger {

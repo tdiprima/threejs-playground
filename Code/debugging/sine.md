@@ -1,6 +1,8 @@
 ## Using sine for Smoothness
 
-<span style="color:blue;">Why do we use `sin` to set position x,y,z (as opposed to `cos` or `tan` or anything else)?</span>
+<span style="color:blue;font-size:larger;">Why do we use `sin` to set position x,y,z (as opposed to `cos` or `tan` or anything else)?</span>
+
+<span style="color:#59acf3;font-size:larger;">hardcore_dany.html</span>
 
 ```js
 function render(time) {

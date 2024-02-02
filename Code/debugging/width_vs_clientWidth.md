@@ -1,5 +1,7 @@
 <span style="color:blue;font-weight:bold;font-size:larger;">What is the difference between canvas.width and canvas.clientWidth?</span>
 
+<span style="color:#59acf3;font-size:larger;">hardcore_dany.html</span>
+
 ```js
 let canvas = renderer.domElement;
 let needResize = canvas.width !== canvas.clientWidth ||
@@ -19,7 +21,7 @@ This is more about how your canvas looks on the web page. It's the visible width
 
 So, if you resize your browser window or change the display settings, `clientWidth` can change, but `canvas.width` stays the same unless you specifically change it in your code.
 
-<span style="color:blue;">So if the **client width changes** &mdash; like we open or close the **dev console** &mdash; then the canvas size needs to be adjusted along with it.</span>
+<span style="color:lime;">So if the **client width changes** &mdash; like we open or close the **dev console** &mdash; then the canvas size needs to be adjusted along with it.</span>
 
 ## Imagine
 
@@ -33,7 +35,7 @@ Here is an image showing what an A4 paper looks like. You can see it lying flat 
 
 ![DALL·E 2023-11-14 15.29.44 - An A4 paper lying flat on a wooden desk, with a pencil and a ruler beside it. The paper should be blank and the scene well-lit, showcasing the standard](A4.png)
 
-<span style="color:blue;">Oh!  So it's your standard 8.5 x 11" sheet of paper?</span>
+<span style="color:blue;font-size:larger;">Oh!  So it's your standard 8.5 x 11" sheet of paper?</span>
 
 Almost, but not quite. An A4 paper is part of the international standard ISO 216, and its dimensions are slightly different from the 8.5 x 11 inches size you're referring to, which is known as "Letter" size and is more commonly used in the United States and Canada.
 
