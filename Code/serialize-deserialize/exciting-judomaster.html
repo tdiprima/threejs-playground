@@ -48,12 +48,6 @@
     }
   }
 
-  // position: {
-  //   x: obj.position.x,
-  //     y: obj.position.y,
-  //     z: obj.position.z
-  // },
-
   function serializeScene() {
     // Only process objects that have geometries
     serializedData = scene.children.filter(obj => obj.isMesh).map(obj => {
