@@ -45,8 +45,8 @@
   const circleB = createCircle(new jsts.geom.Coordinate(300, 250), 80);
   const union = circleA.union(circleB);
 
-  drawCircle(circleA, "green");
-  drawCircle(circleB, "green");
+  drawCircle(circleA, "rgba(0, 128, 0, 0.7)"); // or "green" or "#008000"
+  drawCircle(circleB, "rgba(0, 128, 0, 0.7)");
   drawUnionLine(union.getBoundary(), "blue");
 </script>
 </body>
