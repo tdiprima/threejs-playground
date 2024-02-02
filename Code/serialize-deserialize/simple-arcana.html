@@ -9,6 +9,7 @@
 </head>
 <body>
 <button id="serialize">Serialize Scene</button>
+<button id="clear">Clear Scene</button>
 <button id="deserialize">Deserialize Scene</button>
 <!-- <script src="https://cdn.jsdelivr.net/npm/three@0.141.0/build/three.min.js"></script> -->
 <script src="/build/three.min.js"></script>
@@ -49,6 +50,7 @@
     // Set up button listeners
     document.getElementById('serialize').addEventListener('click', serializeScene);
     document.getElementById('deserialize').addEventListener('click', deserializeScene);
+    document.getElementById("clear").addEventListener("click", function () { scene.clear(); });
   }
 
   function animate() {
@@ -58,8 +60,9 @@
 
   function serializeScene() {
     // Serialize the scene into JSON
-    serializedData = JSON.stringify(scene.toJSON());
-    console.log('Serialized Data:', serializedData);
+    let json = scene.toJSON();
+    serializedData = JSON.stringify(json);
+    console.log('Serialized Data:', json);
     alert('Scene serialized. Check console for details.');
   }
 
