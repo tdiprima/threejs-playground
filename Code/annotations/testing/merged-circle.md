@@ -1,5 +1,12 @@
 ## Thursday, February 1, 2024
 
+<span style="color:#59acf3;font-size:larger;">merged_circle.html</span> asks for 2 overlapping circles, then get the perimiter, then outline the perimeter in red as a sanity check.
+
+<!--
+Using the three.js javascript library, how would I draw a 2D circular geometry?
+Now if I drew another circle that overlapped with this one, is there a function that can merge the geometries of Circle A and Circle B?
+-->
+
 https://www.nayuki.io/page/convex-hull-algorithm
 
 https://github.com/mauriciopoppe/quickhull3d
@@ -16,58 +23,17 @@ var union = a.union(b)
 
 and it supports WKT...yes...this looks very promising
 
-<span style="color:blue;font-size:larger;">using JSTS, create two geometries given the external points in the arrays a and b</span>
-
-To create two geometries using JSTS from points defined in arrays `a` and `b`, you will first need to construct `JSTS` geometry objects from these points. Let's assume `a` and `b` are arrays of coordinates, where each coordinate is an array of two numbers representing x (longitude) and y (latitude) values.
-Here's a step-by-step guide to achieve this, m'lord:
-
-1. **Include JSTS in Your Project**: First, ensure JSTS is included in your project. If you're using Node.js, you can install it via npm. For browser-based projects, include JSTS with a script tag.
-
-   Via npm:
-
-   ```bash
-   npm install jsts
-   ```
-
-   In HTML:
-
-   ```html
-   <script src="https://unpkg.com/jsts/dist/jsts.min.js"></script>
-   ```
-
-2. **Create Geometries from Points**:
-
-   ```javascript
-   // Assuming 'a' and 'b' are arrays of [x, y] coordinates
-   var a = [[x1, y1], [x2, y2], ...];
-   var b = [[x3, y3], [x4, y4], ...];
-   // Initialize JSTS geometry factory
-   var geometryFactory = new jsts.geom.GeometryFactory();
-   // Function to convert a point array to a JSTS LinearRing
-   function toLinearRing(pointArray) {
-     let coordinates = pointArray.map(point => new jsts.geom.Coordinate(point[0], point[1]));
-     return geometryFactory.createLinearRing(coordinates);
-   }
-   // Create JSTS LinearRings from the point arrays
-   var linearRingA = toLinearRing(a);
-   var linearRingB = toLinearRing(b);
-   // Create polygon geometries from the LinearRings
-   var polygonA = geometryFactory.createPolygon(linearRingA);
-   var polygonB = geometryFactory.createPolygon(linearRingB);
-   ```
-
-3. **Handling Polygon Closure**: Ensure that your point arrays `a` and `b` form closed loops. The first and last points of each array should be the same to represent a closed polygon.
-
-4. **Use the Geometries**: Once you have `polygonA` and `polygonB`, you can use them for various geometric operations supported by JSTS, such as intersection, union, difference, etc.
-This example assumes that the arrays `a` and `b` are properly formatted and contain valid coordinate pairs for constructing polygons. JSTS operations can be quite complex and powerful, allowing for a wide range of spatial computations and analyses.
-
-<span style="color:blue;font-size:larger;">Yeah. Right.</span>
+## JSTS
 
 <span style="color:blue;font-size:larger;">Using JSTS.js, create two green circle geometries, A and B, and then show the Union of A and B with a blue line.</span>
 
 To achieve this task, you can follow these steps:
 
 1. Include the JSTS library in your HTML file by adding the following script tag
+
+    ```html
+    <script src="https://unpkg.com/jsts/dist/jsts.min.js"></script>
+    ```
 
 2. Add an HTML canvas element to draw the circles and the union line
 
@@ -77,21 +43,32 @@ To achieve this task, you can follow these steps:
 
 This script creates two green circles (geometries A and B) and calculates their union. The union's boundary is then drawn with a blue line on the canvas. Note that you might need to adjust the circle's center coordinates and radius values depending on the size and layout of your canvas.
 
-<span style="color:blue;font-size:larger;">Can jsts be integrated with three.js in order to do the same thing with 2 overlapping CircleGeometries?</span>
+## JSTS and three
 
-Yes, JSTS can be integrated with Three.js to perform similar operations on 3D geometries. However, since JSTS is a 2D geometry library, you'll need to project your 3D geometries to 2D for calculations and then map the results back to 3D space. In this example, I'll show you how to perform a union of two overlapping circles in 3D using Three.js and JSTS:
+To translate the given script to Three.js, using `CircleGeometry` for rendering circles and potentially using `jsts.js` for calculating the union of circles (and then displaying the union with a blue line), you'll follow these steps:
 
-1. Include the Three.js library and JSTS library in your HTML file:
+1. **Create Circle Geometries in Three.js**: Use `THREE.CircleGeometry` to create geometries for circles A and B.
 
-2. Add a div element to place the Three.js renderer:
+2. **Use JSTS for Union Calculation**: Although JSTS operates on 2D geometries and is typically used with coordinate data, you can still use its logic to calculate the union of the circles. Since `THREE.CircleGeometry` is for rendering and doesn't directly provide a method to calculate geometrical unions, you'll simulate the circles' positions and radii in JSTS for the union calculation, similar to your original script.
 
-3. Create a JavaScript script to set up the 3D scene and integrate JSTS with Three.js:
+3. **Render Union Outline in Three.js**: Use `THREE.Line` or `THREE.LineSegments` with `THREE.BufferGeometry` to render the union's outline calculated by JSTS.
+
+Here's a conceptual translation into Three.js, keeping in mind that you'll need both Three.js and JSTS libraries loaded in your environment:
 
 <span style="color:#59acf3;font-size:larger;">jsts2.html</span>
 
-This script sets up a 3D scene using Three.js, creates two overlapping circle geometries, and calculates their union using JSTS. The union's boundary is then converted into a Three.js shape, and a mesh is created and added to the scene. The camera is positioned, and the scene is rendered.
+### Key Points:
 
-Note that this example assumes both circles lie on the same plane (Z=0) and uses 2D coordinates for JSTS calculations. If you need to work with truly 3D geometries, you'll need to use a 3D geometry library, such as [three.js-csg](https://github.com/manthrax/THREE-CSGMesh), which offers CSG (Constructive Solid Geometry) operations for Three.js geometries.
+- **Circle Representation**: In Three.js, circles are represented as `THREE.CircleGeometry` and added as `THREE.Mesh` objects to the scene. They are visual representations and do not directly correspond to geometrical shapes in computational geometry terms.
+
+- **Union Calculation**: The union calculation is done using JSTS, similarly to your original script. Note that JSTS operates on geometrical data, not on Three.js objects. Therefore, you simulate the circles in JSTS for the union calculation and then visualize the result in Three.js.
+
+- **Union Visualization**: The union's outline calculated by
+
+ JSTS is visualized using `THREE.LineLoop` in Three.js, based on the coordinates obtained from JSTS's union result.
+
+This approach demonstrates how to combine JSTS for computational geometry with Three.js for visualization, translating 2D geometric operations into a 3D visualization context.
+
 
 ## Deleting the circles on mouseup
 
@@ -138,5 +115,80 @@ while (brushShapeGroup.children.length > 0) {
 - **Resetting `brushShapeGroup`**: After clearing the circles, `brushShapeGroup` is ready for the next drawing session. There's no need to recreate it unless you specifically want to remove and recreate the group for some reason.
 
 By following these steps, you'll ensure that the drawn circles are removed from the scene when the user finishes drawing, keeping the scene clean for subsequent actions.
+
+
+## From Scratch
+
+To create a feature allowing users to draw a polygon by merging circles in real-time, with the merged areas having a transparent blue fill and the interior being clear, you can follow these steps:
+
+- **Capture User Input**:
+  - Listen for mouse or touch events on a canvas.
+  - Allow users to place circles on the canvas, storing each circle's position and radius.
+
+- **Merge Circles Dynamically**:
+  - Use computational geometry to calculate the union of all circles drawn by the user.
+  - This may involve approximating circles as polygons and merging these polygons.
+
+- **Calculate and Render the Outline**:
+  - After merging, calculate the outline of the resulting shape.
+  - This can be done by tracing the outer edges of the merged geometry.
+
+- **Fill and Transparency**:
+  - Render the merged shape with a transparent blue fill using Three.js materials with `opacity` and `transparent` properties set accordingly.
+
+- **Clear the Interior**:
+  - To ensure the interior remains clear, focus on rendering only the outline or edges of the shape.
+  - Use `EdgesGeometry` and `LineBasicMaterial` in Three.js to create and render the outline.
+
+- **Use of Shaders**:
+  - Implement custom shaders with Three.js for more complex visual effects, like dynamically highlighting edges or creating specific fill patterns.
+
+- **Optimization and Updates**:
+  - Continuously update the geometry as new circles are added by the user.
+  - Optimize real-time rendering performance, especially when recalculating the merged shape and its outline.
+
+- **Libraries and Tools**:
+  - Consider using external computational geometry libraries if necessary for efficient merging and union calculations.
+  - Explore Three.js examples for custom shader materials and edge rendering techniques.
+
+This approach combines user interaction, dynamic geometry computation, and advanced rendering techniques to create a visually interactive and intuitive drawing tool.
+
+
+## Computational Geometry Libraries
+
+Note that this example assumes both circles lie on the same plane (Z=0) and uses 2D coordinates for JSTS calculations. If you need to work with truly 3D geometries, you'll need to use a 3D geometry library, such as [three.js-csg](https://github.com/manthrax/THREE-CSGMesh), which offers CSG (Constructive Solid Geometry) operations for Three.js geometries.
+
+Here's a basic example of creating a circular shape with a hole...
+For more complex shapes, especially when dealing with merged geometries from arbitrary sources, you might need a computational geometry library that supports boolean operations like union, intersection, and difference. These operations can help you define the resulting shape with the desired holes by performing a difference operation between the outer shape and an inner shape.
+
+Libraries like `CSG.js` (Constructive Solid Geometry) can perform these operations, but integrating them with Three.js might require converting between Three.js geometries and the library's format. After performing the operation, you would convert the result back to a Three.js geometry to be rendered.
+
+**Dynamically Merge Circles into a Polygon:** As the user adds circles, dynamically calculate the union of these circles to create a single, complex shape. This involves computational geometry operations not natively supported by Three.js but can be achieved using external libraries that perform boolean operations on shapes (e.g., CSG.js for Constructive Solid Geometry) or custom algorithms designed to handle circle unions.
+
+## Edges
+
+Use `EdgesGeometry` and `LineBasicMaterial` to create and render the outline.
+
+```js
+// Pseudocode for rendering the merged shape outline in Three.js
+
+// Assuming `mergedShapeGeometry` is the geometry of the merged circles
+const material = new THREE.MeshBasicMaterial({
+  color: 0x0000ff, // Blue color
+  opacity: 0.5,
+  transparent: true,
+  side: THREE.DoubleSide
+});
+
+const mergedShape = new THREE.Mesh(mergedShapeGeometry, material);
+
+// To create an outline, you could use `EdgesGeometry` to generate an edge-only geometry
+const edges = new THREE.EdgesGeometry(mergedShapeGeometry);
+const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff }); // White outline
+const outline = new THREE.LineSegments(edges, lineMaterial);
+
+scene.add(mergedShape);
+scene.add(outline);
+```
 
 <br>
