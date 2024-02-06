@@ -10,7 +10,7 @@
 <body>
 <button id="toggleCrosshairs" style="position: absolute; z-index: 100;">Toggle Crosshairs</button>
 <script>
-  let crosshairsVisible = true;
+  let crosshairsVisible = false;
   let crosshairs = {lineV: null, lineH: null};
 
   // Set up the scene, camera, and renderer
@@ -44,7 +44,7 @@
       scene.remove(crosshairs.lineH);
     }
 
-    const material = new THREE.MeshBasicMaterial({color: 0xffff00}); // Yellow color
+    const material = new THREE.MeshBasicMaterial({ color: 0xffff00 }); // Yellow color
 
     // Create tubes for vertical and horizontal lines
     const lineV = createTube(new THREE.Vector3(0, -height / 2, depth), new THREE.Vector3(0, height / 2, depth), thickness, material);
@@ -54,7 +54,7 @@
     scene.add(lineH);
 
     // Update references in the crosshairs object
-    crosshairs = {lineV, lineH, visible: crosshairsVisible};
+    crosshairs = { lineV, lineH, visible: crosshairsVisible };
 
     // Set initial visibility
     setCrosshairsVisibility(crosshairsVisible);
@@ -68,9 +68,6 @@
     }
   }
 
-  // Initial crosshairs setup
-  addOrUpdateCrosshairs(scene, camera);
-
   // Resize listener to adjust crosshairs when the window size changes
   window.addEventListener('resize', function () {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -79,10 +76,31 @@
     addOrUpdateCrosshairs(scene, camera);
   });
 
+  // Function to toggle crosshairs by adding or removing them from the scene
+  function toggleCrosshairs(scene, camera) {
+    if (crosshairsVisible) {
+      // If crosshairs should be visible, add them to the scene
+      addOrUpdateCrosshairs(scene, camera);
+    } else {
+      // If crosshairs should not be visible, remove them from the scene
+      removeCrosshairs(scene);
+    }
+  }
+
+  // Function to remove crosshairs from the scene
+  function removeCrosshairs(scene) {
+    if (crosshairs.lineV && crosshairs.lineH) {
+      scene.remove(crosshairs.lineV);
+      scene.remove(crosshairs.lineH);
+      // Clear references in the crosshairs object
+      crosshairs = {lineV: null, lineH: null, visible: crosshairsVisible};
+    }
+  }
+
   // Toggle button event listener
   document.getElementById('toggleCrosshairs').addEventListener('click', function () {
     crosshairsVisible = !crosshairsVisible;
-    setCrosshairsVisibility(crosshairsVisible);
+    toggleCrosshairs(scene, camera);
   });
 
   // Animation loop
