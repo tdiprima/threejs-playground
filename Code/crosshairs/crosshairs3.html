@@ -11,7 +11,7 @@
 <button id="toggleCrosshairs" style="position: absolute; z-index: 100;">Toggle Crosshairs</button>
 <script>
   let crosshairsVisible = false;
-  let crosshairs = {lineV: null, lineH: null};
+  let crosshairs = { lineV: null, lineH: null };
 
   // Set up the scene, camera, and renderer
   const scene = new THREE.Scene();
@@ -38,11 +38,8 @@
     const width = height * aspect;
     const thickness = 0.05; // Choose a thickness for the tubes
 
-    // Remove existing crosshairs if they exist
-    if (crosshairs.lineV && crosshairs.lineH) {
-      scene.remove(crosshairs.lineV);
-      scene.remove(crosshairs.lineH);
-    }
+    // Remove existing crosshairs if they exist to ensure they are updated
+    removeCrosshairs(scene); // Use the removeCrosshairs function to clear any existing crosshairs
 
     const material = new THREE.MeshBasicMaterial({ color: 0xffff00 }); // Yellow color
 
@@ -54,18 +51,7 @@
     scene.add(lineH);
 
     // Update references in the crosshairs object
-    crosshairs = { lineV, lineH, visible: crosshairsVisible };
-
-    // Set initial visibility
-    setCrosshairsVisibility(crosshairsVisible);
-  }
-
-  // Function to toggle crosshairs visibility
-  function setCrosshairsVisibility(visible) {
-    if (crosshairs.lineV && crosshairs.lineH) {
-      crosshairs.lineV.visible = visible;
-      crosshairs.lineH.visible = visible;
-    }
+    crosshairs = { lineV, lineH };
   }
 
   // Resize listener to adjust crosshairs when the window size changes
@@ -73,16 +59,17 @@
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    addOrUpdateCrosshairs(scene, camera);
+    if (crosshairsVisible) {
+      addOrUpdateCrosshairs(scene, camera);
+    }
   });
 
   // Function to toggle crosshairs by adding or removing them from the scene
   function toggleCrosshairs(scene, camera) {
+    crosshairsVisible = !crosshairsVisible;
     if (crosshairsVisible) {
-      // If crosshairs should be visible, add them to the scene
       addOrUpdateCrosshairs(scene, camera);
     } else {
-      // If crosshairs should not be visible, remove them from the scene
       removeCrosshairs(scene);
     }
   }
@@ -93,15 +80,15 @@
       scene.remove(crosshairs.lineV);
       scene.remove(crosshairs.lineH);
       // Clear references in the crosshairs object
-      crosshairs = {lineV: null, lineH: null, visible: crosshairsVisible};
+      crosshairs = { lineV: null, lineH: null };
     }
   }
 
   // Toggle button event listener
   document.getElementById('toggleCrosshairs').addEventListener('click', function () {
-    crosshairsVisible = !crosshairsVisible;
     toggleCrosshairs(scene, camera);
   });
+
 
   // Animation loop
   function animate() {
