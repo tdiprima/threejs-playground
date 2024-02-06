@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Crosshairs on Canvas</title>
+</head>
+<body>
+<canvas id="myCanvas" width="400" height="400" style="border:1px solid #000;">
+  Your browser does not support the canvas element.
+</canvas>
+<button id="toggleCrosshairs">Toggle Crosshairs</button>
+
+<script>
+  document.getElementById('toggleCrosshairs').addEventListener('click', function() {
+    // const canvas = document.getElementById('myCanvas');
+    const canvas = document.querySelector('canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Check if crosshairs are already drawn
+    if (canvas.getAttribute('data-crosshairs') === 'visible') {
+      // Clear the canvas to remove crosshairs
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      canvas.setAttribute('data-crosshairs', 'hidden');
+    } else {
+      // Draw the crosshairs
+      drawCrosshairs(ctx, canvas.width, canvas.height);
+      canvas.setAttribute('data-crosshairs', 'visible');
+    }
+  });
+
+  function drawCrosshairs(ctx, width, height) {
+    // Set the style for the crosshairs
+    ctx.strokeStyle = 'yellow';
+    ctx.lineWidth = 2;
+
+    // Draw vertical line
+    ctx.beginPath();
+    ctx.moveTo(width / 2, 0);
+    ctx.lineTo(width / 2, height);
+    ctx.stroke();
+
+    // Draw horizontal line
+    ctx.beginPath();
+    ctx.moveTo(0, height / 2);
+    ctx.lineTo(width, height / 2);
+    ctx.stroke();
+  }
+</script>
+</body>
+</html>
