@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Full Viewport Crosshairs in Three.js</title>
+  <link href="/css/main.css" rel="stylesheet">
+  <script src="/build/three.min.js"></script>
+</head>
+<body>
+<button id="toggleCrosshairs" style="position: absolute; z-index: 100;">Toggle Crosshairs</button>
+<script>
+  let crosshairsVisible = true;
+  let crosshairs = {lineV: null, lineH: null};
+
+  // Set up the scene, camera, and renderer
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.z = 5;
+
+  const renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  // Function to create a tube along a straight line
+  function createTube(start, end, thickness, material) {
+    const path = new THREE.LineCurve3(start, end); // Define the path
+    const tubeGeometry = new THREE.TubeGeometry(path, 20, thickness, 8, false); // Create the tube geometry
+    return new THREE.Mesh(tubeGeometry, material); // Return the mesh
+  }
+
+  // Updated function to add or update crosshairs with tubes
+  function addOrUpdateCrosshairs(scene, camera) {
+    const depth = -5; // Distance from the camera
+    const aspect = camera.aspect;
+    const vFOV = THREE.MathUtils.degToRad(camera.fov); // Convert vertical FOV to radians
+    const height = 2 * Math.tan(vFOV / 2) * Math.abs(depth);
+    const width = height * aspect;
+    const thickness = 0.05; // Choose a thickness for the tubes
+
+    // Remove existing crosshairs if they exist
+    if (crosshairs.lineV && crosshairs.lineH) {
+      scene.remove(crosshairs.lineV);
+      scene.remove(crosshairs.lineH);
+    }
+
+    const material = new THREE.MeshBasicMaterial({color: 0xffff00}); // Yellow color
+
+    // Create tubes for vertical and horizontal lines
+    const lineV = createTube(new THREE.Vector3(0, -height / 2, depth), new THREE.Vector3(0, height / 2, depth), thickness, material);
+    const lineH = createTube(new THREE.Vector3(-width / 2, 0, depth), new THREE.Vector3(width / 2, 0, depth), thickness, material);
+
+    scene.add(lineV);
+    scene.add(lineH);
+
+    // Update references in the crosshairs object
+    crosshairs = {lineV, lineH, visible: crosshairsVisible};
+
+    // Set initial visibility
+    setCrosshairsVisibility(crosshairsVisible);
+  }
+
+  // Function to toggle crosshairs visibility
+  function setCrosshairsVisibility(visible) {
+    if (crosshairs.lineV && crosshairs.lineH) {
+      crosshairs.lineV.visible = visible;
+      crosshairs.lineH.visible = visible;
+    }
+  }
+
+  // Initial crosshairs setup
+  addOrUpdateCrosshairs(scene, camera);
+
+  // Resize listener to adjust crosshairs when the window size changes
+  window.addEventListener('resize', function () {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    addOrUpdateCrosshairs(scene, camera);
+  });
+
+  // Toggle button event listener
+  document.getElementById('toggleCrosshairs').addEventListener('click', function () {
+    crosshairsVisible = !crosshairsVisible;
+    setCrosshairsVisibility(crosshairsVisible);
+  });
+
+  // Animation loop
+  function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+  }
+
+  animate();
+</script>
+</body>
+</html>
