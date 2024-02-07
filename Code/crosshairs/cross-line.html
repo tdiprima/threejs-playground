@@ -3,16 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Full Viewport Crosshairs in Three.js</title>
+  <title>Full Viewport Crosshairs</title>
+  <!-- Line visiblity -->
   <link href="/css/main.css" rel="stylesheet">
   <script src="/build/three.min.js"></script>
 </head>
 <body>
 <button id="toggleCrosshairs" style="position: absolute; z-index: 100;">Toggle Crosshairs</button>
 <script>
-  let crosshairsVisible = true;
-  let crosshairs = {lineV: null, lineH: null};
-
   // Set up the scene, camera, and renderer
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -21,6 +19,9 @@
   const renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
+
+  let crosshairsVisible = true;
+  let crosshairs = { lineV: null, lineH: null };
 
   // Function to add or update crosshairs
   function addOrUpdateCrosshairs(scene, camera) {
@@ -37,7 +38,7 @@
     }
 
     // Create new geometry for crosshairs based on current viewport size
-    const material = new THREE.LineBasicMaterial({color: 0xffff00}); // Yellow color
+    const material = new THREE.LineBasicMaterial({ color: 0xffff00 }); // Yellow color
     const geometryV = new THREE.BufferGeometry().setFromPoints([
       new THREE.Vector3(0, -height / 2, depth),
       new THREE.Vector3(0, height / 2, depth)
