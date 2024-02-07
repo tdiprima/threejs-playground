@@ -140,4 +140,62 @@ function colorGridSquare() {
 document.addEventListener('mousedown', colorGridSquare, false);
 ```
 
+## Make the grid appear at the center of the current view
+
+To make the grid appear at the center of the current view, similarly to how we handled the crosshairs, you need to update the grid's position based on the camera's orientation and position each time the grid is added or the camera's view changes. This involves calculating the center point of the camera's view and positioning the grid accordingly.
+
+Here's how you can modify your `addGrid` function to achieve this, and add functionality to update the grid's position dynamically:
+
+1. **Calculate the Center Point**: When adding the grid, calculate the center point of the camera's current view to position the grid at this location.
+2. **Update Grid Position on Camera Movement**: If you're using OrbitControls or similar for camera navigation, listen for changes (e.g., the `change` event in OrbitControls) and update the grid's position accordingly.
+
+I'll provide an updated version of your `addGrid` function to calculate and set the initial position of the grid based on the camera's current direction and position. I'll also include a function to update the grid's position dynamically:
+
+```javascript
+function addGrid() {
+    const gridSize = 100; // Define the size of the grid
+    const squareSize = 100; // Define the size of each square in the grid
+    grid = new THREE.Group(); // Group to hold the grid
+
+    for (let i = 0; i < gridSize; i++) {
+        for (let j = 0; j < gridSize; j++) {
+            const geometry = new THREE.PlaneGeometry(squareSize, squareSize);
+            const material = new THREE.MeshBasicMaterial({ color: 0x0000ff, transparent: true, opacity: 0.1 });
+            const square = new THREE.Mesh(geometry, material);
+
+            // Position each square
+            square.position.set(i * squareSize - gridSize * squareSize / 2, j * squareSize - gridSize * squareSize / 2, 0);
+            grid.add(square);
+        }
+    }
+
+    updateGridPosition(); // Calculate and set the initial position of the grid
+    scene.add(grid);
+}
+
+function updateGridPosition() {
+    if (!grid) return; // If the grid doesn't exist, exit the function
+
+    // Calculate the center of the camera's current view
+    const vector = new THREE.Vector3(); // Vector pointing to the center of the screen
+    const direction = new THREE.Vector3();
+    camera.getWorldDirection(direction);
+    vector.addVectors(camera.position, direction.multiplyScalar(1000)); // Adjust distance based on your scene
+
+    // Set grid position to match the calculated center point
+    grid.position.copy(vector);
+}
+
+// Assuming you have an instance of OrbitControls named `orbitControls`
+orbitControls.addEventListener('change', function() {
+    if (isGridAdded) {
+        updateGridPosition();
+    }
+});
+```
+
+In this code, `updateGridPosition` calculates the center of the camera's view and moves the grid to this position. The `orbitControls.addEventListener('change', function() {...})` part assumes you have OrbitControls set up and you're listening to its change events to update the grid's position whenever the camera moves. If you're not using OrbitControls or if your controls have a different way of notifying about changes, you'll need to adjust this part accordingly.
+
+The key addition here is dynamically setting the grid's position to ensure it appears at the center of the current view, which is particularly useful when navigating large scenes or focusing on specific areas within your application.
+
 <br>
