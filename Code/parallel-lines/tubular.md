@@ -1,4 +1,4 @@
-## Free-draw with Tube
+## Drawing Tubes on Images
 
 I see what's causing the confusion in your Three.js code regarding drawing on an image using a `TubeBufferGeometry`. The issue arises because `TubeBufferGeometry` does not have a `setFromPoints` method, which is why you're seeing `tubeGeometry` as undefined when you try to use this method. This method is generally associated with simpler geometries like `BufferGeometry` for lines, not for tube geometries.
 
