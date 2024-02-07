@@ -1,6 +1,6 @@
 # 💯
 
-<span style="color:#0000dd;">A Line only comes with a thickness of 1.  The property linewidth does not work with Line.  On the other hand, the linewidth property works with Line2, but I can't raycast against it.</span>
+<span style="color:#0000dd;">A Line only comes with a thickness of 1.  The property linewidth does not work with Line.  On the other hand, the linewidth property works with Line2, but I can't raycast with it.</span>
 
 `Line2`, `TubeGeometry`, and `LineSegments2` give you a thicker line.
 
@@ -30,8 +30,6 @@ let line = new LineSegments2(geometry, material);
 scene.add(line);
 ```
 
-<br>
-
 ## Resolution
 
 The `LineMaterial` expects the resolution of the material to be set explicitly, which affects how the lines are rendered.
@@ -40,10 +38,9 @@ To fix the problem, you need to set the resolution property of the `LineMaterial
 
 ```js
 // In the animation function
-let material = new LineMaterial({ linewidth: 5, color: 0xff0000 });material.resolution.set(window.innerWidth, window.innerHeight); // Add this line
+let material = new LineMaterial({ linewidth: 5, color: 0xff0000 });
+material.resolution.set(window.innerWidth, window.innerHeight); // Add this line
 ```
-
-<br>
 
 ## Error: Computed radius is NaN
 
@@ -63,7 +60,6 @@ let points = [
 let vertices = [1, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 1];
 ```
 
-<br>
 So this won't work:
 
 ```js
@@ -80,7 +76,7 @@ geometry.setAttribute('position', positionAttribute);
 
 Ya gotta do a flat array.
 
-*(parallel.js uses the Float32Array, but doesn't use a BufferAttribute.  tube1.js uses BufferAttribute.)*
+*(parallel.js uses the Float32Array, but doesn't use a BufferAttribute.  lines_fat_raycasting.js uses THREE.Float32BufferAttribute.)*
 
 ```js
 // 1st and last (heh?)
@@ -88,8 +84,6 @@ let geometry = new LineSegmentsGeometry().setPositions([-2, 0, 0, 2, 0, 0]);
 ```
 
 Buddy said: The `LineSegmentsGeometry` is not meant to be used directly with custom positions for each line segment. Instead, it is typically used with a BufferAttribute that contains a list of vertices representing the line segments.
-
-<br>
 
 ## Vertices
 
