@@ -198,6 +198,7 @@ export function deserializeScene(scene, serializedObjects) {
 
   serializedObjects.forEach(serializedData => {
     // Deserialize each object
+    // If serializedData is a string, parse it first: const json = JSON.parse(serializedData);
     const object = loader.parse(serializedData);
 
     // Add a check here if you need to further process the object or its children
