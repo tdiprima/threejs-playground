@@ -198,4 +198,49 @@ In this code, `updateGridPosition` calculates the center of the camera's view an
 
 The key addition here is dynamically setting the grid's position to ensure it appears at the center of the current view, which is particularly useful when navigating large scenes or focusing on specific areas within your application.
 
+## Remove the darn grid
+
+<span style="color:blue;font-size:larger;">I have a grid of squares that I can toggle on and off.  I made a change in the `toggleGridVisibility` function, where if the square is not colored, it should be removed from the scene.  Except I still have rows of blue squares still remaining.</span>
+
+```js
+// Now called "removeGrid"
+function toggleGridVisibility() {
+  grid.children.forEach(square => {
+    if (!square.userData.colored) {
+      // square.material.opacity = square.material.opacity === opacity ? 0 : opacity;
+      removeObject(square);
+    }
+  });
+}
+```
+
+```js
+function removeGrid() {
+  if (grid) {
+    scene.remove(grid);
+    grid = undefined;
+  }
+}
+```
+
+The issue with rows of blue squares remaining even after attempting to remove the non-colored ones might be related to how the grid squares are being iterated and modified within the `toggleGridVisibility` function. When you modify a collection (like removing elements) while iterating over it, you can run into problems because the collection's size and the elements' indices change. This can lead to unexpected behavior, such as skipping elements or not removing them as intended.
+
+In your `toggleGridVisibility` function, you're iterating through `grid.children` and attempting to remove squares directly from it. This could potentially skip some squares due to the changing indices of the remaining items in the collection after removals.
+
+A safer approach would be to collect the squares that need to be removed in a separate array and then iterate over this array to remove them from the grid. This way, the original collection's iteration is not affected by the removal process. Here's how you could adjust your `toggleGridVisibility` function:
+
+```javascript
+function toggleGridVisibility() {
+  // Collect squares to be removed
+  const squaresToRemove = grid.children.filter(square => !square.userData.colored);
+
+  // Remove the collected squares
+  squaresToRemove.forEach(square => removeObject(square));
+}
+```
+
+This method first identifies all squares that are not colored (i.e., `!square.userData.colored`) and collects them into an array. Then, it iterates over this array to remove each square from the grid. This approach avoids modifying the collection while it's being iterated, which should resolve the issue of some squares not being removed as expected.
+
+Please note, modifying the original grid structure during iteration can lead to unexpected results, as mentioned. The solution provided here ensures that you're working with a static list of items to be removed, thus avoiding any iteration issues.
+
 <br>

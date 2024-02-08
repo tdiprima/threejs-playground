@@ -1,3 +1,5 @@
+// Updated demo
+// Squares get put in wrong spot
 import * as THREE from 'three';
 import { createButton } from "../helpers/elements.js";
 

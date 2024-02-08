@@ -1,4 +1,5 @@
 // Serialize the whole object
+// More than one grid; squares get duplicated
 import * as THREE from 'three';
 import { createButton } from "../helpers/elements.js";
 
@@ -50,7 +51,7 @@ export function save(scene) {
       }
     });
 
-    // TODO: save serializedObjects to a database
+    // TODO: save serializedObjects to database
     console.log('Serialized Objects:', serializedObjects);
     alert('Scene serialized successfully. Check console for details.');
   }

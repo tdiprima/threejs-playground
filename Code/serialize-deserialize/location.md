@@ -354,4 +354,119 @@ This function is designed to be extensible. Depending on the variety of objects 
 
 This custom approach requires careful management of the types and properties of objects you expect to serialize and deserialize. It's more lightweight and storage-efficient than serializing the entire object graph with `.toJSON()`, but it also requires a more detailed understanding of your scene's structure and the properties of its objects.
 
+## Duplicated
+
+The issue you're experiencing with objects being deserialized to both the correct and incorrect locations, especially when part of a group, likely stems from how the scene graph is being reconstructed during deserialization. Specifically, the problem might occur because:
+
+1. **Individual Objects** named "annotation" are serialized and added to the `serializedObjects` array.
+2. **Groups** containing children named "annotation" are also serialized in their entirety, including those children. When these groups are deserialized, their children (already serialized as individual objects) are added to the scene again as part of the group, leading to duplicates.
+
+This duplication happens because the serialization process includes both the individual objects and the same objects as part of their parent groups. When deserializing, each is added to the scene separately: once as an individual object and once as a child of its group.
+
+### Solution
+
+To resolve this, you can adjust the serialization logic to ensure that objects are serialized just once, either as individual objects or as part of their groups, but not both. Here’s an approach:
+
+- **Option 1: Serialize Only Groups, Not Individual Children**: When you encounter a group with children named "annotation", serialize the entire group but skip serializing these children as individual objects.
+- **Option 2: Serialize Individuals, Skip Groups**: Serialize individual objects named "annotation" and skip serializing groups unless they have relevant properties or children not named "annotation".
+
+Here’s how you might adjust your serialization logic following Option 1:
+
+```javascript
+function serializeScene(scene) {
+  serializedObjects = [];
+
+  function serializeObjectWithChildren(obj) {
+    let serializedObj = obj.toJSON();
+    return serializedObj;
+  }
+
+  scene.traverse((obj) => {
+    if (obj.type === 'Group') {
+      // Check if the group has children named "annotation"
+      let hasRelevantChildren = obj.children.some(child => child.name.includes("annotation"));
+      if (hasRelevantChildren) {
+        let serializedGroup = serializeObjectWithChildren(obj);
+        serializedObjects.push(serializedGroup);
+        // Skip individual serialization of children by marking them
+        obj.children.forEach(child => {
+          if (child.name.includes("annotation")) {
+            child.userData.skipSerialization = true;
+          }
+        });
+      }
+    } else if (obj.name.includes("annotation") && !obj.userData.skipSerialization) {
+      // Serialize individual objects if not marked to skip
+      serializedObjects.push(serializeObjectWithChildren(obj));
+    }
+  });
+
+  console.log('Serialized Objects:', serializedObjects);
+  alert('Scene serialized successfully. Check console for details.');
+}
+```
+
+### Adjusting Deserialization
+
+Your `deserializeScene` function remains largely the same. The change in serialization logic should prevent the duplication issue by ensuring each object is serialized only once, in its most relevant context (individually or as part of a group).
+
+### Additional Note
+
+Remember to clear `userData.skipSerialization` flags or avoid using them in other parts of your application logic where they might interfere. This approach uses `userData` as a temporary marker during serialization, which should not impact the overall logic of your application.
+
+## Again!
+
+<span style="color:blue;font-size:larger;">Some of my objects already have `userData` that I want to keep.</span>
+
+If your objects already utilize `userData` for other purposes and you want to maintain that data intact, you can still implement a method to avoid duplicating objects during serialization without overwriting or relying on `userData`. One approach is to use a separate tracking mechanism within your serialization function to remember which objects have been processed. This way, you can ensure that objects are either serialized as individuals or as part of a group, but not both, without modifying their `userData`.
+
+Here's how you might adjust your serialization logic to include such a tracking mechanism:
+
+### Updated Serialization Logic
+
+```javascript
+function serializeScene(scene) {
+  serializedObjects = [];
+  let processedObjects = new Set(); // To track processed objects
+
+  function serializeObjectWithChildren(obj) {
+    let serializedObj = obj.toJSON();
+    // Mark all children as processed to avoid double serialization
+    obj.traverse((child) => {
+      if (child.name.includes("annotation")) {
+        processedObjects.add(child.id); // Use unique object ID for tracking
+      }
+    });
+    return serializedObj;
+  }
+
+  scene.traverse((obj) => {
+    // Skip if this object has already been processed
+    if (processedObjects.has(obj.id)) return;
+
+    if (obj.type === 'Group') {
+      let hasRelevantChildren = obj.children.some(child => child.name.includes("annotation"));
+      if (hasRelevantChildren) {
+        // Serialize the group and mark its relevant children as processed
+        serializedObjects.push(serializeObjectWithChildren(obj));
+      }
+    } else if (obj.name.includes("annotation")) {
+      // Serialize individual objects not yet processed
+      serializedObjects.push(serializeObjectWithChildren(obj));
+    }
+  });
+
+  console.log('Serialized Objects:', serializedObjects);
+  alert('Scene serialized successfully. Check console for details.');
+}
+```
+
+### Key Adjustments
+
+- **Tracking Processed Objects**: A `Set` called `processedObjects` is used to keep track of objects that have already been processed, identified by their unique `id`. This prevents them from being serialized again.
+- **Marking Processed in Groups**: When serializing a group with relevant children, all children named "annotation" are marked as processed by adding their IDs to `processedObjects`. This ensures they're not serialized again as individual objects.
+- **Skipping Processed Objects**: Before serializing an object, the function checks if it has already been processed by looking for its ID in `processedObjects`. If found, the function skips serializing this object again.
+
+This approach maintains the integrity of your objects' `userData` by not using it for tracking serialization status, instead relying on an external mechanism that does not interfere with the existing data structure or usage of your objects.
+
 <br>
