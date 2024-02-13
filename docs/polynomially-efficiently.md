@@ -1,6 +1,6 @@
 ## Polynomial
 
-In math, a polynomial is a kind of equation that involves only powers of variables and coefficients. For example, something like \(3x^2 + 4x + 5\) is a polynomial. Here, \(x\) is a variable, and it's raised to different powers (like 2 in \(x^2\)), and there are numbers multiplied with these \(x\) terms (these numbers are called coefficients).
+In math, a polynomial is a kind of equation that involves only powers of variables and coefficients. For example, something like \(3x^2 + 4x + 5\) is a polynomial. Here, *x* is a variable, and it's raised to different powers &mdash; like 2 in x^2 &mdash; and there are numbers multiplied with these *x* terms (these numbers are called coefficients).
 
 <img src="https://cdn1.byjus.com/wp-content/uploads/2020/10/Polynomials.png" width="700">
 

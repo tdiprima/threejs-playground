@@ -17,8 +17,6 @@ document.addEventListener('mousemove', function() {
 });
 ```
 
-<br>
-
 The `mousemove` event is attached to the `document` object.
 
 Whenever the mouse moves, the `clearTimeout` function is called to clear any previously set timer.

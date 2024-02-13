@@ -2,7 +2,7 @@
 
 You can calculate the standard deviation of an array of numbers in JavaScript using the Array `reduce` method to find the mean (average) of the array and then to find the variance (the average of the squared differences from the mean). The standard deviation is the square root of the variance. 
 
-Hereâs how you could do it for the `heights` array:
+Here's how you could do it for the `heights` array:
 
 ```javascript
 const heights = [160, 162, 163, 167, 170, 171, 172, 175, 178, 180];
@@ -25,6 +25,8 @@ In this code:
 2. We then use the mean to calculate the variance.
 3. Finally, we take the square root of the variance to find the standard deviation.
 
-You can run this code in a JavaScript environment (like a browserâs console or Node.js) to find the standard deviation of the heights.
+## See also
+
+<span style="color:#59acf3;font-size:larger;">mathematics.js, histogram.html</span>
 
 <br>

@@ -1,7 +1,7 @@
 <span style="color:blue;font-size:larger;">There's a navigation bar on top, so the location where the square shows up is different from the location I click at.  How do I adjust for this?</span>
 
 ```js
-// X / width; Y / height
+// Original: X / width; Y / height
 mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
 mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 ```
