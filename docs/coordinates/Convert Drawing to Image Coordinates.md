@@ -1,6 +1,6 @@
 ## Convert Drawing to Image Coordinates
 
-[image_drawing_coords.html](../Code/Ales_Inferno/image_drawing_coords.html)
+[image\_drawing\_coords.html](../Code/Ales_Inferno/image_drawing_coords.html)
 
 To convert the `drawingCoordinates` into image coordinates based on the width and height of the image, you need to understand how the coordinates in your Three.js scene relate to the actual pixels of the image. In Three.js, the plane onto which the image is mapped may not directly correspond to the pixel dimensions of the image. Therefore, a conversion is necessary.
 

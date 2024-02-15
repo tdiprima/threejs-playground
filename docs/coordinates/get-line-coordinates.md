@@ -38,9 +38,6 @@ Below is a step-by-step guide to accessing the x, y, and z coordinates of each p
 ### Things to Note:
 - The example assumes you are using `BufferGeometry`. If you are using another type of geometry, the method of accessing vertices may be different.
 - The index `i` in the loop increments by `3` because each vertex's x, y, and z coordinates are stored consecutively in the `position` attribute array in `BufferGeometry`.
-- Ensure that the line’s geometry has the `position` attribute with coordinates before attempting to access them, as attempting to access undefined properties will result in errors.
-
-### Reference:
-For the most accurate and up-to-date information, refer to the official [three.js documentation](https://threejs.org/docs/). Since three.js is actively developed, the API can change, so always check the version you are using against the corresponding documentation.
+- Ensure that the line's geometry has the `position` attribute with coordinates before attempting to access them, as attempting to access undefined properties will result in errors.
 
 <br>

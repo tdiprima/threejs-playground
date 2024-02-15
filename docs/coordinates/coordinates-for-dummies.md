@@ -1,7 +1,7 @@
 ## Line Depth and Image
 <!-- 2d_image_display.html -->
 
-<span style="color:blue;font-size:larger;">if I wanted to take `line.geometry.attributes.position.array` and convert them to image coordinates, based on the size of the image, how would i do that in such a way that i don't  have to know anything about how the plane was created?</span>
+<span style="color:blue;font-size:larger;">If I wanted to take `line.geometry.attributes.position.array` and convert them to image coordinates, based on the size of the image, how would I do that in such a way that I don't  have to know anything about how the plane was created?</span>
 
 Absolutely, I'll explain it step by step. To convert the line's position from Three.js world coordinates to image coordinates, you need to understand a few concepts:
 
@@ -21,7 +21,7 @@ Since Three.js uses a 3D space and the image is 2D, we first need to normalize t
 Assuming your scene's world coordinates go beyond this range, you'll need to know the maximum extents of your world coordinates. You mentioned not wanting to rely on how the plane was created, so you'll need to determine these extents some other way, possibly by keeping track of the objects you add to the scene.
 
 ### Step 2: Convert Normalized Coordinates to Image Coordinates
-Once you have normalized coordinates, the next step is to map these to your image coordinates. 
+Once you have normalized coordinates, the next step is to map these to your image coordinates.
 
 - **X Coordinate:** Multiply the normalized x-coordinate by half of the image's width. Then, add this value to half of the image's width to shift from the [-1, 1] range to [0, image width].
 
@@ -170,5 +170,13 @@ const positionArray = line.geometry.attributes.position.array;
 const imgCoords = convertToImageCoordinates(positionArray, imageWidth, imageHeight, planeWidth, planeHeight);
 console.log("Image coordinates:", imgCoords);
 ```
+
+<span style="color:blue;font-size:larger;">In order for the calculation to come out right, use image width and height instead of plane width and height in production.</span>
+
+## Nope.
+
+See: [image-to-three.md](image-to-three.md)
+
+Scroll down.
 
 <br>
