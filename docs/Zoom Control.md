@@ -2,7 +2,18 @@
 
 Absolutely, this is possible and a great idea to enhance user interaction in your Three.js scene! By using OrbitControls or TrackballControls, you can easily adjust the zoom level programmatically based on the user's selection from a dropdown menu.
 
-For OrbitControls, you would adjust the camera's position to zoom in and out. For TrackballControls, you might adjust the camera.zoom property directly or manipulate the distance of the camera from the target point similarly to how you'd do with OrbitControls.
+```js
+// Option values and text
+const options = [
+  { value: '0', text: 'Zoom' },
+  { value: '0.25', text: 'Zoom 25%' },
+  { value: '0.5', text: 'Zoom 50%' },
+  { value: '0.75', text: 'Zoom 75%' },
+  { value: '1', text: 'Zoom 100%' }
+];
+```
+
+For OrbitControls, you would adjust the camera's position to zoom in and out. For TrackballControls, you might adjust the `camera.zoom` property directly or manipulate the distance of the camera from the target point similarly to how you'd do with OrbitControls.
 
 The approach I suggested changes the camera position relative to its current position, which can indeed cause the zooming behavior to be relative rather than absolute between the fully zoomed-out and fully zoomed-in states:
 
@@ -80,7 +91,7 @@ And here's what each part does:
 
 So, why do it this way? It's a smart method to smoothly pick any distance between our "min" and "max" points based on how much we want to zoom, from not at all (0%) to all the way (100%). It's like having a magic zoom slider that can stop exactly where we want between two points!
 
-## Fix flipping
+## Fix image flipped 180 degrees
 
 ```js
 // Ensure the newPosition calculation respects the camera's current forward vectorconst newPosition = controls.object.position.clone().add(direction.multiplyScalar(newDistance - controls.object.position.distanceTo(controls.target)));  

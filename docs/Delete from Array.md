@@ -81,4 +81,14 @@ function removeGrid() {
 }
 ```
 
+<span style="color:#59acf3;font-size:larger;">edit.js</span>
+
+```js
+let objectsToRemove = [];
+handles.forEach(function (element) {
+  objectsToRemove.push(element);
+});
+objectsToRemove.forEach(object => removal(object));
+```
+
 <br>

@@ -1,8 +1,8 @@
 ## THREE.Texture(canvas)
 
-fontLoader/create-label.html
+[fontLoader/create-label.html]()
 
-<span style="color:#0000dd;">The code I'm using is shite, please rewrite it.</span>
+<span style="color:blue;font-size:larger;">Make it better.</span>
 
 Absolutely, let's try refining the code to resolve your issues. The division by `100` seems to be an attempt to scale the `PlaneGeometry` to a reasonable size in the Three.js scene. However, if this scaling doesn't achieve the desired effect, you might need to adjust it.
 
@@ -19,7 +19,7 @@ Below is an adjusted version of the `createLabel` function:
 ```javascript
 function createLabel(text, fontSize, fontWeight, fontFamily) {
 
-  // Yeah, remember - also do it here for some reason.
+  // Yeah, remember - also do it here.
   context.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
 
   let metrics = context.measureText(text);  let textWidth = metrics.width;  canvas.width = textWidth;  canvas.height = fontSize * 1.2; // added some padding for text height
@@ -30,7 +30,7 @@ function createLabel(text, fontSize, fontWeight, fontFamily) {
   // transparent: true
   let material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, transparent: true });
 
-  // Instead of textWidth and fontSize (duh)  let geometry = new THREE.PlaneGeometry(canvas.width / 100, canvas.height / 100); // Adjust the scale factor as needed  return new THREE.Mesh(geometry, material);
+  // Instead of textWidth and fontSize (duh)  let geometry = new THREE.PlaneGeometry(canvas.width / 100, canvas.height / 100); // Adjust the scale factor as needed  return new THREE.Mesh(geometry, material);
 }
 ```
 

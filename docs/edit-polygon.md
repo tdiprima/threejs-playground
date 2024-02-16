@@ -495,7 +495,7 @@ Integrating handle movement and vertex update logic into your existing code requ
 
 Below is an integrated approach, focusing on the necessary adjustments and additions:
 
-### Modify the `addEditHandles` Function
+### Modify the addEditHandles Function
 
 First, ensure that each handle has a way to be identified as such and has a reference back to its associated rectangle. This is crucial for the event handling logic to differentiate between drawing new rectangles and editing existing ones.
 

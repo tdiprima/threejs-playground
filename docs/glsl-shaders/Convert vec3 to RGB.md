@@ -14,17 +14,14 @@ for (let i = 0; i < color.length; i++) {
 console.log("rgb:", rgb)
 ```
 
-<br>
-Yeah, JavaScript isn't like Python where you can just multiply the array by 255, but you can do it in C; and therefore, GLSL.
+<span style="color:blue;font-size:larger;">Yeah, JavaScript isn't like Python where you can just multiply the array by 255, but you can do it in C; and therefore, GLSL.</span>
 
 ```glsl
 vec3 color = vec3(0.2, 0.2, 0.2);
 vec3 rgb = color * 255.0;
 ```
 
-<br>
 In the above code, we multiply each component of the "color" vector by 255 to convert the range from [0, 1] to [0, 255].
-
 
 ### Clamp
 

@@ -1,6 +1,8 @@
 ## Render Plane in Front
 
-Enfrente de!
+<span style="color:blue;font-size:larger;">Enfrente de!</span>
+
+<span style="color:#59acf3;font-size:larger;">planeModule.js</span>
 
 To create a `PlaneGeometry` in Three.js that covers everything else in the scene, you can follow these steps:
 
@@ -119,6 +121,8 @@ button.addEventListener('click', function() {
 In this setup, when the button is clicked, the plane is created and added, and the scene is re-rendered to include the plane. If you're using an animation loop (e.g., with `requestAnimationFrame`), the new plane will automatically be included in the next frame without a need for a manual render call.
 
 ## Add cube on click
+
+<span style="color:#59acf3;font-size:larger;">cubeModule.js</span>
 
 Certainly! To add a cube to a Three.js scene and ensure it appears in front of everything else, you need to adjust both the cube's position and possibly its render order. Here's a basic example of how you can do this:
 

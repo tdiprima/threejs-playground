@@ -5,10 +5,10 @@
 ## bard-jan-24-gemini-pro
 
 1. Creating the popup:
-    * A div element is created to serve as the popup.
-    * It's positioned at the mouse coordinates using event.clientX and event.clientY.
+    * A `div` element is created to serve as the popup.
+    * It's positioned at the mouse coordinates using `event.clientX` and `event.clientY`.
     * It's styled with padding, border, and background color.
-    * A high z-index ensures it's visible above the Three.js scene.
+    * A high `z-index` ensures it's visible above the Three.js scene.
 
 2. Adding input and button:
     * A text input field is added to the popup.
@@ -16,11 +16,11 @@
 
 3. Handling text input and saving:
     * An event listener is attached to the button.
-    * When clicked, the input value is retrieved and stored in the userData property of the ellipse.
+    * When clicked, the input value is retrieved and stored in the `userData` property of the ellipse.
     * The popup is removed from the DOM.
 
 4. Accessing stored text:
-    * You can now access the associated text using ellipse.userData.text whenever needed.
+    * You can now access the associated text using `ellipse.userData.text` whenever needed.
 
 ```js
 // ... (existing code)
@@ -63,61 +63,6 @@ function onMouseUp(event) {
 }
 
 // ... (remaining code)
-```
-
-## Or gpt-4-0125-preview
-
-Create a function, use a form.
-
-```js
-function createAndShowInputForm(x, y) {
-  // Create form elements
-  const form = document.createElement("form");
-  form.style.position = "absolute";
-  form.style.left = `${x}px`;
-  form.style.top = `${y}px`;
-
-  const input = document.createElement("input");
-  input.type = "text";
-  input.placeholder = "Enter text for ellipse";
-
-  const submitButton = document.createElement("input");
-  submitButton.type = "submit";
-  submitButton.value = "Submit";
-
-  form.appendChild(input);
-  form.appendChild(submitButton);
-  document.body.appendChild(form);
-
-  // Handle form submission
-  form.onsubmit = function(event) {
-    event.preventDefault();
-    const text = input.value;
-    // Here you can associate the text with the ellipse. For demonstration, we just log it.
-    console.log("Text for ellipse:", text);
-    // Remove form after submission
-    document.body.removeChild(form);
-  };
-}
-```
-
-```js
-function onMouseUp(event) {
-  event.preventDefault();
-  isDrawing = false;
-  endPoint = getMousePosition(event.clientX, event.clientY);
-  updateEllipse();
-  // Display the input form at the current mouse position
-  createAndShowInputForm(event.clientX, event.clientY);
-}
-```
-
-Oops, we didn't pass the object in, so how do we store the data?
-
-```js
-let ellipseData = [];
-// Inside the form's onsubmit handler:
-ellipseData.push({ text: input.value, ellipse: /* ellipse details */ });
 ```
 
 This approach gives you a basic way to associate text with ellipses and retrieve it later for any purpose, such as **displaying it on hover** or including it **in a list** elsewhere in your UI.

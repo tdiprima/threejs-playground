@@ -1,6 +1,6 @@
 ## Delaying rendering after the user stops scrolling
 
-<span style="color:#0000dd;">OpenSeadragon will hesitate rendering a whole slide image until the user has stopped scrolling.  Is there a way to mimic such hesitation in three.js?</span>
+<span style="color:blue;font-size:larger;">OpenSeadragon will hesitate rendering a whole slide image until the user has stopped scrolling.  Is there a way to mimic such hesitation in three.js?</span>
 
 Yes, it is possible to mimic the hesitation behavior of OpenSeadragon in three.js.
 
@@ -35,10 +35,37 @@ window.addEventListener('scroll', onScroll);
 
 If the user continues scrolling during this time, the `timeout` variable is cleared and the delay is reset. Once the delay has passed without any further scrolling, the `renderImage` function is called to render the image.
 
+## On Scroll
+
+`onScroll` in the context of web development typically refers to the event that occurs when a user scrolls up and down on a web page. This event is triggered whenever the document or a specific element's scroll position changes, allowing developers to execute JavaScript code in response to the user's scroll actions.
+
+For example, you might use `onScroll` to hide a navigation menu when the user scrolls down or to load more content when the user reaches the bottom of a page.
+
+Zooming in and out, like with OpenSeadragon or similar tools for image viewing and manipulation, is not generally associated with the `onScroll` event. Zooming actions might trigger other events, such as mousewheel events, touch events, or specific events provided by the zooming library being used.
+
+## Zoom events in three.js
+
+In three.js, zooming in and out, especially in the context of a camera within a 3D scene, doesn't directly trigger specific "zoom" events in the way traditional DOM events work (like `onclick`, `onmousemove`, etc.). Instead, zooming is often controlled by modifying the camera's properties or using a control library like `OrbitControls`, `TrackballControls`, or `FlyControls` that come with three.js. These controls adjust the camera's position or properties based on user input (like mouse scroll, pinch gestures on touch devices, or keyboard inputs), which effectively zooms the view in and out of the scene.
+
+If you're using `OrbitControls`, for example, zooming is achieved by changing the camera's distance from the target point. The controls listen to DOM events like mouse scroll or touch gestures to zoom in and out. While `OrbitControls` and similar libraries do not dispatch zoom-specific events by default, they provide hooks or ways to listen to changes that can be used to detect zoom actions:
+
+1. **Update Event**: You can listen for the 'change' event on `OrbitControls` to react to zoom changes. This event is fired after any interaction, including zooming.
+
+    ```javascript
+    controls.addEventListener('change', function() {
+      console.log('Camera zoomed or position changed');
+    });
+    ```
+
+2. **Custom Zoom Detection**: Implement custom logic within the 'change' event listener or by extending `OrbitControls` to detect zooming specifically, possibly by comparing the camera's position or properties before and after the change.
+
+3. **DOM Mousewheel or Touch Events**: Directly listen to `wheel` or touch events on the canvas or document to detect zoom actions, then apply your custom logic for handling these interactions with the camera.
+
+Remember, zoom behavior and the events you need to listen for can vary based on how you've implemented camera controls and interactions in your three.js application.
 
 ## Display a whole slide image
 
-<span style="color:#0000dd;">A digital slide image file created by an Aperio ScanScope slide scanner.</span>
+<span style="color:blue;font-size:larger;">A digital slide image file created by an Aperio ScanScope slide scanner.</span>
 
 Three.js does not have built-in support for SVS files, and therefore cannot directly load and display them.
 
@@ -72,7 +99,7 @@ loader.load('output.png', function(texture) {
 
 ## Pre-processing <span style="font-size:30px;">🔥🧯🧑🏻‍🚒</span>
 
-<span style="color:#0000dd;">Obviously pre-processing such a large file is gonna suck, if not impossible.  Also, the resulting PNG file will be quite large and consume a lot of memory, which will impact the performance of the application.
+<span style="color:blue;font-size:larger;">Obviously pre-processing such a large file is gonna suck, if not impossible.  Also, the resulting PNG file will be quite large and consume a lot of memory, which will impact the performance of the application.
 </span>
 
 ### Get dimensions of whole slide image
@@ -99,7 +126,7 @@ To convert the slide to PNG format, you can use the `openslide-write-png` comman
 
 ### Convert the largest level of the slide to PNG format
 
-<span style="color:#0000dd;">Buddy suggested doing this on the entire slide.  Hecc no!</span>
+<span style="color:blue;font-size:larger;">Buddy suggested doing this on the entire slide.  Hecc no!</span>
 
 ```sh
 openslide-write-png path/to/slide.svs 0 0 0 <width> <height> output.png

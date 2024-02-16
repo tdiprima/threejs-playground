@@ -6,13 +6,21 @@ Imagine you're playing a video game where you can move from one point to another
 
 Here's the simple formula for lerp:
 
+```
 result = start + (end - start) x fraction
+```
 
 - **start**: where you begin.
 - **end**: where you want to go.
 - **fraction**: how far along the path from start to end you are (usually a number between 0 and 1).
 
 Why should you care? If you're into programming, especially making games or animations, lerp is super useful. It helps in moving objects smoothly, changing colors, or even adjusting sounds. It's a basic tool that makes a big difference in how things look and feel in your projects!
+
+[Zoom Control.md](Zoom Control.md)
+
+```js
+const newDistance = minDistance + (maxDistance - minDistance) * (1 - zoomSelection);
+```
 
 ## Fraction
 

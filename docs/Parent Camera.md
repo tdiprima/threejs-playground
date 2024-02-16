@@ -1,10 +1,10 @@
 ## Parent Camera
 
-In what cases would we want a parent camera (PerspectiveCamera)?
+<span style="color:blue;font-size:larger;">In what cases would we want a parent camera (PerspectiveCamera)?
 <!--pan_and_zoom-2.html-->
-Ales\_Inferno/set\_pan\_zoom\_others.html
+Ales\_Inferno/set\_pan\_zoom\_others.html</span>
 
-<span style="color:#0000dd;">If we had multiple cubes, instead of coding the rotation for each stupid one (although we could just easily do that in a loop), we rotate the parent.  That's the idea.</span>
+If we had multiple cubes, instead of coding the rotation for each stupid one (although we could just easily do that in a loop), we rotate the parent.  That's the idea.</span>
 
 ## Example
 

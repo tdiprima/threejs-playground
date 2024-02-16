@@ -12,35 +12,7 @@ It's worth noting that [QuPath](https://github.com/qupath/qupath) is open source
 
 [leaflet-paintpolygon](https://github.com/tcoupin/leaflet-paintpolygon.git)
 
-## Example
-
-Outline Brush Stroke (to achieve the effect of a continuous brush stroke with just the outline).
-
-Enabling brush-based outlining on the canvas.
-
-He has not been able to provide one working example of what I want, so we're done. :(
-
-This is just a small line example to play with.
-
-```js
-function fat_line() {
-  let canvas = document.getElementById("myCanvas");
-  let ctx = canvas.getContext("2d");
-
-  ctx.lineWidth = 20; // Adjust the line width as needed
-  ctx.strokeStyle = 'black'; // Set stroke color to black
-  // ctx.fillStyle = 'rgba(0, 0, 0, 0)'; // Transparent fill; dafuq this do?
-  ctx.fillStyle = 'rgba(255, 255, 255, 1)'; // White fill; didn't work
-
-  // This is a line; circle would be different.
-  ctx.beginPath();
-  ctx.moveTo(50, 50); // Starting point of the line
-  ctx.lineTo(250, 50); // Ending point of the line
-
-  ctx.stroke();
-  ctx.fill(); // didn't work
-}
-```
+<span style="color:blue;font-size:larger;">He has not been able to provide one working example of what I want, so we're done. :(</span>
 
 ## Where is the qupath implementation?
 
@@ -73,23 +45,12 @@ qupath-gui-fx/build/docs/javadoc/qupath/lib/gui/QuPathGUI.DefaultActions.html
 
 build/docs-merged/javadoc/qupath/lib/gui/QuPathGUI.DefaultActions.html
 
-### Hollow Brush!
-
-[How To Make an OUTLINE BRUSH In Procreate](https://youtu.be/VPZJTXhg5po)
-
-[How to Paint with Code: Creating Your Brushes](https://library.superhi.com/posts/how-to-paint-with-code-creating-paintbrushes)
-
-### Articles
-
-[Best Image Annotation Tools of 2023](https://www.v7labs.com/blog/best-image-annotation-tools)
-
-[Medical Image Annotation](https://www.v7labs.com/medical-imaging-annotation)
-
-[How to Paint with Code: Creating Your Brushes](https://library.superhi.com/posts/how-to-paint-with-code-creating-paintbrushes)
-
 ### Keywords
 
 * "stroke outlining"?
 * "outline brush"?
+* hollow brush
+
+<span style="color:lime;font-size:larger;">First, draw with CircleGeometry. Then, store the center point and radius. Next,  use JSTS to calculate the union. Then visualize the union with a line.  Finally, remove all the circles.</span>
 
 <br>

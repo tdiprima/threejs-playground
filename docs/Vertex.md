@@ -74,37 +74,4 @@ This adjustment positions the button 10 pixels to the right and 10 pixels up fro
 
 This approach allows you to control the positioning of the button relative to the vertex precisely, making it possible to place the button in a <mark>**visually clear and non-obstructive location**</mark> in relation to the mesh's geometry on the screen.
 
-## Error-trapping for matrix world
-
-<span style="color:blue;font-size:larger;">Sometimes it complains that mesh.matrixWorld has no parent or something.  How can I error-trap, and yet still have this work?</span>
-
-To handle the situation where `mesh.matrixWorld` might not have a parent or another related issue, you can add a check to ensure `mesh.matrixWorld` is valid and has been updated correctly.
-
-You can use `mesh.updateMatrixWorld(true)` to force the update of `mesh.matrixWorld` and its ancestors if necessary. Here's how you can integrate this with error handling:
-
-```javascript
-try {
-  // Ensure the mesh's world matrix is up to date
-  mesh.updateMatrixWorld(true);
-
-  const vertex = new THREE.Vector3();
-  vertex.fromBufferAttribute(mesh.geometry.attributes.position, 0); // For the first vertex
-
-  // Apply the world matrix to the vertex
-  vertex.applyMatrix4(mesh.matrixWorld);
-
-  vertex.project(camera);
-
-  const x = (vertex.x * 0.5 + 0.5) * renderer.domElement.clientWidth;
-  const y = (vertex.y * -0.5 + 0.5) * renderer.domElement.clientHeight;
-  
-  // Proceed with using x and y as needed
-} catch (error) {
-  console.error('An error occurred:', error.message);
-  // Handle the error, e.g., by skipping this vertex or providing fallback logic
-}
-```
-
-This approach ensures that any errors during the matrix application or projection process are caught, allowing you to handle them appropriately (e.g., logging the error, using fallback values, or skipping the current operation). The `try...catch` block helps in managing unexpected errors, preventing the entire script from failing due to issues with a single mesh or vertex operation.
-
 <br>

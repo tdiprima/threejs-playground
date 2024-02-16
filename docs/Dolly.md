@@ -2,10 +2,7 @@
 
 OrbitControls uses the dolly method behind the scenes.
 
-I manually use it here:
-[Ales\_Inferno/mult\_2d\_images.html](../mult_2d_images.html)
-
-<span style="color:#0000dd;">When might one manually use the "dolly" method controls.dolly(...)?</span>
+<span style="color:blue;font-size:larger;">When might one manually use the "dolly" method controls.dolly(...)?</span>
 
 Great question! While the OrbitControls library handles the dolly operation automatically based on user input, there might be situations where you'd want to manually use the `dolly` method provided by the OrbitControls instance, `controls.dolly(...)`. Here are a few scenarios where you might find it useful:
 
@@ -24,21 +21,5 @@ Great question! While the OrbitControls library handles the dolly operation auto
 By manually invoking the `dolly` method, you have fine-grained control over the camera's dolly operation, enabling you to create specific camera movements or respond to events in a customized manner. It gives you the flexibility to integrate camera adjustments seamlessly into your application or to implement unique camera behaviors tailored to your specific use case.
 
 Remember, the `dolly` method takes parameters that define how much to dolly and in which direction. For example, `controls.dolly(1)` would dolly the camera closer to the target point, while `controls.dolly(-1)` would move it farther away. The magnitude of the value determines the speed or distance of the dolly operation.
-
-## My Example
-
-```js
-controls.dolly(Math.exp(distance * -0.01));
-```
-
-`Math.exp(distance * -0.01)` calculates the **exponential value** of `distance * -0.01`.
-
-The `distance` variable represents the distance between the camera and its target point.
-
-`distance * -0.01` indicates that the camera will be moved by a factor relative to the distance. A negative value indicates that the camera will be moved closer to the target, while a **positive value** would **move it farther away.**
-
-`Math.exp()` calculates the exponential value of a given number. In this case, it is used to convert the distance factor into an exponential value.
-
-The specific value `-0.01` and the exponential calculation might be chosen based on the desired behavior and aesthetic preference for camera movement.
 
 <br>

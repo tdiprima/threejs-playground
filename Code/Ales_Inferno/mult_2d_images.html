@@ -62,46 +62,10 @@
   let image3 = loadImage('image3.jpg', -1, -1, 0)
   let image4 = loadImage('image4.jpg', 1, -1, 0)
 
-  // WE COULDA JUST STOPPED HERE AND RENDERED IT.
-  // We were trying to do something, but it didn't work anyway.
-  // TODO: Maybe if I did 4 cameras. Ah, bueno - 4 controls.
-
   // Create the orbit controls and set them to control the camera
   let controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
-
-  // Add event listeners to the images to pan and zoom together
-  image1.addEventListener('mousedown', onImageMouseDown);
-  image2.addEventListener('mousedown', onImageMouseDown);
-  image3.addEventListener('mousedown', onImageMouseDown);
-  image4.addEventListener('mousedown', onImageMouseDown);
-
-  function onImageMouseDown(event) {
-    // Set the camera target to the position of the clicked image
-    controls.target.copy(event.target.position);
-
-    // Add event listeners to the document to pan and zoom the images together
-    document.addEventListener('mousemove', onDocumentMouseMove);
-    document.addEventListener('mouseup', onDocumentMouseUp);
-  }
-
-  function onDocumentMouseMove(event) {
-    // Calculate the mouse/touch movement and update the camera position
-    let movementX = event.movementX || event.touches[0].clientX - event.touches[1].clientX;
-    let movementY = event.movementY || event.touches[0].clientY - event.touches[1].clientY;
-
-    let distance = Math.sqrt(movementX * movementX + movementY * movementY);
-    controls.dolly(Math.exp(distance * -0.01)); // move the camera closer or farther away from its target
-
-    controls.pan(new THREE.Vector3(-movementX, movementY, 0));
-  }
-
-  function onDocumentMouseUp(event) {
-    // Remove the event listeners from the document
-    document.removeEventListener('mousemove', onDocumentMouseMove);
-    document.removeEventListener('mouseup', onDocumentMouseUp);
-  }
 
   // Render the scene
   function animate() {

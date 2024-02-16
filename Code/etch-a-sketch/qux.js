@@ -95,8 +95,12 @@ renderer.domElement.addEventListener('pointerdown', event => {
 
 function onMouseMove(event) {
   if (isDrawing && mouseIsPressed) {
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    // mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    // mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    const canvas = document.querySelector('canvas');
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
     raycaster.setFromCamera(mouse, camera);
     let intersects = raycaster.intersectObjects(scene.children, true);
@@ -152,7 +156,8 @@ function onMouseUp() {
     for (let i = 0; i < originalArray.length; i += 9) {
       decimatedArray.push(originalArray[i], originalArray[i + 1], originalArray[i + 2]);
     }
-    console.log(decimatedArray.length, decimatedArray);
+    console.log("Original length:", originalArray.length);
+    console.log("Decimated:", decimatedArray.length, decimatedArray);
   }
 }
 

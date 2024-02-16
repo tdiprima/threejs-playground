@@ -28,7 +28,7 @@ In the provided code example, the `mix` function is used to smoothly transition 
 ```
 
 <br>
-<span style="color:#0000dd;font-size:larger;">THREE.WebGLProgram: Program Info Log: WARNING: Output of vertex shader 'webgl\_37cc066937ccaa46' not read by fragment shader.</span>
+<span style="color:blue;font-size:larger;">THREE.WebGLProgram: Program Info Log: WARNING: Output of vertex shader 'webgl\_37cc066937ccaa46' not read by fragment shader.</span>
 
 The warning you're seeing is related to the vertex shader's output not being used in the fragment shader. It indicates that the output variable `vUv` defined in the vertex shader is not being read or utilized in the fragment shader.
 
@@ -47,9 +47,5 @@ void main() {
 **"Interpolate"** refers to the process of **estimating** values between two known values based on a linear or non-linear relationship. It involves determining intermediate values within a range to achieve a smooth transition or progression.
 
 **"Transpose,"** on the other hand, is a term used in linear algebra and matrix operations. It refers to the operation of **rearranging** the rows and columns of a matrix, effectively flipping it along its diagonal. The transpose of a matrix is obtained by **swapping** its rows with its columns.
-
-### Deprecations
-
-Scripts "build/three.js" and "build/three.min.js" are deprecated with r150+, and will be removed with r160. Please use ES Modules or alternatives: https://threejs.org/docs/index.html#manual/en/introduction/Installation three.js:1:9
 
 <br>
