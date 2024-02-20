@@ -4,11 +4,13 @@ Raycasting with `THREE.Line` objects, including `THREE.LineLoop`, behaves differ
 
 However, Three.js provides a way to make line objects more easily interactable by using the `raycast` method with a specific parameter: `LineSegments.raycast`.
 
-For `THREE.Line` and `THREE.LineLoop`, you can **increase the raycast precision** by setting the `Line.material.linewidth` property.
+[Cast a ray at LineSegments](https://discourse.threejs.org/t/cast-a-ray-at-linesegments)
+
+For `THREE.Line` and `THREE.LineLoop`, you can increase the raycast precision by setting the `Line.material.linewidth` property.
 
 But this is mostly a visual change and doesn't affect the actual raycasting computation in most browsers due to limitations in the WebGL implementations regarding line thickness.
 
-<span style="color:blue;font-size:larger;">Backwards.  It does *not* affect it visually, due to the limitations.</span>
+<span style="color:blue;font-size:larger;">Nope.  Linewidth does not work at all.</span>
 
 Here are a few tips to improve interaction with `THREE.LineLoop` or any line-based objects:
 
@@ -161,6 +163,32 @@ function animate() {
 ```
 
 Adjust the `calculateThreshold` and `calculateThresholdForOrthographic` functions to fit the scale and behavior of your specific application. This dynamic adjustment approach ensures that the interaction remains consistent and intuitive, regardless of the camera's distance or zoom level.
+
+## Zoom event listener
+
+In Three.js, when using `TrackballControls` or `OrbitControls` to implement zooming functionality, there isn't a dedicated "zoom" event listener. However, you can listen for changes in a generic way using the `change` event provided by these controls. Here's how you can set up an event listener for zoom changes:
+
+For `OrbitControls`:
+
+```javascript
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.addEventListener('change', function() {
+  console.log('Zoom changed');
+  // You can also perform actions related to the camera's new zoom level here.
+});
+```
+
+For `TrackballControls`:
+
+```javascript
+const controls = new THREE.TrackballControls(camera, renderer.domElement);
+controls.addEventListener('change', function() {
+  console.log('Zoom changed');
+  // Actions related to zoom changes can be performed here as well.
+});
+```
+
+This setup allows you to execute code whenever the camera's position or zoom level changes, which includes zooming actions.
 
 ## Scaling factor
 
