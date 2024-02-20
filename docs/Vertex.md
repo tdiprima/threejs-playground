@@ -74,4 +74,18 @@ This adjustment positions the button 10 pixels to the right and 10 pixels up fro
 
 This approach allows you to control the positioning of the button relative to the vertex precisely, making it possible to place the button in a <mark>**visually clear and non-obstructive location**</mark> in relation to the mesh's geometry on the screen.
 
+## applyMatrix4
+
+`applyMatrix4` is a method in Three.js that allows you to apply a transformation to the geometry of an object using a 4x4 matrix. This transformation can include translation (moving the object in space), rotation (spinning the object around), scale (changing the size of the object), or any combination of these.
+
+Imagine you have a shape made out of clay, like a star or a cube. Using `applyMatrix4`, you can:
+
+- **Move it** from one place to another (translation),
+- **Rotate it** to look at something from a different angle,
+- **Scale it** up to make it bigger or down to make it smaller.
+
+The "4x4 matrix" is a mathematical tool that holds all the instructions for these transformations. When you apply this matrix to the geometry of your Three.js object using `applyMatrix4`, you're telling every point in your object's geometry to move, rotate, and scale according to the rules in the matrix. This is a very efficient way to transform objects because it combines multiple operations into a single step and applies them to all points of the object simultaneously.
+
+*This operation is common for pre-processing geometry data before creating Three.js objects. If the goal is to align the line and mesh in terms of their transformations, it's more straightforward to directly set the line's position, rotation, and scale to match the mesh.*
+
 <br>
