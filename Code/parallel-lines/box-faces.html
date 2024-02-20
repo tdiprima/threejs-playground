@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- https://discourse.threejs.org/t/cast-a-ray-at-linesegments -->
-<!--  @author hofk, based on http://threejs.live/#/webgl_interactive_buffergeometry -->
 <head>
-  <!-- It uses a raycaster to detect when the mouse hovers over the box (mesh). If there's an intersection, it
-  dynamically updates the positions of the line's vertices to match the vertices of the face under the mouse cursor,
-  making the line outline that face. The line's geometry is then transformed to match any transformations applied to
-  the box, and the line is made visible. If the mouse isn't over the box, the line is hidden. -->
   <meta charset="UTF-8">
-  <meta content="IE=edge" http-equiv="X-UA-Compatible">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title> raycast </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>raycast</title>
+  <!-- https://discourse.threejs.org/t/cast-a-ray-at-linesegments -->
+  <!-- @author hofk, based on http://threejs.live/#/webgl_interactive_buffergeometry -->
   <link href="/css/main.css" rel="stylesheet">
 </head>
 <body>
