@@ -71,4 +71,31 @@ let length = Calculate.lineLength(
 
 Remember, this approach assumes that the plane is perpendicular to the camera's view and covers the entire height of the camera's view at the distance specified. If your actual setup deviates from this, further adjustments might be needed.
 
+## calculateScaleFactor
+
+The `calculateScaleFactor` function calculates a scale factor used to convert distances measured in Three.js units to another unit of measurement, by accounting for the current perspective of the camera and the dimensions of the renderer's canvas. Here's the breakdown:
+
+1. **Camera's Position and Field of View (FOV):** It first retrieves the camera's position (`camera.position.z`) and its vertical field of view (`camera.fov`). The FOV is converted from degrees to radians because trigonometric functions in JavaScript expect radians.
+
+2. **Visible Height Calculation at a Specific Distance:** It calculates the visible height at the depth of the plane directly in front of the camera using the formula `2 * Math.tan(vFov / 2) * distance`. This uses basic trigonometry to find the height of a triangle where the camera's FOV acts as the apex angle and the distance from the camera to the plane is one of the triangle's sides.
+
+3. **Scale Factor Calculation:** Finally, it calculates the scale factor by dividing the screen height (`renderer.domElement.clientHeight`) by the calculated plane height at the given distance. This scale factor can be used to convert the distance measured in Three.js units on the plane to real-world units on the screen.
+
+This scaling is essential for applications like measuring distances in a 3D environment, where you need to relate the virtual distances within the 3D scene to real-world measurements, such as meters, centimeters, or in this case, microns.
+
+## No line on zoom
+
+Based on the provided code and the issue you're facing with line visibility when zoomed in, a few potential areas for improvement come to mind:
+
+1. **Depth Buffer Precision:** When you zoom in very closely, issues with the depth buffer's precision can cause rendering artifacts or make objects disappear. One way to mitigate this is by adjusting the camera's near and far planes to be as tight around your scene as possible. This maximizes depth buffer precision.
+
+2. **Depth Test for Line and Text Mesh:** If the line or text mesh is very close to other geometry in the scene, it might be getting clipped or not rendered due to depth testing. To ensure they are always visible, you could disable depth testing for these objects by setting their materials to ignore the depth test. For example:
+
+   ```javascript
+   lineMaterial.depthTest = false;
+   textMaterial.depthTest = false;
+   ```
+
+   However, be aware that disabling depth testing means these objects will always render on top of everything else, which could lead to visual artifacts if that's not the intended behavior.
+
 <br>
