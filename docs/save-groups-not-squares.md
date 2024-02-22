@@ -4,38 +4,30 @@
 let serializedObjects = [];
 
 function serializeScene(scene) {
-  serializedObjects = [];
-  let processedObjects = new Set(); // To track processed objects
+  let processedObjects = new Set();
 
-  function serializeObjectWithChildren(obj) {
-    let serializedObj = obj.toJSON();
-    // Mark all children as processed to avoid double serialization
-    obj.traverse((child) => {
-      if (child.name.includes("annotation")) {
-        processedObjects.add(child.id); // Use unique object ID for tracking
-      }
-    });
-    return serializedObj;
+  function shouldProcess(obj) {
+    return obj.name.includes("annotation") || (obj.userData && obj.userData.colored);
+  }
+
+  function serializeObject(obj) {
+    processedObjects.add(obj.id);
+    serializedObjects.push(obj.toJSON());
   }
 
   scene.traverse((obj) => {
-    // Skip if this object has already been processed
-    if (processedObjects.has(obj.id)) return;
+    // Check if object should be processed and hasn't been processed yet
+    if (!processedObjects.has(obj.id) && shouldProcess(obj)) {
+      serializeObject(obj);
+    }
 
-    if (obj.type === 'Group') {
-      let hasRelevantChildren = obj.children.some(child => child.name.includes("annotation"));
-      if (hasRelevantChildren) {
-        // Serialize the relevant children and mark as processed
-        obj.traverse((child) => {
-          if (child.userData.colored) {
-            processedObjects.add(child.id); // Use unique object ID for tracking
-            serializedObjects.push(child.toJSON());
-          }
-        });
-      }
-    } else if (obj.name.includes("annotation")) {
-      // Serialize individual objects not yet processed
-      serializedObjects.push(serializeObjectWithChildren(obj));
+    // Additional logic for Groups with relevant children
+    if (obj.type === 'Group' && obj.children.some(shouldProcess)) {
+      obj.children.forEach(child => {
+        if (!processedObjects.has(child.id) && shouldProcess(child)) {
+          serializeObject(child);
+        }
+      });
     }
   });
 
