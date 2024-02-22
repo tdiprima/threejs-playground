@@ -91,43 +91,33 @@ And here's what each part does:
 
 So, why do it this way? It's a smart method to smoothly pick any distance between our "min" and "max" points based on how much we want to zoom, from not at all (0%) to all the way (100%). It's like having a magic zoom slider that can stop exactly where we want between two points!
 
-## Fix image flipped 180 degrees
+## Calculate camera target direction
 
 ```js
-// Ensure the newPosition calculation respects the camera's current forward vectorconst newPosition = controls.object.position.clone().add(direction.multiplyScalar(newDistance - controls.object.position.distanceTo(controls.target)));  
-// Remove:
-controls.object.lookAt(controls.target);
-
-// DIDN'T WORK!
-
-// SO
-// Assuming newPosition is calculated and might have a negative z value
-newPosition.z = Math.abs(newPosition.z);
+const direction = controls.target.clone().sub(controls.object.position).normalize();
 ```
 
-## Only move Z then
+This line of code is calculating the direction from the camera to its target point in a 3D scene. Let's break it down:
 
-If your goal is to simply move the camera closer or further away along the Z-axis without changing its X and Y positions, and ensuring that it only zooms in or out relative to a fixed point in a straight line, you can significantly simplify the calculation. This approach is especially useful if your scene's primary interest lies along the Z-axis and you don't need to maintain a focus on a specific target point off this axis.
+- `controls.target.clone()`: This makes a copy of the target's position (where the controls are looking at).
+- `.sub(controls.object.position)`: This subtracts the camera's current position from the target's position, giving the vector pointing from the camera to the target.
+- `.normalize()`: This changes the length of that vector to 1, which means it keeps the direction the same but ignores how far away the target is.
 
-Given this setup, the camera's new Z position based on the zoom selection can be directly calculated using a linear interpolation between the `minDistance` and `maxDistance` values. This method ensures that the camera moves along the Z-axis in a controlled manner.
+So, basically, this line is finding out which way the camera should point to look directly at the target, without worrying about the distance to the target.
 
-Here's how you can do it:
+## Calculate where to move the camera
 
-```javascript
-dropdown.addEventListener('change', function() {
-  const zoomSelection = parseFloat(this.value);
-
-  // Calculate the new Z position of the camera
-  const newZ = minDistance + (maxDistance - minDistance) * zoomSelection;
-
-  // Update the camera's Z position
-  camera.position.z = newZ;
-
-  // If you're using controls that require updating (like OrbitControls)
-  controls.update();
-});
+```js
+// const newDistance = minDistance + (maxDistance - minDistance) * (1 - zoomSelection);
+const newPosition = direction.multiplyScalar(newDistance).add(controls.target);
 ```
 
-<span style="color:lime;font-size:larger;">That didn't work; 25% was closer than 50%, and 75% and 100% keeps backing out. But it didn't flip the value of z. (Yeah, cuz it went backwards.)</span>
+This line of code is moving the camera to a new position based on a direction and a distance from its target point in a 3D scene. Here's the breakdown:
+
+- `direction.multiplyScalar(newDistance)`: This takes the direction vector we got from the previous piece of code and stretches or shrinks it to match `newDistance`, which is how far away from the target the new position should be. This gives us a vector that points from the target to where the camera should move.
+
+- `.add(controls.target)`: This adds the target's position to the stretched/shrunk vector. Since the direction vector starts at the target and extends towards the new camera position, adding the target's position moves the start of this vector to the target's location, effectively placing the new camera position `newDistance` away from the target in the specified direction.
+
+So, in simple terms, this line calculates where to move the camera so it's a certain distance away from its target, going in the direction we calculated before.
 
 <br>
