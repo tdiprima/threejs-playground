@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>patient resonance</title>
+  <!-- Selection box feature that allows users to select a portion of the rendered scene and open it as a separate image -->
+  <style>
+    body {
+      overflow: hidden;
+      margin: 0;
+      touch-action: none;
+      background-color: black;
+    }
+
+    .selectBox {
+      border: 1px solid #ffffff;
+      background-color: rgba(75, 160, 255, 0.3);
+      position: fixed;
+    }
+  </style>
+</head>
+<body>
+<script type="importmap">{
+  "imports": {
+    "three": "/build/three.module.js",
+    "three/addons/": "/jsm/"
+  }
+}
+</script>
+<script async src="/es-module-shims-1.3.6/dist/es-module-shims.js"></script>
+
+<script type="module">
+  import * as THREE from "three";
+  // Utility for selecting parts of the rendered scene:
+  import { SelectionHelper } from "three/addons/interactive/SelectionHelper.js";
+
+  let scene = new THREE.Scene();
+  let camera = new THREE.PerspectiveCamera(
+    60,
+    window.innerWidth / window.innerHeight,
+    1,
+    100
+  );
+  camera.position.set(0, 0, 10);
+
+  // The renderer's drawing buffer is preserved to capture the rendered image.
+  let renderer = new THREE.WebGLRenderer({ preserveDrawingBuffer: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  // This helper will allow users to draw a selection box on the scene.
+  let selectionBox = new SelectionHelper(renderer, "selectBox");
+  // Capture the part of the rendered scene within the selection box
+  selectionBox.onSelectOver = () => {
+    // Capture the entire scene as an image
+    let data = renderer.domElement.toDataURL("image/png");
+    let img = new Image();
+    img.onload = () => {
+      // Calculate the selected area
+      let sb = selectionBox.element.style;
+
+      // Create a new canvas
+      let c = document.createElement("canvas");
+      c.width = parseInt(sb.width);
+      c.height = parseInt(sb.height);
+      console.log(sb.width, sb.height);
+
+      // Draw the selected area of the scene onto this canvas
+      let ctx = c.getContext("2d");
+      ctx.drawImage(
+        img,
+        parseInt(sb.left),
+        parseInt(sb.top),
+        parseInt(sb.width),
+        parseInt(sb.height),
+        0,
+        0,
+        parseInt(sb.width),
+        parseInt(sb.height)
+      );
+      // Convert it to a PNG image
+      let cData = c.toDataURL("image/png");
+      // Open it in a new tab/window
+      window.open(cData, "_blank");
+    };
+    img.src = data;
+    // Remove selection box element from DOM
+    selectionBox.element.parentElement.removeChild(selectionBox.element);
+  };
+
+  // Add directional and ambient lights to the scene for better visualization of objects
+  let light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.setScalar(1);
+  scene.add(light, new THREE.AmbientLight(0xffffff, 0.5));
+
+  // Create 100 box meshes with random positions, scales, and rotations
+  let g = new THREE.BoxGeometry();
+  for (let i = 0; i < 100; i++) {
+    let m = new THREE.MeshLambertMaterial({
+      color: Math.random() * 0x7f7f7f + 0x7f7f7f
+    });
+    let b = new THREE.Mesh(g, m);
+    b.scale.random().addScalar(0.5);
+    b.position.random().subScalar(0.5).multiplyScalar(10);
+    b.rotation.setFromVector3(
+      new THREE.Vector3().random().multiplyScalar(Math.PI)
+    );
+    scene.add(b);
+  }
+
+  // Animation loop that continually renders the scene
+  renderer.setAnimationLoop(() => {
+    renderer.render(scene, camera);
+  });
+</script>
+</body>
+</html>
