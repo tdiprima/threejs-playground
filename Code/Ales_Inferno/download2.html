@@ -5,16 +5,14 @@
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>download image portion</title>
-  <!-- empty image -->
+  <!-- close -->
   <link href="/css/main.css" rel="stylesheet" type="text/css">
   <script src="/build/three.min.js"></script>
 </head>
 <body>
 <button id="download">Download</button>
 <script>
-  console.log(`%cREVISION ${THREE.REVISION}`, "color: #ff00cc;");
-  let imgSrc = "image3.jpg";
-  let imageActualWidth = 400, imageActualHeight = 300;
+  let imgSrc = "image4.jpg";
 
   let scene = new THREE.Scene();
   let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -40,6 +38,11 @@
     let plane = new THREE.Mesh(planeGeom, planeMaterial);
     plane.scale.set(1.0, aspect, 1.0);
     scene.add(plane);
+
+    document.getElementById("download").addEventListener("click", function () {
+      cropAndDownload(tex);
+    });
+
   });
 
   // CREATE THE GEOMETRY FOR A RECTANGLE
@@ -59,112 +62,46 @@
   rectangle.renderOrder = 1;
 
   // Add the rectangle to the scene
-  scene.add(rectangle)
+  scene.add(rectangle);
 
-  // GET THE FOUR CORNERS OF THE RECTANGLE
-  const verticesA = rectangle.geometry.attributes.position.array;
-  const corners = [];
+  function cropAndDownload(tex) {
+    // Convert rectangle's world coordinates to normalized device coordinates (NDC)
+    const ndcCorners = [];
+    const vector = new THREE.Vector3();
+    for (let i = 0; i < vertices.length; i += 3) {
+      vector.set(vertices[i], vertices[i + 1], vertices[i + 2]);
+      vector.project(camera);
+      ndcCorners.push(vector.clone());
+    }
 
-  // Assuming the rectangle is defined with 4 corners and possibly a closing vertex that repeats the first
-  for (let i = 0; i < verticesA.length; i += 3) {
-    // Each vertex is defined by 3 values (x, y, z), hence the i += 3
-    corners.push(new THREE.Vector3(verticesA[i], verticesA[i + 1], verticesA[i + 2]));
-  }
+    // Convert NDC to texture coordinates
+    const texCorners = ndcCorners.map(corner => {
+      return new THREE.Vector2(
+        (corner.x + 1) / 2,
+        (corner.y + 1) / 2
+      );
+    });
 
-  // Remove duplicate if the last vertex is the same as the first
-  const uniqueCorners = corners.filter((value, index, self) =>
-      index === self.findIndex((t) => (
-        t.x === value.x && t.y === value.y && t.z === value.z
-      ))
-  );
+    // Convert texture coordinates to image coordinates
+    const imgCorners = texCorners.map(corner => {
+      return new THREE.Vector2(
+        Math.floor(corner.x * tex.image.width),
+        Math.floor(corner.y * tex.image.height)
+      );
+    });
 
-  // Now 'uniqueCorners' contains the 4 unique corners of the rectangle
-  console.log("uniqueCorners", uniqueCorners);
+    // Crop the image using image coordinates and download it
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = imgCorners[2].x - imgCorners[0].x;
+    canvas.height = imgCorners[2].y - imgCorners[0].y;
+    ctx.drawImage(tex.image, imgCorners[0].x, imgCorners[0].y, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
 
-  // PROJECT 3D COORDINATES TO 2D SCREEN COORDINATES
-  function projectToScreenCoords(renderer, camera, vector3D) {
-    let vector = vector3D.clone();
-    vector.project(camera); // Projects the vector from 3D to NDC space
-
-    // Convert NDC to screen coordinates
-    vector.x = Math.round((vector.x + 1) * renderer.domElement.width / 2);
-    vector.y = Math.round((-vector.y + 1) * renderer.domElement.height / 2);
-
-    return vector;
-  }
-
-  // For each corner of your rectangle
-  let corner1ScreenCoords = projectToScreenCoords(renderer, camera, uniqueCorners[0]);
-  let corner2ScreenCoords = projectToScreenCoords(renderer, camera, uniqueCorners[1]);
-  let corner3ScreenCoords = projectToScreenCoords(renderer, camera, uniqueCorners[2]);
-  let corner4ScreenCoords = projectToScreenCoords(renderer, camera, uniqueCorners[3]);
-
-  // TRANSLATE SCREEN COORDINATES TO IMAGE COORDINATES
-  function screenCoordsToImageCoords(screenX, screenY, imageActualWidth, imageActualHeight, canvasWidth, canvasHeight) {
-    // Calculate the displayed image size and offset due to aspect ratio preservation
-    const scale = Math.min(canvasWidth / imageActualWidth, canvasHeight / imageActualHeight);
-    const displayWidth = imageActualWidth * scale;
-    const displayHeight = imageActualHeight * scale;
-    const offsetX = (canvasWidth - displayWidth) / 2;
-    const offsetY = (canvasHeight - displayHeight) / 2;
-
-    // Adjust screen coordinates to get image coordinates
-    const imageX = (screenX - offsetX) / scale;
-    const imageY = (screenY - offsetY) / scale;
-
-    return { x: imageX, y: imageY };
-  }
-
-  // Apply the Translation for Rectangle Corners
-  let imageCoords1 = screenCoordsToImageCoords(corner1ScreenCoords.x, corner1ScreenCoords.y, imageActualWidth, imageActualHeight, renderer.domElement.width, renderer.domElement.height);
-  let imageCoords2 = screenCoordsToImageCoords(corner2ScreenCoords.x, corner2ScreenCoords.y, imageActualWidth, imageActualHeight, renderer.domElement.width, renderer.domElement.height);
-  let imageCoords3 = screenCoordsToImageCoords(corner3ScreenCoords.x, corner3ScreenCoords.y, imageActualWidth, imageActualHeight, renderer.domElement.width, renderer.domElement.height);
-  let imageCoords4 = screenCoordsToImageCoords(corner4ScreenCoords.x, corner4ScreenCoords.y, imageActualWidth, imageActualHeight, renderer.domElement.width, renderer.domElement.height);
-
-  // CALCULATE THE BOUNDING BOX
-  // const cornersA = [corner1ScreenCoords, corner2ScreenCoords, corner3ScreenCoords, corner4ScreenCoords];
-  const cornersA = [imageCoords1, imageCoords2, imageCoords3, imageCoords4];
-
-  // Calculate min and max x, y values
-  const minX = Math.min(...cornersA.map(corner => corner.x));
-  const maxX = Math.max(...cornersA.map(corner => corner.x));
-  const minY = Math.min(...cornersA.map(corner => corner.y));
-  const maxY = Math.max(...cornersA.map(corner => corner.y));
-
-  // Calculate width and height
-  const width = maxX - minX;
-  const height = maxY - minY;
-
-  // Adjust the x, y, width, and height parameters to match the square's position and size
-  document.getElementById("download").addEventListener("click", function () {
-    downloadImagePortion(minX, minY, width, height, 'extracted_image.png');
-    // downloadImagePortion(300, 300, 256, 256, 'part_of_image.png');
-  });
-
-  // EXTRACT THE PORTION OF THE IMAGE
-  function downloadImagePortion(x, y, width, height, downloadName) {
-    // Create an in-memory canvas
-    let canvas = document.createElement('canvas');
-    let ctx = canvas.getContext('2d');
-    canvas.width = width;
-    canvas.height = height;
-
-    // Draw the three.js renderer's canvas content onto the in-memory canvas
-    // Adjust 'renderer.domElement' to target your specific renderer if necessary
-    ctx.drawImage(renderer.domElement, x, y, width, height, 0, 0, width, height);
-
-    // Convert canvas content to data URL
-    let imageDataUrl = canvas.toDataURL('image/png');
-
-    // Create a link and set the URL as the href
-    let link = document.createElement('a');
-    link.href = imageDataUrl;
-    link.download = downloadName || 'download.png';
-
-    // Trigger the download
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // Download the cropped image
+    const a = document.createElement('a');
+    a.href = canvas.toDataURL();
+    a.download = 'cropped-image.png';
+    a.click();
   }
 
   window.addEventListener("resize", () => {

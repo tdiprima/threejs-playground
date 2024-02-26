@@ -13,7 +13,7 @@
 <button id="download">Download</button>
 <script>
   console.log(`%cREVISION ${THREE.REVISION}`, "color: #ff00cc;");
-  let imgSrc = "image1.jpg";
+  let imgSrc = "image2.jpg";
 
   let scene = new THREE.Scene();
   let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -50,7 +50,6 @@
     canvas.height = height;
 
     // Draw the three.js renderer's canvas content onto the in-memory canvas
-    // Adjust 'renderer.domElement' to target your specific renderer if necessary
     ctx.drawImage(renderer.domElement, x, y, width, height, 0, 0, width, height);
 
     // Convert canvas content to data URL
