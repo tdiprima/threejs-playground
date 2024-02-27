@@ -107,4 +107,16 @@ document.addEventListener('mouseup', function () {
 
 In this code, `plane.geometry.parameters.width` and `plane.geometry.parameters.height` are used to get the dimensions of the plane. These dimensions are then used to normalize the coordinates. Note that the normalization step assumes the plane is centered at the origin. If your plane's position is different, you may need to adjust the normalization step accordingly.
 
+<span style="color:blue;font-size:larger;">It looks like the conversion of NDC to texture coordinates is skipped.  Or is it?</span>
+
+If `drawingCoordinates` contains x, y, z coordinates where x and y are event.clientX and event.clientY normalized to NDC coordinates (with z set to 0), it does change the context slightly. Here's a breakdown:
+
+1. **NDC Coordinates:** If x and y in `drawingCoordinates` are already normalized to NDC, it means that the coordinates have been converted from screen space (the space your mouse events occur in) to NDC space, which ranges from -1 to 1 on both axes. This conversion is a crucial step for 3D rendering pipelines, including operations in WebGL and three.js.
+
+2. **From NDC to Image Coordinates Directly:** The step to convert these NDC coordinates directly to image coordinates, as done in your code snippet, skips the explicit mention of converting NDC to texture coordinates. However, by normalizing these coordinates with respect to the plane's dimensions and then scaling up to the image dimensions, you are effectively performing a similar operation as you would when converting NDC to texture coordinates. The texture coordinates system (ranging from 0 to 1 in both axes) serves as an intermediate between NDC and actual pixel coordinates on a texture/image. Your approach implicitly does this by adjusting the scale and orientation directly based on the image and plane dimensions.
+
+3. **Same Space as the Plane Geometry:** When I mentioned the drawing coordinates being in the same space as the plane geometry the texture is applied to, it was under the assumption that the coordinates were directly comparable to the plane's dimensions without further transformation. Given your update, it seems there's a two-step process: first, conversion of screen coordinates to NDC (which you've done), and second, the direct mapping of these NDC coordinates to the plane and subsequently to image coordinates, bypassing the need for an explicit texture coordinate step.
+
+By directly mapping NDC to image coordinates (taking into account the plane's size and orientation), you are essentially using the normalized plane dimensions as a proxy for texture coordinates. This works because you're directly correlating the 3D space coordinates (NDC) to the 2D space of the image, with the plane acting as the intermediary reference for scale and orientation. This process, though it skips an explicit NDC to texture coordinates conversion, effectively achieves the same goal by leveraging the known relationship between the plane's geometry and the image's dimensions.
+
 <br>
