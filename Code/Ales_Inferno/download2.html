@@ -5,13 +5,15 @@
   <meta content="IE=edge" http-equiv="X-UA-Compatible">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>download image portion</title>
-  <!-- close -->
+  <!-- Got the top part; need the whole rectangle. -->
   <link href="/css/main.css" rel="stylesheet" type="text/css">
   <script src="/build/three.min.js"></script>
 </head>
 <body>
 <button id="download">Download</button>
 <script>
+  console.log(`%cREVISION ${THREE.REVISION}`, "color: #ff00cc;");
+
   let imgSrc = "image4.jpg";
 
   let scene = new THREE.Scene();
@@ -23,34 +25,33 @@
   document.body.appendChild(renderer.domElement);
 
   let planeGeom = new THREE.PlaneGeometry(4, 4);
-  let tex = new THREE.TextureLoader().load(imgSrc, (tex) => {
-    tex.needsUpdate = true;
+  let planeMaterial, plane;
 
-    const width = tex.image.width;
-    const height = tex.image.height;
-    const aspect = height / width;
+  let tex = new THREE.TextureLoader().load(imgSrc, (texture) => {
+    texture.needsUpdate = true;
+    const aspect = texture.image.height / texture.image.width;
 
-    let planeMaterial = new THREE.MeshBasicMaterial({
+    planeMaterial = new THREE.MeshBasicMaterial({
       color: 0xffffff,
-      map: tex
+      map: texture
     });
 
-    let plane = new THREE.Mesh(planeGeom, planeMaterial);
+    plane = new THREE.Mesh(planeGeom, planeMaterial);
     plane.scale.set(1.0, aspect, 1.0);
     scene.add(plane);
 
+    // Adjust the x, y, width, and height parameters to match the square's position and size
     document.getElementById("download").addEventListener("click", function () {
-      cropAndDownload(tex);
+      adjustRectangleAndDownload(texture.image, plane);
     });
-
   });
 
-  // CREATE THE GEOMETRY FOR A RECTANGLE
+  // Rectangle geometry setup
   let vertices = new Float32Array([
     -1.0, -1.0, 0.0,  // Vertex 1: bottom left
-    1.0, -1.0, 0.0,  // Vertex 2: bottom right
-    1.0,  1.0, 0.0,  // Vertex 3: top right
-    -1.0,  1.0, 0.0   // Vertex 4: top left
+    1.0, -1.0, 0.0,   // Vertex 2: bottom right
+    1.0, 1.0, 0.0,    // Vertex 3: top right
+    -1.0, 1.0, 0.0    // Vertex 4: top left
   ]);
 
   let geometry = new THREE.BufferGeometry();
@@ -64,44 +65,64 @@
   // Add the rectangle to the scene
   scene.add(rectangle);
 
-  function cropAndDownload(tex) {
-    // Convert rectangle's world coordinates to normalized device coordinates (NDC)
-    const ndcCorners = [];
-    const vector = new THREE.Vector3();
+  // GET THE FOUR CORNERS OF THE RECTANGLE
+  const verticesA = rectangle.geometry.attributes.position.array;
+
+  // Function to adjust and download the image portion
+  function adjustRectangleAndDownload(image, plane) {
+    const imageWidth = image.width;
+    const imageHeight = image.height;
+    const planeScale = { x: plane.scale.x, y: plane.scale.y };
+
+    // Assuming convertSceneCoordsToImageCoords is correctly implemented
+    const pixelVertices = convertSceneCoordsToImageCoords(verticesA, imageWidth, imageHeight, planeGeom, planeScale);
+
+    let minX = Math.min(...pixelVertices.filter((v, i) => i % 2 === 0));
+    let minY = Math.min(...pixelVertices.filter((v, i) => i % 2 !== 0));
+    let maxX = Math.max(...pixelVertices.filter((v, i) => i % 2 === 0));
+    let maxY = Math.max(...pixelVertices.filter((v, i) => i % 2 !== 0));
+
+    let canvas = document.createElement('canvas');
+    let ctx = canvas.getContext('2d');
+    canvas.width = maxX - minX;
+    canvas.height = maxY - minY;
+
+    // Correctly align the y-coordinate when drawing the image
+    // Corrected ctx.drawImage usage
+    ctx.drawImage(
+      image,           // source image
+      minX,            // source x (start clipping x)
+      minY,            // source y (start clipping y)
+      maxX - minX,     // source width (clip width)
+      maxY - minY,     // source height (clip height)
+      0,               // destination x on the canvas
+      0,               // destination y on the canvas
+      canvas.width,    // destination width on the canvas
+      canvas.height    // destination height on the canvas
+    );
+
+    canvas.toBlob(function (blob) {
+      let link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'cropped_image.png';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }, 'image/png');
+  }
+
+  // Convert Three.js coordinates to image pixel coordinates, taking plane scaling into account
+  function convertSceneCoordsToImageCoords(vertices, imageWidth, imageHeight, planeGeometry, planeScale) {
+    const scaleX = imageWidth / (planeGeometry.parameters.width * planeScale.x);
+    const scaleY = imageHeight / (planeGeometry.parameters.height * planeScale.y);
+    let pixelVertices = [];
+
     for (let i = 0; i < vertices.length; i += 3) {
-      vector.set(vertices[i], vertices[i + 1], vertices[i + 2]);
-      vector.project(camera);
-      ndcCorners.push(vector.clone());
+      const x = (vertices[i] + planeGeometry.parameters.width / 2) * scaleX;
+      const y = (1 - (vertices[i + 1] + planeGeometry.parameters.height / 2) / planeGeometry.parameters.height) * imageHeight;
+      pixelVertices.push(x, y);
     }
-
-    // Convert NDC to texture coordinates
-    const texCorners = ndcCorners.map(corner => {
-      return new THREE.Vector2(
-        (corner.x + 1) / 2,
-        (corner.y + 1) / 2
-      );
-    });
-
-    // Convert texture coordinates to image coordinates
-    const imgCorners = texCorners.map(corner => {
-      return new THREE.Vector2(
-        Math.floor(corner.x * tex.image.width),
-        Math.floor(corner.y * tex.image.height)
-      );
-    });
-
-    // Crop the image using image coordinates and download it
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = imgCorners[2].x - imgCorners[0].x;
-    canvas.height = imgCorners[2].y - imgCorners[0].y;
-    ctx.drawImage(tex.image, imgCorners[0].x, imgCorners[0].y, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
-
-    // Download the cropped image
-    const a = document.createElement('a');
-    a.href = canvas.toDataURL();
-    a.download = 'cropped-image.png';
-    a.click();
+    return pixelVertices;
   }
 
   window.addEventListener("resize", () => {
