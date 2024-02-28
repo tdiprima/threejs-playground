@@ -138,26 +138,40 @@ If the downloaded image looks slightly off from what you expect, there could be 
 
 By methodically checking these aspects, you can pinpoint the cause of the discrepancy and adjust your approach accordingly to achieve the desired result.
 
-# Download 1
+# Download 4
 
-This code is a bit like a digital artist's tool that lets you zoom in on a specific part of a big picture and save just that piece. It's built for use in a 3D web environment with three.js. Here's how it works, step by step:
+```js
+const rectVertices = rectangle.geometry.attributes.position.array;
+const rectCanvasVertices = rectVertices.map((coord, index) => {
+  if (index % 3 === 0) {
+    return (coord + 1) * (width / 2);
+  } else if (index % 3 === 1) {
+    return (1 - coord) * (height / 2);
+  }
+  return coord;
+});
+```
 
-1. **Start with a Shape:** It begins with `verticesA`, the corners of a rectangle in your 3D world. Think of this as the outline of the part of the image you're interested in.
+This code snippet is about transforming 3D coordinates from a rectangle's geometry into 2D coordinates on a canvas. Let's break it down:
 
-2. **Adjust and Save:** The `adjustRectangleAndDownload` function is where the magic happens. You give it an image and a 3D plane (like a flat surface in your 3D world), and it figures out how to match the corner points of your 3D rectangle to the correct spots on the image.
+1. **Accessing Rectangle Vertices**: 
+    - `const rectVertices = rectangle.geometry.attributes.position.array;`
+    - This line gets the array of vertices from the rectangle's geometry. Each vertex has three values representing its position in 3D space: x, y, and z coordinates.
 
-3. **Image Mapping:** It uses a special function, `convertSceneCoordsToImageCoords`, to translate the 3D points of the rectangle into 2D points on the image, taking into account the size of the image and the scale of the 3D plane. This is like converting GPS coordinates into spots on a treasure map.
+2. **Mapping 3D Coordinates to 2D Canvas**:
+    - The `rectVertices.map(...)` function iterates over every coordinate in the `rectVertices` array.
+    - For each coordinate (`coord`), depending on its position in the array (determined by `index`), it applies a different calculation.
 
-4. **Find the Edges:** It calculates the smallest and largest x (left and right sides) and y (top and bottom) values among these points. This gives the boundaries of the part of the image you're focusing on.
+3. **Transforming Coordinates**:
+    - **X Coordinate (index % 3 === 0)**:
+        - For every third element starting from the 0th position (which represent x coordinates in 3D space), it transforms the coordinate to fit the canvas width.
+        - `(coord + 1) * (width / 2)` moves the coordinate system from a center-origin (common in 3D graphics, where coordinates range from -1 to 1) to a top-left origin (common in 2D graphics, like a canvas). The x coordinate is scaled to fit within the canvas width.
+    - **Y Coordinate (index % 3 === 1)**:
+        - For every third element starting from the 1st position (which represent y coordinates), it transforms the coordinate similarly but flips the y-axis. This is because in 3D space, positive y is usually upwards, while in 2D canvas, positive y is downwards.
+        - `(1 - coord) * (height / 2)` also moves from a center-origin to a top-left origin, but it subtracts the coordinate from 1 before scaling, effectively flipping the y-axis to match the canvas's coordinate system.
+    - **Z Coordinate (index % 3 === 2)**:
+        - It simply returns the z coordinate without transformation. Since we're mapping to a 2D space, the z coordinate is not modified but could be used for other purposes (like depth sorting).
 
-5. **Create a Canvas:** Next, it creates an invisible drawing board (a canvas) in the browser, sized just right to fit the piece of the image you're interested in.
-
-6. **Draw the Image Piece:** Using some clever drawing commands, it copies just that part of the image onto the canvas, adjusting as needed to make sure it fits perfectly.
-
-7. **Save the Piece:** Finally, it converts the canvas into an image file and automatically downloads it to your computer, like cutting out a piece of a photo and saving it.
-
-8. **Conversion Magic:** The `convertSceneCoordsToImageCoords` function does the heavy lifting of figuring out where each corner of your 3D rectangle lands on the 2D image, considering how the plane is scaled and positioned. This ensures the piece you save matches exactly what you're seeing in the 3D world, scaled down to image size.
-
-So, in short, this code lets you pick a part of a 3D scene, figure out how it matches up with an image, and then saves just that part of the image, like using a virtual camera to take a snapshot of a smaller scene within a larger one.
+This transformation allows 3D coordinates from a WebGL context (like those used in three.js) to be accurately represented on a 2D canvas, respecting the dimensions and orientation of the canvas.
 
 <br>

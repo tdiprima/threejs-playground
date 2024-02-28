@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas Image Processing</title>
+  <!-- Draw an image onto an html5 canvas. Then draw a rectangle on it. Next,
+  get the portion of the image that's inside that rectangle that you just drew.
+  Finally, download the extracted image. -->
+</head>
+<body>
+<canvas id="canvas" width="500" height="300"></canvas>
+<button id="download">Download Extracted Image</button>
+<script>
+  // Get canvas and context
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+
+  // Load an image
+  const img = new Image();
+  img.onload = drawImage;
+  img.src = 'image1.jpg';
+
+  function drawImage() {
+    // Draw the image on the canvas
+    ctx.drawImage(img, 0, 0);
+
+    // Draw a rectangle on top of the image
+    ctx.strokeRect(100, 75, 200, 150);
+
+    // Extract the portion of the image inside the rectangle
+    const clippedImg = ctx.getImageData(100, 75, 200, 150);
+
+    // Trigger download of the clipped image data
+    document.getElementById("download").addEventListener("click", function () {
+      downloadImage(clippedImg);
+    });
+  }
+
+  function downloadImage(imgData) {
+    // Create a new canvas to draw the extracted part
+    const canvas = document.createElement('canvas');
+    canvas.width = imgData.width;
+    canvas.height = imgData.height;
+
+    // Put the image data on the new canvas
+    const ctx = canvas.getContext('2d');
+    ctx.putImageData(imgData, 0, 0);
+
+    // Convert the new canvas to an image and trigger download
+    const url = canvas.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.download = 'extracted-image.png'; // 'clipped.png';
+    link.href = url;
+    link.click();
+  }
+</script>
+</body>
+</html>
