@@ -11,23 +11,19 @@
 <body>
 <button id="download">Download</button>
 <script>
-  let imgSrc = "image1.jpg";
-
   let scene = new THREE.Scene();
   let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.z = 2;
 
-  const renderer = new THREE.WebGLRenderer({alpha: true, antialias: true, preserveDrawingBuffer: true});
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, preserveDrawingBuffer: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
   let textureLoader = new THREE.TextureLoader();
-  textureLoader.load(imgSrc, function (texture) {
+  textureLoader.load("image1.jpg", function (texture) {
     let aspectRatio = texture.image.height / texture.image.width;
     let planeGeometry = new THREE.PlaneGeometry(4, 4 * aspectRatio);
-    let planeMaterial = new THREE.MeshBasicMaterial({
-      map: texture
-    });
+    let planeMaterial = new THREE.MeshBasicMaterial({ map: texture });
     let plane = new THREE.Mesh(planeGeometry, planeMaterial);
     scene.add(plane);
 

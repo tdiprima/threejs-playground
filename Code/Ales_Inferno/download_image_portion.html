@@ -13,7 +13,6 @@
 <button id="download">Download</button>
 <script>
   console.log(`%cREVISION ${THREE.REVISION}`, "color: #ff00cc;");
-  let imgSrc = "image2.jpg";
 
   let scene = new THREE.Scene();
   let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -24,7 +23,7 @@
   document.body.appendChild(renderer.domElement);
 
   let planeGeom = new THREE.PlaneGeometry(4, 4);
-  let tex = new THREE.TextureLoader().load(imgSrc, (tex) => {
+  let tex = new THREE.TextureLoader().load("image2.jpg", (tex) => {
     tex.needsUpdate = true;
 
     const width = tex.image.width;
@@ -68,7 +67,7 @@
 
   // Adjust the x, y, width, and height parameters to match the square's position and size
   document.getElementById("download").addEventListener("click", function () {
-    downloadImagePortion(400, 0, 256, 256, 'part_of_image.png');
+    downloadImagePortion(400, 75, 256, 256, 'part_of_image.png');
   })
 
   window.addEventListener("resize", () => {

@@ -12,8 +12,6 @@
 <body>
 <button id="download">Download</button>
 <script>
-  let imgSrc = "image4.jpg";
-
   let scene = new THREE.Scene();
   let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.z = 2;
@@ -23,7 +21,7 @@
   document.body.appendChild(renderer.domElement);
 
   let planeGeom = new THREE.PlaneGeometry(4, 4);
-  let tex = new THREE.TextureLoader().load(imgSrc, (tex) => {
+  let tex = new THREE.TextureLoader().load("image4.jpg", (tex) => {
     tex.needsUpdate = true;
 
     const width = tex.image.width;
