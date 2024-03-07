@@ -107,8 +107,12 @@ function worldToImageCoordinates(positionArray, imageWidth, imageHeight) {
         // Extract x and y from the position array (ignoring z)
         const x = positionArray[i];
         const y = positionArray[i + 1];
+        
+        // Normalize coordinates to [-1, 1]
+        x = x / (imageWidth / 2);
+        y = y / (imageHeight / 2);
 
-        // Convert world coordinates directly to image coordinates <-- WRONG!
+        // Convert world coordinates to image coordinates
         const imageX = (x + 1) * (imageWidth / 2);
         const imageY = (1 - y) * (imageHeight / 2);
 
@@ -151,10 +155,7 @@ function convertToImageCoordinates(positionArray, imageWidth, imageHeight, plane
     const imageX = (normalizedX + 1) * (imageWidth / 2);
     const imageY = (1 - normalizedY) * (imageHeight / 2);
 
-    imageCoordinates.push({
-      x: imageX,
-      y: imageY
-    });
+    imageCoordinates.push({ x: imageX, y: imageY });
   }
 
   return imageCoordinates;
@@ -172,11 +173,5 @@ console.log("Image coordinates:", imgCoords);
 ```
 
 <span style="color:blue;font-size:larger;">In order for the calculation to come out right, use image width and height instead of plane width and height in production.</span>
-
-## Nope.
-
-See: [image-to-three.md](image-to-three.md)
-
-Scroll down.
 
 <br>

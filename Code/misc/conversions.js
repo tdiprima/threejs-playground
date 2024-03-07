@@ -1,3 +1,4 @@
+// positionArray - A flat array of x,y,z coordinates
 function convertToImageCoordinates(positionArray, imageWidth, imageHeight) {
   const imageCoordinates = [];
 
@@ -17,7 +18,8 @@ function convertToImageCoordinates(positionArray, imageWidth, imageHeight) {
 }
 
 /**
- * Convert image coordinates to Three.js coordinates
+ * Transform an image's pixel coordinates to Three.js's WebGL coordinates system
+ * array - An array of objects, where each object has x and y properties
  */
 function imageToThreeCoords(array, imageWidth, imageHeight) {
   return array.map(({x, y}) => {
