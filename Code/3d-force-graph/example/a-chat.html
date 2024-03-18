@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>3D Graph Example Code</title>
+  <!-- This example initializes a basic graph with a set of nodes and links between them. -->
+  <style> body { margin: 0; } </style>
+</head>
+<body>
+<div id="3d-graph"></div>
+
+<!-- <script src="https://unpkg.com/3d-force-graph"></script> -->
+<script src="../dist/3d-force-graph.js"></script>
+<script>
+  // Example Data
+  // Let's define some nodes and links:
+  const nodes = [
+    { id: "node1", name: "Node 1", val: 1, group: 1 },
+    { id: "node2", name: "Node 2", val: 2, group: 2 },
+    { id: "node3", name: "Node 3", val: 3, group: 3 },
+  ];
+
+  const links = [
+    { source: "node1", target: "node2" },
+    { source: "node2", target: "node3" },
+    { source: "node3", target: "node1" },
+  ];
+
+  console.log(nodes); // Check if there's an extra node defined
+  console.log(links); // Ensure all links correspond to node ids
+
+  // Create the graph
+  // Each node is automatically colored by its group, and labels are displayed on hover.
+  // Directional particles are added to the links to indicate direction, with their speed proportional to the link's value property.
+  const Graph = ForceGraph3D()
+  (document.getElementById('3d-graph'))
+    .graphData({ nodes, links })
+    .nodeAutoColorBy('group')
+    .nodeLabel(node => `${node.name}: ${node.val}`)
+    .linkDirectionalParticles(4)
+    .linkDirectionalParticleSpeed(d => d.value * 0.001);
+
+  // The graph's size is adjusted on window resize for responsiveness.
+  window.addEventListener('resize', () => Graph.width(window.innerWidth).height(window.innerHeight));
+</script>
+</body>
+</html>

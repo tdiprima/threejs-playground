@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>change the label color</title>
+  <!-- This example initializes a basic graph with a set of nodes and links between them. -->
+  <style> body { margin: 0; } </style>
+</head>
+<body>
+<div id="3d-graph"></div>
+<script src="/build/three.min.js"></script>
+<script src="../dist/3d-force-graph.js"></script>
+<!-- <script src="https://unpkg.com/3d-force-graph"></script> -->
+<script>
+  // Example Data
+  // Let's define some nodes and links:
+  const nodes = [
+    { id: "node1", name: "Node 1", group: 1 },
+    { id: "node2", name: "Node 2", group: 2 },
+    { id: "node3", name: "Node 3", group: 3 },
+  ];
+
+  const links = [
+    { source: "node1", target: "node2", val: 1 },
+    { source: "node2", target: "node3", val: 2 },
+    { source: "node3", target: "node1", val: 3 },
+  ];
+
+  const Graph = ForceGraph3D()(document.getElementById('3d-graph'))
+    .graphData({ nodes, links })
+    .nodeAutoColorBy('group')
+    // Custom Node Geometry
+    .nodeThreeObject(node => {
+      // Create a node element (e.g., a sphere)
+      const nodeGeometry = new THREE.SphereGeometry(10);
+      const nodeMaterial = new THREE.MeshBasicMaterial({ depthWrite: false, transparent: true, opacity: 0 });
+      const mesh = new THREE.Mesh(nodeGeometry, nodeMaterial);
+
+      // Create a sprite for the label
+      const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: createLabelTexture(node.name, 'aqua', 'black') }));
+
+      // Adjust label size and position
+      sprite.scale.set(20, 10, 1);
+      sprite.position.set(15, 15, 0); // Adjust label position relative to the node
+
+      // Combine node and label into a group
+      const group = new THREE.Group();
+      group.add(mesh); // Add the node element
+      group.add(sprite); // Add the label
+
+      return group;
+    });
+
+  // Function to create a texture for the label
+  function createLabelTexture(text, fontColor, backgroundColor) {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    context.fillStyle = backgroundColor; // Background color
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.font = 'Bold 20px Arial';
+    context.fillStyle = fontColor; // Font color
+    context.fillText(text, 0, 20);
+
+    const texture = new THREE.Texture(canvas);
+    texture.needsUpdate = true;
+
+    return texture;
+  }
+
+  // The graph's size is adjusted on window resize for responsiveness.
+  window.addEventListener('resize', () => Graph.width(window.innerWidth).height(window.innerHeight));
+</script>
+</body>
+</html>

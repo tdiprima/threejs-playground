@@ -5,18 +5,23 @@
   <style>
     body { margin: 0; }
   </style>
+  <style> body { margin: 0; } </style>
+
   <script src="//bundle.run/@yarnpkg/lockfile@1.1.0"></script>
   <script src="//unpkg.com/dat.gui"></script>
   <script src="//unpkg.com/d3-octree"></script>
   <script src="//unpkg.com/d3-force-3d"></script>
-  <script src="//unpkg.com/three"></script>
-  <script src="//unpkg.com/three-spritetext"></script>
-  <!-- <script src="//unpkg.com/3d-force-graph"></script> -->
-  <script src="../dist/3d-force-graph.js"></script>
+
+  <script src="//unpkg.com/3d-force-graph"></script>
+  <!-- <script src="../dist/3d-force-graph.js"></script> -->
 </head>
 <body>
 <div id="graph"></div>
-<script>
+
+<script type="importmap">{ "imports": { "three": "//unpkg.com/three/build/three.module.js" }}</script>
+<script type="module">
+  import SpriteText from "//unpkg.com/three-spritetext/dist/three-spritetext.mjs";
+
   // controls
   const controls = { 'DAG Orientation': 'lr'};
   const gui = new dat.GUI();
@@ -26,7 +31,7 @@
   // graph config
   const graph = ForceGraph3D()
     .backgroundColor('#101020')
-    .linkColor(() => 'rgba(255, 255, 255, 0.2)')
+    .linkColor(() => 'rgba(255, 255, 255, 0.6)')
     .dagMode('lr')
     .onDagError(() => false)
     .dagLevelDistance(180)
@@ -43,7 +48,7 @@
     .d3AlphaDecay(0.02)
     .d3VelocityDecay(0.3);
 
-  fetch("../yarn.lock")
+  fetch('yarn.lock')
     .then(r => r.text())
     .then(text => {
       const yarnlock = _yarnpkg_lockfile.parse(text);
@@ -53,34 +58,22 @@
     .then(yarnlock => {
       const nodes = [];
       const links = [];
-      let count = 0;
 
-      console.log("%centries", "color: #ccff00;", Object.entries(yarnlock).length);
-      Object.entries(yarnlock)
-        .forEach(([package, details]) => {
-          nodes.push({
-            package,
-            version: details.version
+      Object.entries(yarnlock).forEach(([pkg, details]) => {
+        nodes.push({
+          package: pkg,
+          version: details.version
+        });
+
+        if (details.dependencies) {
+          Object.entries(details.dependencies).forEach(([dep, version]) => {
+            links.push({source: pkg, target: `${dep}@${version}`});
           });
+        }
+      });
 
-          if (details.dependencies) {
-            count += Object.entries(details.dependencies).length;
-            Object.entries(details.dependencies)
-              .forEach(([dep, version]) => {
-                links.push({
-                  source: package,
-                  target: `${dep}@${version}`
-                });
-              });
-          }
-        });
-      console.log("%cdependencies", "color: #ccff00;", count);
-
-      graph(document.getElementById("graph"))
-        .graphData({
-          nodes,
-          links
-        });
+      graph(document.getElementById('graph'))
+        .graphData({ nodes, links });
     });
 </script>
 </body>
