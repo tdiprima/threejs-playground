@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Blending Modes</title>
+  <!-- Explore how different blending modes affect the appearance of 3D objects in three.js -->
+  <!-- <script src="/build/three.min.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dat.gui/build/dat.gui.min.js"></script>
+</head>
+<body>
+<script>
+  // Scene setup
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setClearColor(0xf5f5f5);
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  // Add a light
+  const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+  scene.add(ambientLight);
+
+  // Red box with normal blending
+  const geometry1 = new THREE.BoxGeometry();
+  const material1 = new THREE.MeshBasicMaterial({
+    color: 0xff0000,
+    transparent: true,
+    opacity: 0.5
+  });
+  const box1 = new THREE.Mesh(geometry1, material1);
+  scene.add(box1);
+
+  // Green box to apply blending modes
+  const geometry2 = new THREE.BoxGeometry();
+  const material2 = new THREE.MeshBasicMaterial({
+    color: 0x00ff00,
+    transparent: true,
+    opacity: 0.5
+  });
+  const box2 = new THREE.Mesh(geometry2, material2);
+  box2.position.x = 1; // Offset to overlap
+  scene.add(box2);
+
+  // Camera position
+  camera.position.z = 5;
+
+  // dat.GUI setup
+  const gui = new dat.GUI();
+  const controls = {
+    blending: 'NormalBlending'
+  };
+
+  gui.add(controls, 'blending', ['NoBlending', 'NormalBlending', 'AdditiveBlending', 'SubtractiveBlending', 'MultiplyBlending', 'CustomBlending']).onChange(function(value) {
+    switch (value) {
+      case 'NoBlending':
+        material2.blending = THREE.NoBlending;
+        break;
+      case 'NormalBlending':
+        material2.blending = THREE.NormalBlending;
+        break;
+      case 'AdditiveBlending':
+        material2.blending = THREE.AdditiveBlending;
+        break;
+      case 'SubtractiveBlending':
+        material2.blending = THREE.SubtractiveBlending;
+        break;
+      case 'MultiplyBlending':
+        material2.blending = THREE.MultiplyBlending;
+        break;
+      case 'CustomBlending':
+        material2.blending = THREE.CustomBlending;
+        break;
+    }
+    material2.needsUpdate = true; // Important to apply the change
+  });
+
+  // Animation loop
+  function animate() {
+    requestAnimationFrame(animate);
+
+    box1.rotation.x += 0.01;
+    box1.rotation.y += 0.01;
+    box2.rotation.x += 0.01;
+    box2.rotation.y += 0.01;
+
+    renderer.render(scene, camera);
+  }
+
+  animate();
+</script>
+</body>
+</html>
