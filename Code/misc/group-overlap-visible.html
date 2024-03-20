@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Overlap + Visibility</title>
+  <script src="/build/three.min.js"></script>
+</head>
+<body>
+<button id="toggleRedBox">Toggle Red Box</button>
+<button id="toggleYellowBox">Toggle Yellow Box</button>
+<script>
+  // Scene setup
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer();
+  renderer.setClearColor(0xf5f5f5);
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  // Group for the red box
+  const redGroup = new THREE.Group();
+  const geometry1 = new THREE.BoxGeometry();
+  const material1 = new THREE.MeshBasicMaterial({ color: 0xff0000, transparent: true, opacity: 0.5 });
+  const box1 = new THREE.Mesh(geometry1, material1);
+  redGroup.add(box1); // Add the red box to the group
+  scene.add(redGroup); // Add the group to the scene
+
+  // Group for the yellow box
+  const yellowGroup = new THREE.Group();
+  const geometry2 = new THREE.BoxGeometry();
+  const material2 = new THREE.MeshBasicMaterial({ color: 0xffff00, transparent: true, opacity: 0.5 });
+  const box2 = new THREE.Mesh(geometry2, material2);
+  box2.position.x = 0.5; // Position within the group
+  box2.position.y = 0.5;
+  yellowGroup.add(box2); // Add the yellow box to the group
+  scene.add(yellowGroup); // Add the group to the scene
+
+  // Camera position
+  camera.position.z = 5;
+
+  // Toggle visibility of the groups
+  document.getElementById('toggleRedBox').addEventListener('click', function () {
+    redGroup.visible = !redGroup.visible; // Toggle the visibility
+  });
+
+  document.getElementById('toggleYellowBox').addEventListener('click', function () {
+    yellowGroup.visible = !yellowGroup.visible;
+  });
+
+  // Animation loop
+  function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+  }
+
+  animate();
+</script>
+</body>
+</html>
