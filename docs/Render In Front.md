@@ -84,6 +84,14 @@ In this code, the `transparent` property of the `MeshBasicMaterial` is set to `t
 
 When adding a new object to a scene in Three.js after the initial rendering, typically you don't need to manually set `needsUpdate = true` on the geometry or material. This is because the renderer will automatically account for the new object in the next render call. However, if you're changing the properties of materials or geometries of existing objects, then `needsUpdate = true` is necessary.
 
+<hr>
+
+`onMouseMove`: Here, you're updating the line's geometry to reflect the new end position as the mouse moves. Since you're potentially updating the positions of an existing geometry's vertices, calling `setFromPoints()` should be sufficient because it redefines the geometry's vertices and updates the internal buffers accordingly. In typical use cases of `setFromPoints()`, Three.js handles the necessary buffer updates internally, so you wouldn't manually do `line.geometry.attributes.position.needsUpdate = true;` after using setFromPoints().
+
+That said, the `needsUpdate = true` flag becomes crucial when you're directly manipulating the buffers (for example, changing the values of `position.array` directly in a more performance-intensive or lower-level manipulation scenario). In such cases, you explicitly inform Three.js that the data has changed and the buffers need to be re-uploaded to the GPU.
+
+<hr>
+
 In your case, since you're adding a new plane to the scene via a button click, here's what you should ensure:
 
 1. **Add the Plane to the Scene or Camera**: When the button is clicked, create the plane and add it to the scene or the camera, depending on whether you want it to move with the camera or stay static in the scene.
