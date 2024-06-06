@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>Circle Brush Size Slider</title>
-  <style>
+  <!-- <style>
     #sliderContainer {
       position: absolute;
       top: 10px;
@@ -14,19 +14,19 @@
       padding: 10px;
       border-radius: 5px;
     }
-  </style>
+  </style> -->
 </head>
 <body>
-<div id="sliderContainer">
+<!-- <div id="sliderContainer">
   <label for="brushSizeSlider">Brush Size:</label>
   <input type="range" id="brushSizeSlider" min="10" max="200" value="100">
-</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</div> -->
+<script src="/build/three.min.js"></script>
 <script>
   let scene, camera, renderer;
   let brushSize = 100;
   let tempCircle = null;
-  let slider = document.getElementById('brushSizeSlider');
+  // let slider = document.getElementById('brushSizeSlider');
 
   init();
   animate();
@@ -41,9 +41,40 @@
 
     camera.position.z = 500;
 
+    // Create slider dynamically
+    createSlider();
+
     // Add event listeners
+    const slider = document.getElementById('brushSizeSlider');
     slider.addEventListener('input', onSliderInput);
     slider.addEventListener('change', onSliderChange);
+  }
+
+  function createSlider() {
+    const sliderContainer = document.createElement('div');
+    sliderContainer.id = 'sliderContainer';
+    sliderContainer.style.position = 'absolute';
+    sliderContainer.style.top = '10px';
+    sliderContainer.style.left = '10px';
+    sliderContainer.style.zIndex = '1';
+    sliderContainer.style.background = 'rgba(255, 255, 255, 0.8)';
+    sliderContainer.style.padding = '10px';
+    sliderContainer.style.borderRadius = '5px';
+
+    const label = document.createElement('label');
+    label.htmlFor = 'brushSizeSlider';
+    label.innerText = 'Brush Size:';
+
+    const slider = document.createElement('input');
+    slider.type = 'range';
+    slider.id = 'brushSizeSlider';
+    slider.min = '10';
+    slider.max = '200';
+    slider.value = '100';
+
+    sliderContainer.appendChild(label);
+    sliderContainer.appendChild(slider);
+    document.body.appendChild(sliderContainer);
   }
 
   function animate() {
@@ -66,7 +97,7 @@
       scene.remove(tempCircle);
     }
     let geometry = new THREE.CircleGeometry(brushSize, 32);
-    let material = new THREE.MeshBasicMaterial({ color: 0x00ff00, opacity: 0.5, transparent: true });
+    let material = new THREE.MeshBasicMaterial({color: 0x00ff00, opacity: 0.5, transparent: true});
     tempCircle = new THREE.Mesh(geometry, material);
     scene.add(tempCircle);
   }
