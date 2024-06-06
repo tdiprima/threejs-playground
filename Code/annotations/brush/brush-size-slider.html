@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Circle Brush Size Slider</title>
+  <style>
+    #sliderContainer {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+<div id="sliderContainer">
+  <label for="brushSizeSlider">Brush Size:</label>
+  <input type="range" id="brushSizeSlider" min="10" max="200" value="100">
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+  let scene, camera, renderer;
+  let brushSize = 100;
+  let tempCircle = null;
+  let slider = document.getElementById('brushSizeSlider');
+
+  init();
+  animate();
+
+  function init() {
+    // Scene setup
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    camera.position.z = 500;
+
+    // Add event listeners
+    slider.addEventListener('input', onSliderInput);
+    slider.addEventListener('change', onSliderChange);
+  }
+
+  function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+  }
+
+  function onSliderInput(event) {
+    brushSize = event.target.value;
+    updateTempCircle();
+  }
+
+  function onSliderChange(event) {
+    brushSize = event.target.value;
+    removeTempCircle();
+  }
+
+  function updateTempCircle() {
+    if (tempCircle) {
+      scene.remove(tempCircle);
+    }
+    let geometry = new THREE.CircleGeometry(brushSize, 32);
+    let material = new THREE.MeshBasicMaterial({ color: 0x00ff00, opacity: 0.5, transparent: true });
+    tempCircle = new THREE.Mesh(geometry, material);
+    scene.add(tempCircle);
+  }
+
+  function removeTempCircle() {
+    if (tempCircle) {
+      scene.remove(tempCircle);
+      tempCircle = null;
+    }
+  }
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+</script>
+</body>
+</html>
