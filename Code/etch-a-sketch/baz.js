@@ -1,8 +1,6 @@
-// Calculate polygon area and perimeter in pixels - too little
-// Not calculating Three.js world coordinates to screen coordinates (pixels)
+// Calculate polygon area and perimeter in microns
 import * as THREE from "three";
 import { OrbitControls } from "/jsm/controls/OrbitControls.js";
-
 let btnDraw = document.getElementById("toggleButton");
 let imageSource = "/images/image1.jpg";
 let isDrawing = false;
@@ -160,7 +158,6 @@ function onMouseUp() {
 }
 
 function calculatePolygonArea(positions) {
-  // The Shoelace formula (or Gauss's area formula)
   let area = 0;
   let n = positions.length / 3;
   for (let i = 0; i < n - 1; i++) {
@@ -168,14 +165,13 @@ function calculatePolygonArea(positions) {
     let y1 = positions[3 * i + 1];
     let x2 = positions[3 * (i + 1)];
     let y2 = positions[3 * (i + 1) + 1];
-    area += (x1 * y2 - x2 * y1);
+    area += x1 * y2 - x2 * y1;
   }
   area = Math.abs(area) / 2;
   return area;
 }
 
 function calculatePolygonPerimeter(positions) {
-  // The sum of the distances between each pair of consecutive vertices
   let perimeter = 0;
   let n = positions.length / 3;
   for (let i = 0; i < n - 1; i++) {
@@ -185,16 +181,14 @@ function calculatePolygonPerimeter(positions) {
     let y2 = positions[3 * (i + 1) + 1];
     perimeter += Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
   }
-  // Closing the polygon by adding distance between the last and the first point
-  let x1 = positions[3 * (n - 1)];
-  let y1 = positions[3 * (n - 1) + 1];
-  let x2 = positions[0];
-  let y2 = positions[1];
-  perimeter += Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
   return perimeter;
 }
 
 function displayAreaAndPerimeter(area, perimeter) {
+  // Convert area and perimeter to microns
+  let areaInMicrons = area / 16; // 1 micron² = 16 pixels²
+  let perimeterInMicrons = perimeter / 4; // 1 micron = 4 pixels
+
   let div = document.createElement("div");
   div.style.position = "absolute";
   div.style.top = "10px";
@@ -206,12 +200,12 @@ function displayAreaAndPerimeter(area, perimeter) {
   let closeButton = document.createElement("span");
   closeButton.style.float = "right";
   closeButton.style.cursor = "pointer";
-  closeButton.innerHTML = "&nbsp;X";
+  closeButton.textContent = "X";
   closeButton.addEventListener("click", function() {
     div.style.display = "none";
   });
 
-  div.innerHTML = `Area: ${area.toFixed(2)} pixels²<br>Perimeter: ${perimeter.toFixed(2)} pixels`;
+  div.innerHTML = `Area: ${areaInMicrons.toFixed(2)} microns²<br>Perimeter: ${perimeterInMicrons.toFixed(2)} microns`;
   div.appendChild(closeButton);
   document.body.appendChild(div);
 }

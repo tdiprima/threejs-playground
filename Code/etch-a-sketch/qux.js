@@ -1,5 +1,5 @@
-// Calculate polygon area and perimeter in pixels - too little
-// Not calculating Three.js world coordinates to screen coordinates (pixels)
+// Calculate polygon area and perimeter in pixels - too much
+// Converting 3D Points to 2D Screen Points
 import * as THREE from "three";
 import { OrbitControls } from "/jsm/controls/OrbitControls.js";
 
@@ -88,7 +88,7 @@ renderer.domElement.addEventListener('pointerdown', event => {
 function onMouseMove(event) {
   if (isDrawing && mouseIsPressed) {
     // Calculate mouse position in normalized device coordinates
-    const canvas = document.querySelector('canvas');
+    const canvas = renderer.domElement;
     const rect = canvas.getBoundingClientRect();
     mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
     mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
@@ -146,8 +146,8 @@ function onMouseUp() {
       line.geometry.computeBoundingSphere();
 
       // Calculate area and perimeter
-      const area = calculatePolygonArea(currentPolygonPositions);
-      const perimeter = calculatePolygonPerimeter(currentPolygonPositions);
+      const area = calculatePolygonArea(currentPolygonPositions, camera);
+      const perimeter = calculatePolygonPerimeter(currentPolygonPositions, camera);
 
       // Display the area and perimeter
       displayAreaAndPerimeter(area, perimeter);
@@ -159,38 +159,66 @@ function onMouseUp() {
   }
 }
 
-function calculatePolygonArea(positions) {
-  // The Shoelace formula (or Gauss's area formula)
+function toScreenPosition(point, camera) {
+  const canvas = renderer.domElement;
+  const widthHalf = 0.5 * canvas.width;
+  const heightHalf = 0.5 * canvas.height;
+
+  const vector = point.clone().project(camera);
+
+  vector.x = (vector.x * widthHalf) + widthHalf;
+  vector.y = -(vector.y * heightHalf) + heightHalf;
+
+  return vector;
+}
+
+function calculatePolygonArea(positions, camera) {
   let area = 0;
-  let n = positions.length / 3;
+  const n = positions.length / 3;
+  const screenPositions = [];
+
+  for (let i = 0; i < n; i++) {
+    const vertex = new THREE.Vector3(positions[3 * i], positions[3 * i + 1], positions[3 * i + 2]);
+    screenPositions.push(toScreenPosition(vertex, camera));
+  }
+
   for (let i = 0; i < n - 1; i++) {
-    let x1 = positions[3 * i];
-    let y1 = positions[3 * i + 1];
-    let x2 = positions[3 * (i + 1)];
-    let y2 = positions[3 * (i + 1) + 1];
+    const x1 = screenPositions[i].x;
+    const y1 = screenPositions[i].y;
+    const x2 = screenPositions[i + 1].x;
+    const y2 = screenPositions[i + 1].y;
     area += (x1 * y2 - x2 * y1);
   }
+
   area = Math.abs(area) / 2;
   return area;
 }
 
-function calculatePolygonPerimeter(positions) {
-  // The sum of the distances between each pair of consecutive vertices
+function calculatePolygonPerimeter(positions, camera) {
   let perimeter = 0;
-  let n = positions.length / 3;
+  const n = positions.length / 3;
+  const screenPositions = [];
+
+  for (let i = 0; i < n; i++) {
+    const vertex = new THREE.Vector3(positions[3 * i], positions[3 * i + 1], positions[3 * i + 2]);
+    screenPositions.push(toScreenPosition(vertex, camera));
+  }
+
   for (let i = 0; i < n - 1; i++) {
-    let x1 = positions[3 * i];
-    let y1 = positions[3 * i + 1];
-    let x2 = positions[3 * (i + 1)];
-    let y2 = positions[3 * (i + 1) + 1];
+    const x1 = screenPositions[i].x;
+    const y1 = screenPositions[i].y;
+    const x2 = screenPositions[i + 1].x;
+    const y2 = screenPositions[i + 1].y;
     perimeter += Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
   }
+
   // Closing the polygon by adding distance between the last and the first point
-  let x1 = positions[3 * (n - 1)];
-  let y1 = positions[3 * (n - 1) + 1];
-  let x2 = positions[0];
-  let y2 = positions[1];
+  const x1 = screenPositions[n - 1].x;
+  const y1 = screenPositions[n - 1].y;
+  const x2 = screenPositions[0].x;
+  const y2 = screenPositions[0].y;
   perimeter += Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+
   return perimeter;
 }
 
@@ -206,7 +234,7 @@ function displayAreaAndPerimeter(area, perimeter) {
   let closeButton = document.createElement("span");
   closeButton.style.float = "right";
   closeButton.style.cursor = "pointer";
-  closeButton.innerHTML = "&nbsp;X";
+  closeButton.textContent = "X";
   closeButton.addEventListener("click", function() {
     div.style.display = "none";
   });
