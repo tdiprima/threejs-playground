@@ -1,8 +1,9 @@
 /**
- * new array
- * To handle the first drawn polygon and prevent connections between
- * polygons, you can add an additional check in the onMouseMove function
- * to determine if it's the first vertex being added to the current polygon.
+ * The code checks if it's the first vertex of the current polygon
+ * by comparing the length of currentPolygonPositions with zero.
+ * If it's the first vertex, it is directly added to the positions array
+ * without the distance check. For subsequent vertices, the distance check
+ * is performed as before.
  */
 import * as THREE from "three";
 import { OrbitControls } from "/jsm/controls/OrbitControls.js";
@@ -11,7 +12,6 @@ let btnDraw = document.getElementById("toggleButton");
 let imageSource = "/images/image1.jpg";
 let isDrawing = false;
 let mouseIsPressed = false;
-let positions = [];
 let controls;
 let color = "#0000ff";
 
@@ -27,14 +27,15 @@ document.body.appendChild(renderer.domElement);
 controls = new OrbitControls(camera, renderer.domElement);
 
 btnDraw.addEventListener("click", function () {
-  positions = [];
   if (isDrawing) {
     isDrawing = false;
     controls.enabled = true;
 
+    // Remove the mouse event listeners
     renderer.domElement.removeEventListener("mousemove", onMouseMove);
     renderer.domElement.removeEventListener("mouseup", onMouseUp);
   } else {
+    // Drawing on
     isDrawing = true;
     controls.enabled = false;
 
@@ -60,7 +61,6 @@ scene.add(plane);
 let raycaster = new THREE.Raycaster();
 let mouse = new THREE.Vector2();
 
-// Set up line material and geometry
 let lineMaterial = new THREE.LineBasicMaterial({ color });
 
 // Dashed Line Issue Solution
@@ -71,9 +71,11 @@ lineMaterial.depthWrite = false;
 lineMaterial.transparent = true;
 lineMaterial.alphaTest = 0.5; // Adjust this value as needed
 
+// START
 let line;
-let currentPolygonPositions = []; // Declare a variable to store positions for the current polygon
-let polygonPositions = []; // Declare an array to store positions for each polygon
+let currentPolygonPositions = []; // Store positions for current polygon
+let polygonPositions = []; // Store positions for each polygon
+const distanceThreshold = 0.1;
 
 renderer.domElement.addEventListener('pointerdown', event => {
   if (isDrawing) {
@@ -91,8 +93,10 @@ renderer.domElement.addEventListener('pointerdown', event => {
 function onMouseMove(event) {
   if (isDrawing && mouseIsPressed) {
     // Calculate mouse position in normalized device coordinates
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    const canvas = document.querySelector('canvas');
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
     // Use raycaster to get intersection point with scene
     raycaster.setFromCamera(mouse, camera);
@@ -100,14 +104,31 @@ function onMouseMove(event) {
 
     if (intersects.length > 0) {
       let point = intersects[0].point;
-      // positions.push(point.x, point.y, point.z); TODO
 
-      let bufferGeometry = line.geometry;
-      // line.geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
-      currentPolygonPositions.push(point.x, point.y, point.z); // Store the position in the current polygon's array
-      line.geometry.setAttribute("position", new THREE.Float32BufferAttribute(currentPolygonPositions, 3)); // Use the current polygon's array for the line's position attribute
+      // Check if it's the first vertex of the current polygon
+      const isFirstVertex = currentPolygonPositions.length === 0;
 
-      bufferGeometry.attributes.position.needsUpdate = true;
+      if (isFirstVertex) {
+        // Store the position in the current polygon's array
+        currentPolygonPositions.push(point.x, point.y, point.z);
+      } else {
+        // DISTANCE CHECK
+        const lastVertex = new THREE.Vector3().fromArray(currentPolygonPositions.slice(-3));
+        const currentVertex = new THREE.Vector3(point.x, point.y, point.z);
+        const distance = lastVertex.distanceTo(currentVertex);
+
+        if (distance > distanceThreshold) {
+          currentPolygonPositions.push(point.x, point.y, point.z); // Store the position in the current polygon's array
+          line.geometry.setAttribute("position", new THREE.Float32BufferAttribute(currentPolygonPositions, 3)); // Use the current polygon's array for the line's position attribute
+        }
+      }
+
+      try {
+        let bufferGeometry = line.geometry;
+        bufferGeometry.attributes.position.needsUpdate = true;
+      } catch (e) {
+        // No big deal.
+      }
     }
   }
 }
@@ -116,15 +137,23 @@ function onMouseUp() {
   if (isDrawing) {
     mouseIsPressed = false;
 
-    // Draw the final line
-    line.geometry.setDrawRange(0, currentPolygonPositions.length / 3);
-    line.geometry.computeBoundingSphere();
+    // Ensure there are at least 3 points to form a closed polygon
+    if (currentPolygonPositions.length >= 9) { // 3 points * 3 coordinates (x, y, z)
+      // Close the polygon by adding the first point to the end
+      const firstPoint = currentPolygonPositions.slice(0, 3);
+      currentPolygonPositions.push(...firstPoint);
 
-    console.log(`%cNum vertices:`, 'color: #997fff', currentPolygonPositions.length);
-    console.log("positions", line.geometry.getAttribute("position").array);
+      // Create a new geometry with the closed polygon positions
+      const closedPolygonGeometry = new THREE.BufferGeometry();
+      closedPolygonGeometry.setAttribute('position', new THREE.Float32BufferAttribute(currentPolygonPositions, 3));
+      line.geometry = closedPolygonGeometry;
+      line.geometry.setDrawRange(0, currentPolygonPositions.length / 3);
+      line.geometry.computeBoundingSphere();
+    }
 
-    polygonPositions.push(currentPolygonPositions); // Store the current polygon's positions in the polygonPositions array
-    currentPolygonPositions = []; // Clear the current polygon's array
+    polygonPositions.push(currentPolygonPositions); // Store the current polygon's positions
+
+    currentPolygonPositions = []; // Clear the current polygon's array for the next drawing
   }
 }
 
