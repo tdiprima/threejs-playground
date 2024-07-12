@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Polygon Drawing</title>
+  <title>Hide div setTimeout</title>
+  <!-- Ditto. window.innerWidth -->
   <style>
     #infoDiv {
       position: absolute;
@@ -188,7 +189,7 @@
 
     vector.project(camera);
     vector.x = (vector.x * widthHalf) + widthHalf;
-    vector.y = - (vector.y * heightHalf) + heightHalf;
+    vector.y = -(vector.y * heightHalf) + heightHalf;
     return vector;
   }
 
