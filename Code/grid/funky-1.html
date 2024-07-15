@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>funky-1</title>
+  <!-- Fabric bonanza, grid and marker -->
+  <!-- This example initializes a basic grid with a set of nodes and links between them. -->
+  <style>
+    body { margin: 0; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- BUTTONS -->
+<button id="btnGrid">Add Grid</button>
+<button id="btnMarker">Activate Marker</button>
+
+<!-- CONTAINER FOR THREE.JS -->
+<div id="container" style="width: 696px; height: 510px; border: aliceblue 3px solid"></div>
+
+<!-- SCRIPTS -->
+<script src="/build/three.min.js"></script>
+
+<!-- MAIN SCRIPT -->
+<script>
+  let scene, camera, renderer;
+  let plane, gridHelper, raycaster, mouse;
+  let markerActive = false;
+  const sizeOfBox = 50;
+  let gridAdded = false;
+
+  init();
+
+  function init() {
+    // Scene setup
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(75, 696 / 510, 0.1, 1000);
+    renderer = new THREE.WebGLRenderer();
+    renderer.setSize(696, 510);
+    document.getElementById('container').appendChild(renderer.domElement);
+
+    // Camera position
+    camera.position.z = 500;
+
+    // Plane with image
+    const texture = new THREE.TextureLoader().load('/images/image1.jpg');
+    const planeGeometry = new THREE.PlaneGeometry(696, 510);
+    const planeMaterial = new THREE.MeshBasicMaterial({ map: texture });
+    plane = new THREE.Mesh(planeGeometry, planeMaterial);
+    scene.add(plane);
+
+    // Raycaster and mouse for interaction
+    raycaster = new THREE.Raycaster();
+    mouse = new THREE.Vector2();
+
+    // Event listeners
+    document.getElementById('btnGrid').addEventListener('click', toggleGrid);
+    document.getElementById('btnMarker').addEventListener('click', toggleMarker);
+    renderer.domElement.addEventListener('mousemove', onMouseMove);
+
+    animate();
+  }
+
+  function toggleGrid() {
+    if (gridAdded) {
+      scene.remove(gridHelper);
+      gridAdded = false;
+    } else {
+      gridHelper = new THREE.GridHelper(696, 696 / sizeOfBox, 0x00ff00, 0x00ff00);
+      gridHelper.rotation.x = Math.PI / 2;
+      scene.add(gridHelper);
+      gridAdded = true;
+    }
+  }
+
+  function toggleMarker() {
+    markerActive = !markerActive;
+    document.getElementById('btnMarker').innerText = markerActive ? "Marker Activated" : "Activate Marker";
+  }
+
+  function onMouseMove(event) {
+    if (!markerActive || !gridAdded) return;
+
+    const rect = renderer.domElement.getBoundingClientRect();
+    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObject(plane);
+
+    if (intersects.length > 0) {
+      const intersect = intersects[0];
+      const x = Math.floor((intersect.point.x + 348) / sizeOfBox) * sizeOfBox - 348;
+      const y = Math.floor((intersect.point.y + 255) / sizeOfBox) * sizeOfBox - 255;
+
+      const markerGeometry = new THREE.PlaneGeometry(sizeOfBox, sizeOfBox);
+      const markerMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, side: THREE.DoubleSide });
+      const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+      marker.position.set(x + sizeOfBox / 2, y + sizeOfBox / 2, 1);
+      marker.name = "heatmap annotation";
+      scene.add(marker);
+    }
+  }
+
+  function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+  }
+</script>
+</body>
+</html>
