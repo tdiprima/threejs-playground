@@ -1,4 +1,4 @@
-// Fixes bas
+// Filter on if the object type is LineLoop
 function serializeScene() {
   serializedData = scene.children.filter(obj => obj instanceof THREE.LineLoop).map(obj => {
     // Accessing vertex data from BufferGeometry
@@ -56,9 +56,9 @@ function deserializeScene() {
       // Set userData if any
       lineLoop.userData = data.userData;
 
-      // Add the LineLoop to the scene
+      // Add the newly created object to the scene
       scene.add(lineLoop);
     }
-    // Include deserialization for other object types if necessary
+    // Handle other object types if necessary
   });
 }

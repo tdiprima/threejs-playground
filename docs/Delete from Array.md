@@ -91,4 +91,41 @@ handles.forEach(function (element) {
 objectsToRemove.forEach(object => removal(object));
 ```
 
+<span style="color:#59acf3;font-size:larger;">save.js</span>
+
+For deserialization, use `THREE.ObjectLoader`:
+
+```javascript
+export function deserializeScene(scene, serializedData) {
+  const loader = new THREE.ObjectLoader();
+
+  // Assuming serializedData is the JSON object returned by .toJSON()
+  // If serializedData is a string (e.g., from a database), parse it first:
+  // const json = JSON.parse(serializedData);
+
+  const loadedScene = loader.parse(serializedData);
+
+  // Optionally clear the current scene first
+  while(scene.children.length > 0){ 
+    const object = scene.children[0];
+    scene.remove(object); 
+    if (object.geometry) object.geometry.dispose();
+    if (object.material) {
+      if (Array.isArray(object.material)) {
+        object.material.forEach(material => material.dispose());
+      } else {
+        object.material.dispose();
+      }
+    }
+  }
+
+  // Add loaded objects to the current scene
+  loadedScene.children.forEach(child => {
+    scene.add(child);
+  });
+
+  console.log('Scene deserialized and added to the current scene.');
+}
+```
+
 <br>
