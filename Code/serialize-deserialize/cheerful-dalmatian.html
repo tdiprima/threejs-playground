@@ -59,8 +59,12 @@
   }
 
   function deserializeFromFile() {
-    loadFile("cheerful-dalmatian.json", function(responseText) {
+    let file = "cheerful-dalmatian.json";
+    // let file = "simple-arcana.json";
+
+    loadFile(file, function(responseText) {
       savedMeshes = JSON.parse(responseText);
+      if (!Array.isArray(savedMeshes)) { savedMeshes = [savedMeshes]; } // If it's not an array, make it one
       deserializeScene();
     });
   }
