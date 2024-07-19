@@ -8,8 +8,8 @@
   <link href="/css/main.css" rel="stylesheet">
 </head>
 <body>
-<button id="serialize">Serialize Scene</button>
-<button id="clear">Clear Scene</button>
+<!-- <button id="serialize">Serialize Scene</button> -->
+<!-- <button id="clear">Clear Scene</button> -->
 <button id="deserialize">Deserialize Scene</button>
 <!-- <script src="https://cdn.jsdelivr.net/npm/three@0.141.0/build/three.min.js"></script> -->
 <script src="/build/three.min.js"></script>
@@ -30,27 +30,27 @@
     document.body.appendChild(renderer.domElement);
 
     // Add a sphere to the scene
-    const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
-    const sphereMaterial = new THREE.MeshBasicMaterial({color: 0xff0000});
-    sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-    sphere.userData = {name: 'mySphere'};
-    scene.add(sphere);
+    // const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
+    // const sphereMaterial = new THREE.MeshBasicMaterial({color: 0xff0000});
+    // sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+    // sphere.userData = {name: 'mySphere'};
+    // scene.add(sphere);
 
     // Add a cube to the scene
-    const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
-    const cubeMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00});
-    cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-    cube.position.set(2, 0, 0); // Move the cube right
-    cube.userData = {name: 'myCube'};
-    scene.add(cube);
+    // const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+    // const cubeMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00});
+    // cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+    // cube.position.set(2, 0, 0); // Move the cube right
+    // cube.userData = {name: 'myCube'};
+    // scene.add(cube);
 
     // Set camera position
     camera.position.z = 5;
 
     // Set up button listeners
-    document.getElementById('serialize').addEventListener('click', serializeScene);
-    document.getElementById('deserialize').addEventListener('click', deserializeScene);
-    document.getElementById("clear").addEventListener("click", function () { scene.clear(); });
+    // document.getElementById('serialize').addEventListener('click', serializeScene);
+    document.getElementById("deserialize").addEventListener("click", deserializeScene);
+    // document.getElementById("clear").addEventListener("click", function () { scene.clear(); });
   }
 
   function animate() {
@@ -58,33 +58,43 @@
     renderer.render(scene, camera);
   }
 
-  function serializeScene() {
-    // Serialize the scene into JSON
-    let json = scene.toJSON();
-    serializedData = JSON.stringify(json);
-    console.log('Serialized Data:', json);
-    alert('Scene serialized. Check console for details.');
-  }
+  // function serializeScene() {
+  //   // Serialize the scene into JSON
+  //   let json = scene.toJSON();
+  //   serializedData = JSON.stringify(json);
+  //   console.log('Serialized Data:', serializedData);
+  // }
 
-  function deserializeScene() {
-    if (!serializedData) {
-      alert('No serialized data found. Serialize the scene first.');
-      return;
-    }
+
+  function deserializeScene(serializedData) {
+    // if (!serializedData) {
+    //   alert('No serialized data found. Serialize the scene first.');
+    //   return;
+    // }
 
     // Clear the current scene
-    while (scene.children.length > 0) {
-      scene.remove(scene.children[0]);
-    }
+    // while (scene.children.length > 0) {
+    //   scene.remove(scene.children[0]);
+    // }
 
-    // Deserialize the JSON back into a scene object
-    const loader = new THREE.ObjectLoader();
-    scene = loader.parse(JSON.parse(serializedData));
+    loadFile("simple-arcana.json", function(responseText) {
+      // Deserialize the JSON back into a scene object
+      const loader = new THREE.ObjectLoader();
+      scene = loader.parse(JSON.parse(responseText));
 
-    // Re-render the scene
-    renderer.render(scene, camera);
-    alert('Scene deserialized.');
+      // Re-render the scene
+      // renderer.render(scene, camera);
+    });
   }
+
+  let loadFile = function(filePath, done) {
+    let xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+      return done(this.responseText);
+    };
+    xhr.open("GET", filePath, true);
+    xhr.send();
+  };
 </script>
 </body>
 </html>

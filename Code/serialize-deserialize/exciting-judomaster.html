@@ -36,7 +36,7 @@
 
   function addRandomGeometry() {
     const geometryTypes = [THREE.BoxGeometry, THREE.SphereGeometry, THREE.ConeGeometry];
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ffff });
 
     for (let i = 0; i < 5; i++) {
       const geometry = new geometryTypes[Math.floor(Math.random() * geometryTypes.length)]();
@@ -56,7 +56,8 @@
         position: obj.position,
         rotation: obj.rotation,
         scale: obj.scale,
-        userData: obj.userData
+        userData: obj.userData,
+        color: obj.material.color
       };
     });
     console.log('Serialized Data:', serializedData);
@@ -66,7 +67,7 @@
   function deserializeScene() {
     serializedData.forEach(data => {
       const geometry = new THREE[data.type]();
-      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+      const material = new THREE.MeshBasicMaterial({ color: data.color });
       const mesh = new THREE.Mesh(geometry, material);
 
       mesh.position.copy(data.position);
@@ -86,13 +87,9 @@
     scene.clear();
   });
 
-  document.getElementById('serialize').addEventListener('click', () => {
-    serializeScene();
-  });
+  document.getElementById('serialize').addEventListener('click', serializeScene);
 
-  document.getElementById('deserialize').addEventListener('click', () => {
-    deserializeScene();
-  });
+  document.getElementById('deserialize').addEventListener('click', deserializeScene);
 
   init();
 </script>
