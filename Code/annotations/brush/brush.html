@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Brush</title>
+  <style>
+    #imageButton {
+      background-image: url('brush.png'); /* Path to your image */
+      background-size: cover; /* This ensures your image covers the button */
+      height: 32px; /* Height of the button */
+      width: 32px; /* Width of the button */
+      border: none; /* Optional: removes the border */
+      cursor: pointer; /* Changes the cursor on hover */
+      /*color: initial; !* Set the initial font color *!*/
+      /*display: block; !* Ensures the button is treated as a block-level element *!*/
+    }
+
+    /*.aquaColor {*/
+    /*  color: aqua; !* This class changes the font color to aqua *!*/
+    /*}*/
+
+    #imageButton.brushDark {
+      background-image: url('brush-dark.png');
+    }
+  </style>
+</head>
+<body>
+<button id="imageButton"></button>
+<!-- Aqua: -->
+<!-- <button id="imageButton">Click Me</button> -->
+<script>
+  document.getElementById('imageButton').addEventListener('click', function() {
+    this.classList.toggle('brushDark');
+  });
+</script>
+</body>
+</html>
