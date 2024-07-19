@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cheerful Dalmatian</title>
+  <!-- Serialize each object -->
+  <link rel="stylesheet" href="/css/main.css">
+  <script src="/build/three.min.js"></script>
+</head>
+<body>
+  <button id="serialize">Serialize Scene</button>
+  <button id="clear">Clear Scene</button>
+  <button id="deserialize">Deserialize Scene</button>
+  <button id="from-file">Deserialize from File</button>
+<script>
+  let savedMeshes = [];
+  let scene = new THREE.Scene();
+  let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.z = 5;
+  let renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  addRandomGeometry();
+
+  document.getElementById('serialize').addEventListener('click', serializeScene);
+  document.getElementById('deserialize').addEventListener('click', deserializeScene);
+  document.getElementById('from-file').addEventListener('click', deserializeFromFile);
+  document.getElementById('clear').addEventListener('click', function () {
+    scene.clear();
+  });
+
+  function addRandomGeometry() {
+    for (let i = 0; i < 3; i++) {
+      const geometry = new THREE.BoxGeometry(1, 1, 1);
+      const material = new THREE.MeshBasicMaterial({color: Math.random() * 0xffffff});
+      const cube = new THREE.Mesh(geometry, material);
+      cube.position.set(Math.random() * 10 - 5, Math.random() * 10 - 5, Math.random() * 10 - 5);
+      scene.add(cube);
+    }
+  }
+
+  function serializeScene() {
+    scene.traverse((obj) => {
+      if (obj.isMesh) {
+        savedMeshes.push(obj.toJSON());
+      }
+    });
+
+    console.log('Saved Meshes:', savedMeshes);
+  }
+
+  function deserializeScene() {
+    const loader = new THREE.ObjectLoader();
+    savedMeshes.forEach((mesh) => {
+      scene.add(loader.parse(mesh));
+    });
+  }
+
+  function deserializeFromFile() {
+    loadFile("cheerful-dalmatian.json", function(responseText) {
+      savedMeshes = JSON.parse(responseText);
+      deserializeScene();
+    });
+  }
+
+  let loadFile = function(filePath, done) {
+    let xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+      return done(this.responseText);
+    };
+    xhr.open("GET", filePath, true);
+    xhr.send();
+  };
+
+  function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+  }
+
+  animate();
+</script>
+</body>
+</html>
