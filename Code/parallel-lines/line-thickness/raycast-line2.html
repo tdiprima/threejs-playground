@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Raycast Line2</title>
+  <!-- Conclusion: It doesn't work. -->
   <style>
     body {
-      /* Outer Space */
       background-color: #484848;
     }
   </style>
@@ -49,7 +49,7 @@
   const geometry = new LineGeometry();
   geometry.setPositions(points);
 
-  // Create material with a line width greater than 1
+  // Create material with a reasonable line width
   const material = new LineMaterial({
     color: 0xffffff,
     linewidth: 0.005, // Set the thickness here
@@ -67,18 +67,30 @@
   // Add OrbitControls for easy viewing
   const controls = new OrbitControls(camera, renderer.domElement);
 
+  // Raycaster and mouse setup
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
+
   // RAYCASTING FUNCTION FOR Line2
+  // The standard Raycaster in three.js is designed to work with Line, Mesh, and Points, but not directly with Line2.
+  // Since Line2 doesn't have built-in raycasting, you'll need to write a custom raycasting function to handle this.
   function raycastLine2(raycaster, intersects) {
     const geometry = this.geometry;
     const material = this.material;
     const matrixWorld = this.matrixWorld;
 
+    // Check for early exit if the raycaster doesn't intersect the bounding box
+    // const bbox = new THREE.Box3().setFromObject(this);
+    // if (!raycaster.ray.intersectsBox(bbox)) return;
+
+    // Transform the ray to the local space of the line
     const inverseMatrix = new THREE.Matrix4();
     inverseMatrix.copy(matrixWorld).invert();
 
     const localRay = raycaster.ray.clone().applyMatrix4(inverseMatrix);
 
     const positions = geometry.attributes.position.array;
+    const lineWidth = material.linewidth;
     const precision = raycaster.params.Line2 ? raycaster.params.Line2.precision : 1e-4;
 
     const vStart = new THREE.Vector3();
@@ -91,10 +103,10 @@
       vEnd.fromArray(positions, i + 3);
 
       // Calculate the closest point on the line segment to the ray
-      const distSq = localRay.distanceSqToSegment(vStart, vEnd, interRay, interSegment);
+      const distanceSq = localRay.distanceSqToSegment(vStart, vEnd, interRay, interSegment);
 
-      if (distSq < precision * precision) {
-        interSegment.applyMatrix4(this.matrixWorld);
+      if (distanceSq < precision * precision) {
+        interSegment.applyMatrix4(this.matrixWorld); // closestPoint
 
         const distance = raycaster.ray.origin.distanceTo(interSegment);
         if (distance < raycaster.near || distance > raycaster.far) continue;
@@ -108,20 +120,32 @@
     }
   }
 
-  // Extend Line2 prototype to include the custom raycasting method
+  // Attach the custom raycast method to Line2
   Line2.prototype.raycast = raycastLine2;
 
   // USAGE
-  const raycaster = new THREE.Raycaster();
-  const mouse = new THREE.Vector2();
-  // Assuming you have a camera and mouse position set up
+  // Handle mouse clicks
+  function onMouseClick(event) {
+    // Convert screen coordinates to normalized device coordinates
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-  raycaster.setFromCamera(mouse, camera);
-  const intersects = raycaster.intersectObject(line2); // line2 is your Line2 object
+    // Update the raycaster with the camera and mouse position
+    raycaster.setFromCamera(mouse, camera);
 
-  if (intersects.length > 0) {
-    console.log('Line2 intersected at', intersects[0].point);
+    // Check for intersections with the Line2 object
+    const intersects = raycaster.intersectObject(line2);
+
+    if (intersects.length > 0) {
+      // console.log('Intersection detected at:', intersects[0].point);
+      console.log("Clicked on the Line2 object");
+    } else {
+      console.log("Did not click on the Line2 object");
+    }
   }
+
+  // Add the event listener
+  window.addEventListener('click', onMouseClick, false);
 
   // Render loop
   function animate() {
