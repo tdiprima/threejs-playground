@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Raycast Line2</title>
+  <!-- Clicking on the top and left lines work.  But not the bottom and right.  Clicking inside the box works. -->
   <!-- Conclusion: It doesn't work. -->
   <!-- If your line disappears because of the resolution property in LineMaterial, try changing line thickness -->
   <style>
@@ -89,7 +90,7 @@
 
     const positions = geometry.attributes.position.array;
     const lineWidth = material.linewidth;
-    const precision = raycaster.params.Line2 ? raycaster.params.Line2.precision : 1e-2; // Adjusted precision
+    const precision = raycaster.params.Line2 ? raycaster.params.Line2.precision : 0.1; // Adjusted precision
 
     const vStart = new THREE.Vector3();
     const vEnd = new THREE.Vector3();
