@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Raycast Line2</title>
   <!-- Conclusion: It doesn't work. -->
+  <!-- If your line disappears because of the resolution property in LineMaterial, try changing line thickness -->
   <style>
     body {
       background-color: #484848;
@@ -52,10 +53,9 @@
   // Create material with a reasonable line width
   const material = new LineMaterial({
     color: 0xffffff,
-    linewidth: 0.005, // Set the thickness here
-    // resolution: new THREE.Vector2(window.innerWidth, window.innerHeight) // Important!
+    linewidth: 5, // Set the thickness here
+    resolution: new THREE.Vector2(window.innerWidth, window.innerHeight) // Important!
   });
-  // We didn't have "resolution" before
 
   // Create the line
   const line2 = new Line2(geometry, material);
@@ -72,16 +72,14 @@
   const mouse = new THREE.Vector2();
 
   // RAYCASTING FUNCTION FOR Line2
-  // The standard Raycaster in three.js is designed to work with Line, Mesh, and Points, but not directly with Line2.
-  // Since Line2 doesn't have built-in raycasting, you'll need to write a custom raycasting function to handle this.
   function raycastLine2(raycaster, intersects) {
     const geometry = this.geometry;
     const material = this.material;
     const matrixWorld = this.matrixWorld;
 
     // Check for early exit if the raycaster doesn't intersect the bounding box
-    // const bbox = new THREE.Box3().setFromObject(this);
-    // if (!raycaster.ray.intersectsBox(bbox)) return;
+    const bbox = new THREE.Box3().setFromObject(this);
+    if (!raycaster.ray.intersectsBox(bbox)) return;
 
     // Transform the ray to the local space of the line
     const inverseMatrix = new THREE.Matrix4();
@@ -91,7 +89,7 @@
 
     const positions = geometry.attributes.position.array;
     const lineWidth = material.linewidth;
-    const precision = raycaster.params.Line2 ? raycaster.params.Line2.precision : 1e-4;
+    const precision = raycaster.params.Line2 ? raycaster.params.Line2.precision : 1e-2; // Adjusted precision
 
     const vStart = new THREE.Vector3();
     const vEnd = new THREE.Vector3();
@@ -124,7 +122,6 @@
   Line2.prototype.raycast = raycastLine2;
 
   // USAGE
-  // Handle mouse clicks
   function onMouseClick(event) {
     // Convert screen coordinates to normalized device coordinates
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -137,7 +134,6 @@
     const intersects = raycaster.intersectObject(line2);
 
     if (intersects.length > 0) {
-      // console.log('Intersection detected at:', intersects[0].point);
       console.log("Clicked on the Line2 object");
     } else {
       console.log("Did not click on the Line2 object");
@@ -160,8 +156,7 @@
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    // material.resolution.set(window.innerWidth, window.innerHeight);
-    // Same here. Don't do this.
+    material.resolution.set(window.innerWidth, window.innerHeight);
   });
 </script>
 </body>
