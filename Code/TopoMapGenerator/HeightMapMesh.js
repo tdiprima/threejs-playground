@@ -20,47 +20,47 @@ scene.add(light);
 // Load the image
 const loader = new THREE.TextureLoader();
 loader.load('MountainHeightMap.png', (texture) => {
-    // Get image dimensions
-    const width = texture.image.width;
-    const height = texture.image.height;
+  // Get image dimensions
+  const width = texture.image.width;
+  const height = texture.image.height;
 
-    // Create a plane geometry based on the image dimensions
-    const geometry = new THREE.PlaneGeometry(width, height, width - 1, height - 1);
+  // Create a plane geometry based on the image dimensions
+  const geometry = new THREE.PlaneGeometry(width, height, width - 1, height - 1);
 
-    // Get the image data for height mapping
-    const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
-    const context = canvas.getContext('2d');
-    context.drawImage(texture.image, 0, 0);
+  // Get the image data for height mapping
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const context = canvas.getContext('2d');
+  context.drawImage(texture.image, 0, 0);
 
-    const imageData = context.getImageData(0, 0, width, height);
-    const data = imageData.data;
+  const imageData = context.getImageData(0, 0, width, height);
+  const data = imageData.data;
 
-    // Update the z-coordinate of each vertex based on the grayscale value
-    for (let i = 0, j = 0; i < data.length; i += 4, j++) {
-        const gray = data[i] * 0.3 + data[i + 1] * 0.59 + data[i + 2] * 0.11;
-        geometry.attributes.position.setZ(j, gray / 255 * 20); // Adjust the scale as needed
-    }
+  // Update the z-coordinate of each vertex based on the grayscale value
+  for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+    const gray = data[i] * 0.3 + data[i + 1] * 0.59 + data[i + 2] * 0.11;
+    geometry.attributes.position.setZ(j, gray / 255 * 20); // Adjust the scale as needed
+  }
 
-    geometry.computeVertexNormals();
+  geometry.computeVertexNormals();
 
-    // Create a material
-    const material = new THREE.MeshPhongMaterial({
-        color: 0x888888,
-        wireframe: true, // Toggle this to false to see the surface more clearly
-    });
+  // Create a material
+  const material = new THREE.MeshPhongMaterial({
+    color: 0x888888,
+    wireframe: true, // Toggle this to false to see the surface more clearly
+  });
 
-    // Create the mesh
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.rotation.x = -Math.PI / 2; // Rotate the plane to lay flat
-    scene.add(mesh);
+  // Create the mesh
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.rotation.x = -Math.PI / 2; // Rotate the plane to lay flat
+  scene.add(mesh);
 
-    // Render the scene
-    function animate() {
-        requestAnimationFrame(animate);
-        controls.update();
-        renderer.render(scene, camera);
-    }
-    animate();
+  // Render the scene
+  function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  animate();
 });
