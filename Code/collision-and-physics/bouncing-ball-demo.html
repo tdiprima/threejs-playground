@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Physics Ball Drop</title>
+    <!-- Here's a simple physics demo using three.js that simulates a ball dropping and bouncing until it comes to a stop. -->
+    <!-- We'll use basic physics principles like gravity, velocity, and damping to reduce the height of the bounce over time. -->
+    <!-- The ball will drop, bounce, and lose height on each bounce until it eventually comes to rest on the ground. -->
+    <!-- You can adjust the damping or gravity values to change the behavior of the bounce! -->
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="/build/three.min.js"></script>
+    <script>
+      // Scene setup
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      // Create ground
+      const groundGeometry = new THREE.PlaneGeometry(10, 10);
+      const groundMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff, side: THREE.DoubleSide });
+      const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+      ground.rotation.x = Math.PI / 2;
+      ground.position.y = 0;
+      scene.add(ground);
+
+      // Create ball
+      const ballGeometry = new THREE.SphereGeometry(0.5, 32, 32);
+      const ballMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+      const ball = new THREE.Mesh(ballGeometry, ballMaterial);
+      ball.position.y = 5;
+      scene.add(ball);
+
+      // Physics variables
+      let velocity = 0;
+      const gravity = -0.02;
+      // This reduces the velocity after each bounce, simulating energy loss with each impact.
+      // When the ball's bounce gets too small, it stops bouncing.
+      const damping = 0.7; // Reduces bounce height over time
+
+      let isBouncing = true;
+
+      // Set up camera
+      camera.position.z = 5;
+      camera.position.y = 2;
+
+      // Animation loop
+      function animate() {
+        requestAnimationFrame(animate);
+
+        if (isBouncing) {
+          // Apply gravity
+          velocity += gravity;
+          ball.position.y += velocity;
+
+          // Check if ball hits the ground
+          if (ball.position.y <= 0.5) {
+            ball.position.y = 0.5; // Prevent ball from going below ground
+            velocity = -velocity * damping; // Reverse direction and apply damping
+
+            // Stop bouncing when velocity is very low
+            if (Math.abs(velocity) < 0.01) {
+              isBouncing = false;
+              ball.position.y = 0.5; // Ensure it stays on the ground
+            }
+          }
+        }
+
+        renderer.render(scene, camera);
+      }
+
+      animate();
+    </script>
+  </body>
+</html>
