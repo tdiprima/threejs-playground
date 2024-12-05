@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Spacing Slider</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+    }
+    .slider-container {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      border-radius: 5px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-family: Arial, sans-serif;
+    }
+    input[type="range"] {
+      width: 200px;
+    }
+  </style>
+</head>
+<body>
+  <div class="slider-container">
+    <label for="spacing-slider">Spacing: <span id="spacing-value">1.5</span></label>
+    <input id="spacing-slider" type="range" min="0.5" max="5" step="0.1" value="1.5">
+  </div>
+  <canvas id="three-canvas"></canvas>
+  <script src="/build/three.min.js"></script>
+  <script>
+    // Set up the scene, camera, and renderer
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 0, 10);
+
+    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('three-canvas') });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    // Add a group of objects
+    const group = new THREE.Group();
+    scene.add(group);
+
+    const planeMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, side: THREE.DoubleSide });
+    const planeGeometry = new THREE.PlaneGeometry(1, 1);
+
+    // Create and add objects to the group
+    const planes = [];
+    for (let i = 0; i < 5; i++) {
+      const plane = new THREE.Mesh(planeGeometry, planeMaterial.clone());
+      plane.material.color.setHSL(i / 5, 1, 0.5); // Different color for each plane
+      group.add(plane);
+      planes.push(plane);
+    }
+
+    // Initial spacing
+    let spacing = 1.5;
+
+    // Function to update spacing dynamically
+    function updateSpacing() {
+      planes.forEach((plane, index) => {
+        plane.position.y = index * spacing; // Update spacing along the y-axis
+      });
+    }
+
+    // Set up slider to control spacing
+    const slider = document.getElementById('spacing-slider');
+    const spacingValue = document.getElementById('spacing-value');
+
+    slider.addEventListener('input', (event) => {
+      spacing = parseFloat(event.target.value);
+      spacingValue.textContent = spacing.toFixed(1); // Update displayed value
+      updateSpacing();
+    });
+
+    // Initialize spacing
+    updateSpacing();
+
+    // Animation loop
+    const animate = () => {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    };
+    animate();
+  </script>
+</body>
+</html>
