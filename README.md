@@ -57,7 +57,7 @@ Header comments in the scripts usually include references, external libraries us
 
 ## References
 
-- References and attributions are typically included in the header comments of the scripts.
+- References and attributions are typically included in the header comments of the scripts, or in markdown files.
 - Look for relevant links or resources directly in the code for each project.
 
 <br>
