@@ -12,7 +12,7 @@ Header comments in the scripts usually include references, external libraries us
 
 ### Creative Projects
 - **Aircraft**: 3D modeling or animations involving aircraft.
-- **Ales_Inferno**: Miscellaneous creative experiments. Fondly named after Alejandra Villarreal's Spector bass color style.
+- **Ales_Inferno**: Miscellaneous creative experiments. Fondly named after Alejandra Villarreal's Spector bass.
 - **TopoMapGenerator**: Procedural generation of topographical maps.
 
 ### Tools and Interactivity
